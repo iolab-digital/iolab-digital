@@ -1,0 +1,77 @@
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  boolean,
+  integer,
+  json,
+} from "drizzle-orm/pg-core";
+
+export const contacts = pgTable("contacts", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  company: text("company"),
+  industry: text("industry"),
+  serviceInterest: text("service_interest"),
+  message: text("message").notNull(),
+  budgetRange: text("budget_range"),
+  currentTools: text("current_tools"),
+  status: text("status").default("new").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  name: text("name"),
+  source: text("source").default("website"),
+  subscribedAt: timestamp("subscribed_at").defaultNow().notNull(),
+  unsubscribedAt: timestamp("unsubscribed_at"),
+});
+
+export const portfolioItems = pgTable("portfolio_items", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  clientName: text("client_name").notNull(),
+  category: text("category").notNull(),
+  description: text("description"),
+  challenge: text("challenge"),
+  solution: text("solution"),
+  results: text("results"),
+  techStack: json("tech_stack").$type<string[]>(),
+  featuredImage: text("featured_image").notNull(),
+  galleryImages: json("gallery_images").$type<string[]>(),
+  appStoreUrl: text("app_store_url"),
+  playStoreUrl: text("play_store_url"),
+  websiteUrl: text("website_url"),
+  servicesProvided: json("services_provided").$type<string[]>(),
+  industry: text("industry"),
+  testimonialQuote: text("testimonial_quote"),
+  testimonialAuthor: text("testimonial_author"),
+  isFeatured: boolean("is_featured").default(false),
+  displayOrder: integer("display_order").default(0),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  excerpt: text("excerpt"),
+  featuredImage: text("featured_image"),
+  category: text("category"),
+  tags: json("tags").$type<string[]>(),
+  author: text("author").default("Rauf Tur"),
+  readTimeMinutes: integer("read_time_minutes"),
+  isPublished: boolean("is_published").default(false),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});

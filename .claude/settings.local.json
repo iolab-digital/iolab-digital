@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npm -v)",
+      "Bash(cmd.exe /c \"where node && node -v && where npm && npm -v\")",
+      "Bash(cmd.exe /c \"where node 2>nul && node -v && where npm 2>nul && npm -v\")",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Read(//c/Users/halik/AppData/**)",
+      "Bash(docker run:*)",
+      "Bash(docker compose:*)",
+      "Bash(find D:/Docker_Apps/iolab-digital/old-wordpress-uploads/ -type f \\\\\\(-name *.png -o -name *.jpg -o -name *.jpeg -o -name *.svg -o -name *.gif -o -name *.webp -o -name *.mp4 -o -name *.mov -o -name *.ico \\\\\\))",
+      "Bash(grep -vE \"-[0-9]+x[0-9]+\\\\.\\(jpg|jpeg|png|gif|ico|svg|mp4|mov|webm\\)$\")",
+      "Bash(find /d/Docker_Apps/hammont-wholesale -name *.ts -o -name *.js)",
+      "Bash(xargs grep:*)",
+      "Bash(find /d/Docker_Apps/iolab-digital -name *.ts -o -name *.js)",
+      "Bash(find /d/Docker_Apps/tappd-v5 -name *.ts -o -name *.js)",
+      "Bash(find /d/Docker_Apps/tappd-v5 -type f -name *.ts -o -name *.js)",
+      "Bash(find /d/Docker_Apps/tappd-v5 -path */node_modules -prune -o -type f \\\\\\(-name *.ts -o -name *.js \\\\\\) -print)",
+      "Bash(find /d/Docker_Apps/iolab-digital -path */node_modules -prune -o -type f \\\\\\(-name *.ts -o -name *.js \\\\\\) -print)",
+      "Bash(find /d/Docker_Apps/iolab-digital/src -type f \\\\\\(-name *.ts -o -name *.js \\\\\\))",
+      "Bash(grep -r \"DO_SPACES\\\\|BUCKET\\\\|CDN\" /d/Docker_Apps/iolab-digital --include=*.env* --include=*.ts --include=*.js)",
+      "Bash(grep -r remotePatterns /d/Docker_Apps/ --include=*.js --include=*.ts)",
+      "Bash(curl -o public/images/logo/iolab-logo-latest-white.png \"https://iolab.co/wp-content/uploads/2024/06/iolab-logo-design-v04152023-v4-WHT-1.png\")",
+      "Bash(curl -o public/images/logo/iolab-logo-latest-black.png \"https://iolab.co/wp-content/uploads/2024/06/iolab-logo-design-v04152023-v4-BLK-1.png\")",
+      "Bash(curl -o public/images/logo/iolab-logo-latest-notext.png \"https://iolab.co/wp-content/uploads/2024/06/iolab-logo-design-v04152023-v4-BLK-no-text-300.png\")"
+    ]
+  }
+}
