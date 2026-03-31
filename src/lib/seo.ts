@@ -129,6 +129,38 @@ export function creativeWorkSchema(
   };
 }
 
+export function articleSchema(
+  title: string,
+  description: string,
+  slug: string,
+  publishedAt: string,
+  updatedAt?: string,
+  image?: string
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    url: `${BASE_URL}/blog/${slug}`,
+    datePublished: publishedAt,
+    dateModified: updatedAt || publishedAt,
+    author: {
+      "@type": "Person",
+      name: "Rauf Tur",
+      url: SITE.social.linkedin,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "iOLab Digital",
+      url: BASE_URL,
+      logo: { "@type": "ImageObject", url: `${CDN}/images/logo/iolab-logo-black.png` },
+    },
+    ...(image ? { image } : {}),
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE_URL}/blog/${slug}` },
+  };
+}
+
 export function pageMetadata(
   title: string,
   description: string,

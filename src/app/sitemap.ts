@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ALL_INDUSTRY_SLUGS } from "@/data/industries";
+import { getAllPosts } from "@/lib/blog";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://iolab.co";
 
@@ -41,5 +42,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
   }));
 
-  return [...staticPages, ...industryPages, ...portfolioPages];
+  const blogPages = getAllPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt || post.publishedAt),
+    priority: 0.7 as const,
+    changeFrequency: "monthly" as const,
+  }));
+
+  return [...staticPages, ...industryPages, ...blogPages, ...portfolioPages];
 }

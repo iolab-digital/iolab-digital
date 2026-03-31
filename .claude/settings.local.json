@@ -51,7 +51,16 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/portfolio)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/about)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/services/custom-crm)",
-      "Bash(curl -s http://localhost:3000/about)"
+      "Bash(curl -s http://localhost:3000/about)",
+      "Bash(ls -la \"D:/Docker_Apps/iolab-digital/src/app/\\(marketing\\)/blog/[slug]/\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/custom-crm-vs-salesforce)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/ai-automation-small-business-2026)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/how-much-does-custom-app-cost)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/signs-outgrown-saas)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/what-is-ivr-system-ai)",
+      "Bash(curl -s http://localhost:3000/blog/custom-crm-vs-salesforce)",
+      "Bash(curl -s http://localhost:3000/blog)"
     ]
   }
 }
