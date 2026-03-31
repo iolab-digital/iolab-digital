@@ -21,7 +21,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src={`${CDN}/images/logo/iolab-icon.png`}
+              src="https://iolab.nyc3.cdn.digitaloceanspaces.com/images/logo/iolab-logo-latest-white.png"
               alt="iOLab Digital"
               width={120}
               height={40}

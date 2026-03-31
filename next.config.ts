@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "iolab-digital.nyc3.cdn.digitaloceanspaces.com",
+        hostname: "iolab.nyc3.cdn.digitaloceanspaces.com",
       },
     ],
   },
