@@ -10,8 +10,8 @@ const s3Client = new S3Client({
   forcePathStyle: false,
 });
 
-const BUCKET = process.env.DO_SPACES_BUCKET || "iolab-digital";
-const CDN_URL = process.env.DO_SPACES_CDN_URL || "https://iolab-digital.nyc3.digitaloceanspaces.com";
+const BUCKET = process.env.DO_SPACES_BUCKET || "iolab";
+const CDN_URL = process.env.DO_SPACES_CDN_URL || "https://iolab.nyc3.digitaloceanspaces.com";
 
 /**
  * Upload a file to DigitalOcean Spaces

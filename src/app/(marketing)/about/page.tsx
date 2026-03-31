@@ -47,7 +47,7 @@ export default function AboutPage() {
           <div className="relative">
             <div className="rounded-2xl overflow-hidden">
               <Image
-                src="/images/team/rauf-tur.jpg"
+                src="https://iolab.nyc3.digitaloceanspaces.com/images/team/rauf-tur.jpg"
                 alt="Rauf Tur - Founder of iOLab Digital"
                 width={600}
                 height={600}

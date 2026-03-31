@@ -12,19 +12,19 @@ export const metadata: Metadata = {
 };
 
 const PROJECTS = [
-  { name: "Tappd", category: "Custom Mobile App", image: "/images/portfolio/tappd/business-landing.png", slug: "tappd" },
-  { name: "Allenberry Resort", category: "Web Design", image: "/images/portfolio/allenberry-resort.png", slug: "allenberry-resort" },
-  { name: "Sand Hills Casino", category: "Web Design", image: "/images/portfolio/sandhills-casino.png", slug: "sand-hills-casino" },
-  { name: "The Hen Houses", category: "Web Design & Photography", image: "/images/portfolio/hen-houses.png", slug: "hen-houses" },
-  { name: "Johnny D's", category: "Web Design", image: "/images/portfolio/johnny-ds.png", slug: "johnny-ds" },
-  { name: "South Beach Casino", category: "Web Design", image: "/images/portfolio/southbeach-casino.png", slug: "south-beach-casino" },
-  { name: "Homeland Industrial", category: "Web Design", image: "/images/portfolio/homeland.png", slug: "homeland" },
-  { name: "The Milestone", category: "Web Design", image: "/images/portfolio/milestone.png", slug: "the-milestone" },
-  { name: "Villa Buena Onda", category: "Web Design", image: "/images/portfolio/vbo.png", slug: "villa-buena-onda" },
-  { name: "Dilks Development", category: "Web Design", image: "/images/portfolio/dilks.png", slug: "dilks-development" },
-  { name: "ALPK Restaurant", category: "Web Design", image: "/images/portfolio/alpk.png", slug: "alpk" },
-  { name: "Spark Meraki", category: "Web Design", image: "/images/portfolio/spark-meraki.png", slug: "spark-meraki" },
-  { name: "Pro Pools PGH", category: "Web Design", image: "/images/portfolio/pro-pools.png", slug: "pro-pools" },
+  { name: "Tappd", category: "Custom Mobile App", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/tappd/business-landing.png", slug: "tappd" },
+  { name: "Allenberry Resort", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/allenberry-resort.png", slug: "allenberry-resort" },
+  { name: "Sand Hills Casino", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/sandhills-casino.png", slug: "sand-hills-casino" },
+  { name: "The Hen Houses", category: "Web Design & Photography", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/hen-houses.png", slug: "hen-houses" },
+  { name: "Johnny D's", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/johnny-ds.png", slug: "johnny-ds" },
+  { name: "South Beach Casino", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/southbeach-casino.png", slug: "south-beach-casino" },
+  { name: "Homeland Industrial", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/homeland.png", slug: "homeland" },
+  { name: "The Milestone", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/milestone.png", slug: "the-milestone" },
+  { name: "Villa Buena Onda", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/vbo.png", slug: "villa-buena-onda" },
+  { name: "Dilks Development", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/dilks.png", slug: "dilks-development" },
+  { name: "ALPK Restaurant", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/alpk.png", slug: "alpk" },
+  { name: "Spark Meraki", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/spark-meraki.png", slug: "spark-meraki" },
+  { name: "Pro Pools PGH", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/pro-pools.png", slug: "pro-pools" },
 ];
 
 export default function PortfolioPage() {

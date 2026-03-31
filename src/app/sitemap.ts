@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { ALL_INDUSTRY_SLUGS } from "@/data/industries";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://iolab.co";
 
@@ -21,10 +22,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/services/digital-marketing`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/portfolio`, priority: 0.9, changeFrequency: "weekly" as const },
     { url: `${BASE_URL}/industries`, priority: 0.8, changeFrequency: "monthly" as const },
-    { url: `${BASE_URL}/industries/restaurants`, priority: 0.7, changeFrequency: "monthly" as const },
-    { url: `${BASE_URL}/industries/contractors`, priority: 0.7, changeFrequency: "monthly" as const },
-    { url: `${BASE_URL}/industries/dental`, priority: 0.7, changeFrequency: "monthly" as const },
-    { url: `${BASE_URL}/industries/home-services`, priority: 0.7, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/blog`, priority: 0.8, changeFrequency: "weekly" as const },
     { url: `${BASE_URL}/about`, priority: 0.7, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/contact`, priority: 0.8, changeFrequency: "monthly" as const },
@@ -32,11 +29,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/why-custom`, priority: 0.8, changeFrequency: "monthly" as const },
   ];
 
+  const industryPages = ALL_INDUSTRY_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/industries/${slug}`,
+    priority: 0.7 as const,
+    changeFrequency: "monthly" as const,
+  }));
+
   const portfolioPages = PORTFOLIO_SLUGS.map((slug) => ({
     url: `${BASE_URL}/portfolio/${slug}`,
     priority: 0.6 as const,
     changeFrequency: "monthly" as const,
   }));
 
-  return [...staticPages, ...portfolioPages];
+  return [...staticPages, ...industryPages, ...portfolioPages];
 }

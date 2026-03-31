@@ -1,16 +1,17 @@
 import Image from "next/image";
+import { CDN } from "@/lib/constants";
 
 const CLIENT_LOGOS = [
-  { name: "Allenberry Resort", src: "/images/clients/allenberry.png" },
-  { name: "Mudhen Brewing", src: "/images/clients/mudhen.png" },
-  { name: "Homeland Industrial", src: "/images/clients/homeland.png" },
-  { name: "The Hen Houses", src: "/images/clients/henhouses.png" },
-  { name: "Poppi's", src: "/images/clients/poppis.png" },
-  { name: "Villa Buena Onda", src: "/images/clients/vbo.png" },
-  { name: "Sand Hills Casino", src: "/images/clients/sandhills.png" },
-  { name: "South Beach Casino", src: "/images/clients/southbeach.png" },
-  { name: "Hammont", src: "/images/clients/hammont.png" },
-  { name: "Tappd", src: "/images/clients/tappd.png" },
+  { name: "Allenberry Resort", src: `${CDN}/images/clients/allenberry.png` },
+  { name: "Mudhen Brewing", src: `${CDN}/images/clients/mudhen.png` },
+  { name: "Homeland Industrial", src: `${CDN}/images/clients/homeland.png` },
+  { name: "The Hen Houses", src: `${CDN}/images/clients/henhouses.png` },
+  { name: "Poppi's", src: `${CDN}/images/clients/poppis.png` },
+  { name: "Villa Buena Onda", src: `${CDN}/images/clients/vbo.png` },
+  { name: "Sand Hills Casino", src: `${CDN}/images/clients/sandhills.png` },
+  { name: "South Beach Casino", src: `${CDN}/images/clients/southbeach.png` },
+  { name: "Hammont", src: `${CDN}/images/clients/hammont.png` },
+  { name: "Tappd", src: `${CDN}/images/clients/tappd.png` },
 ];
 
 export function ClientLogoCarousel() {

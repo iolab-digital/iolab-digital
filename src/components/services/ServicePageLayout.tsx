@@ -8,6 +8,7 @@ import { FAQ } from "@/components/shared/FAQ";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import type { LucideIcon } from "lucide-react";
+import { CDN } from "@/lib/constants";
 
 type ServicePageProps = {
   badge: string;
@@ -44,7 +45,7 @@ export function ServicePageLayout({
 
       <section className="relative bg-dark text-white py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0">
-          <Image src="/images/backgrounds/navy-topographic.png" alt="" fill className="object-cover opacity-20" aria-hidden="true" />
+          <Image src={`${CDN}/images/backgrounds/navy-topographic.png`} alt="" fill className="object-cover opacity-20" aria-hidden="true" />
           <div className="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

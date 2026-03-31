@@ -1,4 +1,4 @@
-import { SITE } from "./constants";
+import { SITE, CDN } from "./constants";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://iolab.co";
 
@@ -8,7 +8,7 @@ export function organizationSchema() {
     "@type": "Organization",
     name: "iOLab Digital",
     url: BASE_URL,
-    logo: `${BASE_URL}/images/logo/iolab-logo-black.png`,
+    logo: `${CDN}/images/logo/iolab-logo-black.png`,
     description: SITE.description,
     foundingDate: "2014",
     founder: {
@@ -51,7 +51,7 @@ export function localBusinessSchema() {
       addressCountry: "US",
     },
     priceRange: "$$",
-    image: `${BASE_URL}/images/logo/iolab-logo-black.png`,
+    image: `${CDN}/images/logo/iolab-logo-black.png`,
   };
 }
 
@@ -108,7 +108,7 @@ export function personSchema() {
     jobTitle: "Founder & CEO",
     worksFor: { "@type": "Organization", name: "iOLab Digital" },
     url: SITE.social.linkedin,
-    image: `${BASE_URL}/images/team/rauf-tur.jpg`,
+    image: `${CDN}/images/team/rauf-tur.jpg`,
   };
 }
 
@@ -123,7 +123,7 @@ export function creativeWorkSchema(
     "@type": "CreativeWork",
     name,
     description,
-    image: `${BASE_URL}${image}`,
+    image: image.startsWith("http") ? image : `${CDN}${image}`,
     url: `${BASE_URL}/portfolio/${slug}`,
     creator: { "@type": "Organization", name: "iOLab Digital" },
   };

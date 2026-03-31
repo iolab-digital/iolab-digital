@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
-import { SITE, NAV_LINKS, SERVICES } from "@/lib/constants";
+import { SITE, NAV_LINKS, SERVICES, CDN } from "@/lib/constants";
 import { Container } from "@/components/ui/Container";
 import { NewsletterForm } from "./NewsletterForm";
 
@@ -45,7 +45,7 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/images/logo/iolab-icon.png"
+                src={`${CDN}/images/logo/iolab-icon.png`}
                 alt="iOLab Digital"
                 width={120}
                 height={40}

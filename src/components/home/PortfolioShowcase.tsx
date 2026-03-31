@@ -7,6 +7,7 @@ import { Section } from "@/components/ui/Section";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { staggerContainer, staggerItem } from "@/lib/animations";
+import { CDN } from "@/lib/constants";
 
 const FEATURED_PROJECTS = [
   {
@@ -14,7 +15,7 @@ const FEATURED_PROJECTS = [
     category: "Custom Mobile App",
     description:
       "Digital beverage menu platform for breweries and restaurants with real-time tap management, NFC coasters, and loyalty program.",
-    image: "/images/portfolio/tappd/business-landing.png",
+    image: `${CDN}/images/portfolio/tappd/business-landing.png`,
     alt: "Tappd Custom Mobile App — Digital Beverage Menu Platform with NFC Coasters by iOLab Digital",
     color: "from-amber-500 to-orange-600",
   },
@@ -23,7 +24,7 @@ const FEATURED_PROJECTS = [
     category: "Web Design & Development",
     description:
       "Complete resort website redesign with booking engine integration, event management, and hospitality-focused UX.",
-    image: "/images/portfolio/allenberry-resort.png",
+    image: `${CDN}/images/portfolio/allenberry-resort.png`,
     alt: "Allenberry Resort Custom Website Design — Boutique Hotel & Event Venue by iOLab Digital",
     color: "from-emerald-500 to-teal-600",
   },
@@ -32,7 +33,7 @@ const FEATURED_PROJECTS = [
     category: "Web Design & Development",
     description:
       "Casino & resort website with gaming info, event calendars, and booking integration for Manitoba entertainment destination.",
-    image: "/images/portfolio/sandhills-casino.png",
+    image: `${CDN}/images/portfolio/sandhills-casino.png`,
     alt: "Sand Hills Casino Website Development — Gaming & Entertainment Resort Site by iOLab Digital",
     color: "from-purple-500 to-indigo-600",
   },
@@ -41,7 +42,7 @@ const FEATURED_PROJECTS = [
     category: "Web Design & Photography",
     description:
       "Boutique vacation rental website with property showcases, booking integration, and professional photography.",
-    image: "/images/portfolio/hen-houses.png",
+    image: `${CDN}/images/portfolio/hen-houses.png`,
     alt: "The Hen Houses Vacation Rental Website — Boutique Property Showcases by iOLab Digital",
     color: "from-rose-500 to-pink-600",
   },

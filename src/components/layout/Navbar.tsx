@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS } from "@/lib/constants";
+import { NAV_LINKS, CDN } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 
 export function Navbar() {
@@ -21,7 +21,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/images/logo/iolab-icon.png"
+              src={`${CDN}/images/logo/iolab-icon.png`}
               alt="iOLab Digital"
               width={120}
               height={40}

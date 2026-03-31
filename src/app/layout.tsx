@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "iOLab Digital",
-    images: [{ url: "/images/logo/iolab-logo-black.png", width: 500, height: 240, alt: "iOLab Digital" }],
+    images: [{ url: "https://iolab.nyc3.digitaloceanspaces.com/images/logo/iolab-logo-black.png", width: 500, height: 240, alt: "iOLab Digital" }],
   },
   twitter: {
     card: "summary_large_image",

@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "iolab-digital.nyc3.digitaloceanspaces.com",
+        hostname: "iolab.nyc3.digitaloceanspaces.com",
       },
       {
         protocol: "https",

@@ -6,19 +6,19 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 
 const PROJECTS: Record<string, { name: string; category: string; image: string; description: string }> = {
-  tappd: { name: "Tappd", category: "Custom Mobile App", image: "/images/portfolio/tappd/business-landing.png", description: "Digital beverage menu platform for breweries and restaurants with real-time tap management, NFC coasters, and loyalty program." },
-  "allenberry-resort": { name: "Allenberry Resort", category: "Web Design", image: "/images/portfolio/allenberry-resort.png", description: "Complete resort website redesign with booking engine integration, event management, and hospitality-focused UX." },
-  "sand-hills-casino": { name: "Sand Hills Casino", category: "Web Design", image: "/images/portfolio/sandhills-casino.png", description: "Casino & resort website with gaming info, event calendars, and booking integration." },
-  "hen-houses": { name: "The Hen Houses", category: "Web Design & Photography", image: "/images/portfolio/hen-houses.png", description: "Boutique vacation rental website with property showcases, booking integration, and professional photography." },
-  "johnny-ds": { name: "Johnny D's", category: "Web Design", image: "/images/portfolio/johnny-ds.png", description: "Restaurant website with online ordering, menu management, and local SEO optimization." },
-  "south-beach-casino": { name: "South Beach Casino", category: "Web Design", image: "/images/portfolio/southbeach-casino.png", description: "Casino resort website with entertainment calendar and booking system." },
-  homeland: { name: "Homeland Industrial", category: "Web Design", image: "/images/portfolio/homeland.png", description: "Industrial supply company website with product catalog and quote system." },
-  "the-milestone": { name: "The Milestone", category: "Web Design", image: "/images/portfolio/milestone.png", description: "Harrisburg restaurant and event venue website with booking and events." },
-  "villa-buena-onda": { name: "Villa Buena Onda", category: "Web Design", image: "/images/portfolio/vbo.png", description: "Costa Rica micro-resort website with property showcases and booking." },
-  "dilks-development": { name: "Dilks Development", category: "Web Design", image: "/images/portfolio/dilks.png", description: "Real estate development company website with project showcases." },
-  alpk: { name: "ALPK Restaurant", category: "Web Design", image: "/images/portfolio/alpk.png", description: "Restaurant website with menu, online ordering, and reservation system." },
-  "spark-meraki": { name: "Spark Meraki", category: "Web Design", image: "/images/portfolio/spark-meraki.png", description: "Creative events company website with portfolio and booking." },
-  "pro-pools": { name: "Pro Pools PGH", category: "Web Design", image: "/images/portfolio/pro-pools.png", description: "Pool services company website with service listings and quote requests." },
+  tappd: { name: "Tappd", category: "Custom Mobile App", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/tappd/business-landing.png", description: "Digital beverage menu platform for breweries and restaurants with real-time tap management, NFC coasters, and loyalty program." },
+  "allenberry-resort": { name: "Allenberry Resort", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/allenberry-resort.png", description: "Complete resort website redesign with booking engine integration, event management, and hospitality-focused UX." },
+  "sand-hills-casino": { name: "Sand Hills Casino", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/sandhills-casino.png", description: "Casino & resort website with gaming info, event calendars, and booking integration." },
+  "hen-houses": { name: "The Hen Houses", category: "Web Design & Photography", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/hen-houses.png", description: "Boutique vacation rental website with property showcases, booking integration, and professional photography." },
+  "johnny-ds": { name: "Johnny D's", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/johnny-ds.png", description: "Restaurant website with online ordering, menu management, and local SEO optimization." },
+  "south-beach-casino": { name: "South Beach Casino", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/southbeach-casino.png", description: "Casino resort website with entertainment calendar and booking system." },
+  homeland: { name: "Homeland Industrial", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/homeland.png", description: "Industrial supply company website with product catalog and quote system." },
+  "the-milestone": { name: "The Milestone", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/milestone.png", description: "Harrisburg restaurant and event venue website with booking and events." },
+  "villa-buena-onda": { name: "Villa Buena Onda", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/vbo.png", description: "Costa Rica micro-resort website with property showcases and booking." },
+  "dilks-development": { name: "Dilks Development", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/dilks.png", description: "Real estate development company website with project showcases." },
+  alpk: { name: "ALPK Restaurant", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/alpk.png", description: "Restaurant website with menu, online ordering, and reservation system." },
+  "spark-meraki": { name: "Spark Meraki", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/spark-meraki.png", description: "Creative events company website with portfolio and booking." },
+  "pro-pools": { name: "Pro Pools PGH", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/pro-pools.png", description: "Pool services company website with service listings and quote requests." },
 };
 
 export async function generateStaticParams() {

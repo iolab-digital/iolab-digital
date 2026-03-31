@@ -6,6 +6,7 @@ import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { TypewriterText } from "@/components/shared/TypewriterText";
+import { CDN } from "@/lib/constants";
 
 const ROTATING_WORDS = [
   "Custom CRM",
@@ -21,7 +22,7 @@ export function HeroSection() {
       {/* Background image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/backgrounds/navy-topographic.png"
+          src={`${CDN}/images/backgrounds/navy-topographic.png`}
           alt=""
           fill
           className="object-cover opacity-50"

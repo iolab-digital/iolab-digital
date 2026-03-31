@@ -9,6 +9,8 @@ import {
   Headphones,
 } from "lucide-react";
 
+export const CDN = "https://iolab.nyc3.digitaloceanspaces.com";
+
 export const SITE = {
   name: "iOLab Digital",
   tagline: "Custom Apps. AI Automation. Zero SaaS Fees.",
@@ -109,14 +111,14 @@ export const INDUSTRIES = [
   { name: "Contractors & Construction", icon: "🔨", slug: "contractors" },
   { name: "Dental & Medical", icon: "🦷", slug: "dental" },
   { name: "Home Services", icon: "🏠", slug: "home-services" },
-  { name: "Pest Control", icon: "🐛", slug: "home-services" },
-  { name: "Tree Removal & Landscaping", icon: "🌳", slug: "home-services" },
-  { name: "HVAC & Plumbing", icon: "🔧", slug: "home-services" },
-  { name: "Auto Shops", icon: "🚗", slug: "contractors" },
-  { name: "Salons & Spas", icon: "💈", slug: "restaurants" },
-  { name: "Law Firms", icon: "⚖️", slug: "contractors" },
-  { name: "Florists", icon: "💐", slug: "restaurants" },
-  { name: "Real Estate", icon: "🏢", slug: "contractors" },
+  { name: "Pest Control", icon: "🐛", slug: "pest-control" },
+  { name: "Tree Removal & Landscaping", icon: "🌳", slug: "landscaping" },
+  { name: "HVAC & Plumbing", icon: "🔧", slug: "hvac-plumbing" },
+  { name: "Auto Shops", icon: "🚗", slug: "auto-shops" },
+  { name: "Salons & Spas", icon: "💈", slug: "salons" },
+  { name: "Law Firms", icon: "⚖️", slug: "law-firms" },
+  { name: "Florists", icon: "💐", slug: "florists" },
+  { name: "Real Estate", icon: "🏢", slug: "real-estate" },
 ];
 
 export const STATS = [
