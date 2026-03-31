@@ -1,8 +1,10 @@
 import { Resend } from "resend";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
-const FROM_EMAIL = "iOLab Digital <hello@iolab.co>";
+const FROM_EMAIL = "iOLab Digital <updates@updates.iolab.co>";
 
 export async function sendContactNotification(data: {
   name: string;
@@ -15,7 +17,7 @@ export async function sendContactNotification(data: {
   budgetRange?: string;
   currentTools?: string;
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: "hello@iolab.co",
     subject: `New Lead: ${data.name} — ${data.serviceInterest || "General Inquiry"}`,
@@ -41,7 +43,7 @@ export async function sendContactConfirmation(data: {
   name: string;
   email: string;
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: data.email,
     subject: "Thanks for reaching out — iOLab Digital",
@@ -63,7 +65,7 @@ export async function sendContactConfirmation(data: {
 }
 
 export async function sendWelcomeEmail(data: { email: string; name?: string }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: data.email,
     subject: "Welcome to the iOLab community",
