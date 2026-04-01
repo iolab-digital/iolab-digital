@@ -8,6 +8,13 @@ import {
   json,
 } from "drizzle-orm/pg-core";
 
+export const siteSettings = pgTable("site_settings", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const contacts = pgTable("contacts", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),

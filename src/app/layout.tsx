@@ -3,6 +3,7 @@ import { DM_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { organizationSchema } from "@/lib/seo";
+import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <JsonLd data={organizationSchema()} />
         {children}
+        <LiveChatWidget />
       </body>
     </html>
   );

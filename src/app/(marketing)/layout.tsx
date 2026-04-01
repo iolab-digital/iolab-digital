@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ExitIntentPopup } from "@/components/shared/ExitIntentPopup";
 import { StickyCTA } from "@/components/shared/StickyCTA";
 
+
 export default function MarketingLayout({
   children,
 }: {
@@ -17,6 +18,7 @@ export default function MarketingLayout({
       <Footer />
       <ExitIntentPopup />
       <StickyCTA />
+
     </>
   );
 }

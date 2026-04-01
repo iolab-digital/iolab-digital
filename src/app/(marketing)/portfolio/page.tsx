@@ -25,7 +25,7 @@ const PROJECTS = [
   { name: "ALPK Restaurant", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/alpk.png", slug: "alpk" },
   { name: "Spark Meraki", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/spark-meraki.png", slug: "spark-meraki" },
   { name: "Pro Pools PGH", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/pro-pools.png", slug: "pro-pools" },
-  { name: "Maven", category: "Custom Business Platform", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/maven.png", slug: "maven" },
+  { name: "Maven", category: "Custom Business Platform", image: "https://iolab.nyc3.cdn.digitaloceanspaces.com/images/portfolio/maven-sj-crm.png", slug: "maven" },
 ];
 
 export default function PortfolioPage() {

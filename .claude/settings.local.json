@@ -135,7 +135,12 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/hubspot)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/monday)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/zendesk)",
-      "Bash(curl -s -X POST http://localhost:3000/api/blog/publish -H \"Content-Type: application/json\" -d '{\"\"slug\"\":\"\"saas-stack-bloat-cost-small-business-2026\"\",\"\"action\"\":\"\"publish\"\"}')"
+      "Bash(curl -s -X POST http://localhost:3000/api/blog/publish -H \"Content-Type: application/json\" -d '{\"\"slug\"\":\"\"saas-stack-bloat-cost-small-business-2026\"\",\"\"action\"\":\"\"publish\"\"}')",
+      "Bash(find /d/Docker_Apps/iolab-digital -name *.md -type f)",
+      "Bash(curl -s -X POST http://localhost:3000/api/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"messages\"\"\"\":[{\"\"\"\"role\"\"\"\":\"\"\"\"user\"\"\"\",\"\"\"\"content\"\"\"\":\"\"\"\"What services do you offer?\"\"\"\"}]}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/maven.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/clients/maven.png)",
+      "Bash(curl -s \"http://localhost:3000/api/admin/settings?key=chatbot_enabled\")"
     ]
   }
 }
