@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Clock } from "lucide-react";
@@ -18,6 +19,7 @@ export const metadata: Metadata = pageMetadata(
 );
 
 export default function BlogPage() {
+  noStore();
   const posts = getAllPosts();
   const [featured, ...rest] = posts;
 

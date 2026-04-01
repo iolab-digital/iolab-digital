@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { getAllPostsIncludingDrafts, getDraftPosts } from "@/lib/blog";
 import {
@@ -14,6 +15,7 @@ import { ApproveButton, RejectButton } from "./BlogActions";
 export const dynamic = "force-dynamic";
 
 export default function AdminBlogPage() {
+  noStore();
   const allPosts = getAllPostsIncludingDrafts();
   const drafts = getDraftPosts();
   const published = allPosts.filter((p) => p.status === "published");
