@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Lock, Loader2, Eye, EyeOff } from "lucide-react";
 
 export default function AdminLoginPage() {
@@ -34,10 +35,14 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
       <div className="w-full max-w-sm mx-4">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
-            iO
-          </div>
-          <h1 className="text-2xl font-bold text-white">iOLab Admin</h1>
+          <Image
+            src="https://iolab.nyc3.cdn.digitaloceanspaces.com/images/logo/iolab-logo-latest-white.png"
+            alt="iOLab Digital"
+            width={160}
+            height={50}
+            className="mx-auto mb-4"
+          />
+          <h1 className="text-xl font-bold text-white font-display">Admin Dashboard</h1>
           <p className="text-gray-500 text-sm mt-1">Enter your password to continue</p>
         </div>
 

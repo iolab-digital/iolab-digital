@@ -65,6 +65,8 @@ async function getStats() {
 
 export default async function AdminDashboardPage() {
   const stats = await getStats();
+  const now = new Date();
+  const greeting = now.getHours() < 12 ? "Good morning" : now.getHours() < 18 ? "Good afternoon" : "Good evening";
 
   const statCards = [
     { label: "Demo Leads (All Time)", value: stats.totalLeads, icon: Users, color: "text-blue-600 bg-blue-50" },
@@ -75,7 +77,10 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="p-6 max-w-6xl">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold font-display">{greeting}, Rauf</h1>
+        <p className="text-sm text-gray-500">Here&apos;s what&apos;s happening with iOLab Digital today.</p>
+      </div>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

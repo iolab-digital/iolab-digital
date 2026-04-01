@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -31,14 +32,17 @@ export function AdminSidebar() {
   return (
     <aside className="w-56 bg-gray-950 text-white flex flex-col shrink-0 min-h-screen">
       <div className="p-4 border-b border-gray-800">
-        <Link href="/admin" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white text-xs font-bold">
-            iO
-          </div>
-          <div>
-            <div className="text-sm font-bold">iOLab</div>
-            <div className="text-[10px] text-gray-500">Admin Dashboard</div>
-          </div>
+        <Link href="/admin" className="flex items-center gap-3">
+          <Image
+            src="https://iolab.nyc3.cdn.digitaloceanspaces.com/images/logo/iolab-logo-latest-white.png"
+            alt="iOLab Digital"
+            width={100}
+            height={32}
+            className="h-7 w-auto"
+          />
+          <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-gray-500 border-l border-gray-700 pl-3">
+            Admin
+          </span>
         </Link>
       </div>
 
