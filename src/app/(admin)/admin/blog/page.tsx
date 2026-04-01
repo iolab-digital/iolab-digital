@@ -1,6 +1,7 @@
-import { unstable_noStore as noStore } from "next/cache";
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { getAllPostsIncludingDrafts, getDraftPosts } from "@/lib/blog";
 import {
   FileText,
   Clock,
@@ -9,18 +10,64 @@ import {
   CheckCircle2,
   ExternalLink,
   Sparkles,
+  Loader2,
+  Trash2,
 } from "lucide-react";
-import { ApproveButton, RejectButton } from "./BlogActions";
 
-export const dynamic = "force-dynamic";
+type Post = {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  status: "published" | "draft";
+  publishedAt: string;
+  readingTime: number;
+  image: string | null;
+};
 
 export default function AdminBlogPage() {
-  noStore();
-  const allPosts = getAllPostsIncludingDrafts();
-  const drafts = getDraftPosts();
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [drafts, setDrafts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  const fetchPosts = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/blog", { cache: "no-store" });
+      const data = await res.json();
+      setAllPosts(data.posts || []);
+      setDrafts(data.drafts || []);
+    } catch {
+      // silent
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
+  async function handleAction(slug: string, action: "publish" | "reject") {
+    if (action === "reject" && !confirm("Delete this draft permanently?")) return;
+
+    setActionLoading(slug);
+    const res = await fetch("/api/blog/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, action }),
+    });
+
+    if (res.ok) {
+      // Re-fetch fresh data from API
+      await fetchPosts();
+    } else {
+      alert(`Failed to ${action}. Please try again.`);
+    }
+    setActionLoading(null);
+  }
+
   const published = allPosts.filter((p) => p.status === "published");
 
-  // Tag breakdown
   const tagCounts: Record<string, number> = {};
   allPosts.forEach((p) =>
     p.tags.forEach((t) => {
@@ -33,6 +80,14 @@ export default function AdminBlogPage() {
     allPosts.length > 0
       ? Math.round(allPosts.reduce((s, p) => s + p.readingTime, 0) / allPosts.length)
       : 0;
+
+  if (loading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-6xl">
@@ -126,8 +181,30 @@ export default function AdminBlogPage() {
                   >
                     <ExternalLink className="h-3 w-3" /> Preview
                   </Link>
-                  <ApproveButton slug={draft.slug} />
-                  <RejectButton slug={draft.slug} />
+                  <button
+                    onClick={() => handleAction(draft.slug, "publish")}
+                    disabled={actionLoading === draft.slug}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-600 text-white hover:bg-green-700 flex items-center gap-1 disabled:opacity-50"
+                  >
+                    {actionLoading === draft.slug ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-3 w-3" />
+                    )}
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => handleAction(draft.slug, "reject")}
+                    disabled={actionLoading === draft.slug}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium border border-red-200 text-red-600 hover:bg-red-50 flex items-center gap-1 disabled:opacity-50"
+                  >
+                    {actionLoading === draft.slug ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-3 w-3" />
+                    )}
+                    Reject
+                  </button>
                 </div>
               </div>
             ))}
