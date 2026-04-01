@@ -19,6 +19,7 @@ const PROJECTS: Record<string, { name: string; category: string; image: string; 
   alpk: { name: "ALPK Restaurant", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/alpk.png", description: "Restaurant website with menu, online ordering, and reservation system." },
   "spark-meraki": { name: "Spark Meraki", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/spark-meraki.png", description: "Creative events company website with portfolio and booking." },
   "pro-pools": { name: "Pro Pools PGH", category: "Web Design", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/pro-pools.png", description: "Pool services company website with service listings and quote requests." },
+  maven: { name: "Maven", category: "Custom Business Platform", image: "https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/maven.png", description: "Custom local business networking platform with member directory, event management, messaging, and community engagement tools." },
 };
 
 export async function generateStaticParams() {

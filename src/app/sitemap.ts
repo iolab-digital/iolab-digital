@@ -7,7 +7,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://iolab.co";
 const PORTFOLIO_SLUGS = [
   "tappd", "allenberry-resort", "sand-hills-casino", "hen-houses",
   "johnny-ds", "south-beach-casino", "homeland", "the-milestone",
-  "villa-buena-onda", "dilks-development", "alpk", "spark-meraki", "pro-pools",
+  "villa-buena-onda", "dilks-development", "alpk", "spark-meraki", "pro-pools", "maven",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

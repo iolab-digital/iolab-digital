@@ -27,8 +27,7 @@ async function getCampaignStats() {
   const [completedCampaigns] = await db
     .select({ count: sql<number>`count(DISTINCT ${demoDripEmails.leadId})` })
     .from(demoDripEmails)
-    .where(eq(demoDripEmails.emailNumber, 7))
-    .where(sql`${demoDripEmails.sentAt} IS NOT NULL`);
+    .where(and(eq(demoDripEmails.emailNumber, 7), sql`${demoDripEmails.sentAt} IS NOT NULL`));
 
   return { emailStats, activeCampaigns: activeCampaigns.count, completedCampaigns: completedCampaigns.count };
 }

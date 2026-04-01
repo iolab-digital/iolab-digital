@@ -12,6 +12,7 @@ const CLIENT_LOGOS = [
   { name: "South Beach Casino", src: `${CDN}/images/clients/southbeach.png` },
   { name: "Hammont", src: `${CDN}/images/clients/hammont.png` },
   { name: "Tappd", src: `${CDN}/images/clients/tappd.png` },
+  { name: "Maven", src: `${CDN}/images/clients/maven.png` },
 ];
 
 export function ClientLogoCarousel() {
