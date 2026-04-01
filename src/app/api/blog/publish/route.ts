@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import fs from "fs";
 import path from "path";
 
@@ -19,17 +20,19 @@ export async function POST(request: Request) {
     }
 
     if (action === "publish") {
-      // Change status: "draft" to status: "published" in frontmatter
       let content = fs.readFileSync(filePath, "utf-8");
       content = content.replace(/^status:\s*"draft"/m, 'status: "published"');
-      // Also update the publishedAt to now if it was a future date
       fs.writeFileSync(filePath, content, "utf-8");
+      revalidatePath("/admin/blog");
+      revalidatePath("/blog");
+      revalidatePath(`/blog/${slug}`);
       return NextResponse.json({ success: true, action: "published" });
     }
 
     if (action === "reject") {
-      // Delete the file
       fs.unlinkSync(filePath);
+      revalidatePath("/admin/blog");
+      revalidatePath("/blog");
       return NextResponse.json({ success: true, action: "deleted" });
     }
 
