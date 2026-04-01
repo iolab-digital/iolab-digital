@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Real Estate",
   description:
     "Replace kvCORE, Follow Up Boss, and BoomTown with a custom CRM, lead management, and automation platform built for how real estate actually works.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/realestate.png",
 
   metaTitle: "Custom Apps for Real Estate Agents & Brokerages",
   metaDescription:

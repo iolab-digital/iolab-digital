@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Pest Control",
   description:
     "Ditch PestRoutes and FieldRoutes. We build custom CRM, scheduling, and automation tools designed specifically for how pest control companies operate.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/pest-control.png",
 
   metaTitle: "Custom Apps for Pest Control Companies",
   metaDescription:

@@ -35,6 +35,8 @@ export default function EmailMarketingPage() {
         { question: "Do you write the email content?", answer: "Yes. We handle strategy, copywriting, design, and technical setup. You approve the content before anything goes out, and we optimize based on performance data." },
         { question: "Can you integrate email with our CRM or website?", answer: "Absolutely. We connect your email platform with your website, CRM, e-commerce platform, and any other tools to ensure seamless data flow and automated triggers." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/email-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/email-showcase.png"
       relatedServices={[
         { title: "AI Automation", slug: "ai-automation" },
         { title: "Digital Marketing", slug: "digital-marketing" },

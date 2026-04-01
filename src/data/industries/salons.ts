@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Salons & Spas",
   description:
     "Replace Vagaro, Fresha, and Mindbody with a custom booking, client management, and marketing platform that's 100% your brand.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/salons.png",
 
   metaTitle: "Custom Apps for Salons & Spas",
   metaDescription:

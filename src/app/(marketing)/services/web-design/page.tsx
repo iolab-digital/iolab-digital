@@ -35,6 +35,8 @@ export default function WebDesignPage() {
         { question: "Will my website be optimized for SEO?", answer: "Absolutely. Every website we build includes SEO-optimized architecture, proper meta tags, structured data markup, fast load times, mobile optimization, and clean URLs — everything Google looks for to rank your site." },
         { question: "Can I update the content myself?", answer: "Yes. We build in a content management system so you can easily update text, images, and pages yourself. We also offer monthly maintenance plans if you'd rather have us handle updates." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/web-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/web-showcase.png"
       relatedServices={[
         { title: "SEO & Content", slug: "seo" },
         { title: "Digital Marketing", slug: "digital-marketing" },

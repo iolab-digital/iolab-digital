@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Home Services",
   description:
     "Cleaning, handyman, painting, moving — we build custom tools that replace expensive field service software and give you a competitive edge.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/home-services.png",
 
   metaTitle: "Custom Apps for Home Service Businesses",
   metaDescription:

@@ -56,6 +56,7 @@ export function IndustryPageLayout({ data }: { data: IndustryPageData }) {
     title,
     highlight,
     description,
+    heroImage,
     businessContext,
     painPoints,
     solutions,
@@ -108,20 +109,35 @@ export function IndustryPageLayout({ data }: { data: IndustryPageData }) {
           <div className="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="text-5xl mb-6 block" role="img" aria-label={industry}>
-              {icon}
-            </span>
-            <Badge variant="dark" className="mb-4">
-              {industry}
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold font-display mb-6">
-              {title} <span className="text-primary">{highlight}</span>
-            </h1>
-            <p className="text-gray-400 text-lg mb-8">{description}</p>
-            <Button href="/contact" size="lg">
-              Book a Free Consultation
-            </Button>
+          <div className={heroImage ? "grid md:grid-cols-2 gap-12 items-center" : "max-w-3xl mx-auto text-center"}>
+            <div>
+              <span className="text-5xl mb-6 block" role="img" aria-label={industry}>
+                {icon}
+              </span>
+              <Badge variant="dark" className="mb-4">
+                {industry}
+              </Badge>
+              <h1 className="text-4xl md:text-5xl font-bold font-display mb-6">
+                {title} <span className="text-primary">{highlight}</span>
+              </h1>
+              <p className="text-gray-400 text-lg mb-8">{description}</p>
+              <Button href="/contact" size="lg">
+                Book a Free Consultation
+              </Button>
+            </div>
+            {heroImage && (
+              <div className="relative hidden md:block">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 border border-white/10">
+                  <Image
+                    src={heroImage}
+                    alt={`Custom Software for ${industry} — Dashboard Interface by iOLab Digital`}
+                    width={600}
+                    height={400}
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Landscapers",
   description:
     "Stop overpaying for software that doesn't understand seasonal work, property-level contracts, or crew-based scheduling. We build tools that do.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/landscaping.png",
 
   metaTitle: "Custom Apps for Landscaping & Tree Removal",
   metaDescription:

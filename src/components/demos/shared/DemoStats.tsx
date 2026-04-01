@@ -19,7 +19,7 @@ export function DemoStats({ stats }: { stats: Stat[] }) {
         >
           <div className="text-2xl font-bold font-display text-gray-900">
             {stat.prefix}
-            <AnimatedCounter target={stat.value} />
+            <AnimatedCounter value={stat.value} />
             {stat.suffix}
           </div>
           <div className="text-xs text-gray-500 mt-1">{stat.label}</div>

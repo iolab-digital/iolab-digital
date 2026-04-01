@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Law Firms",
   description:
     "Replace Clio, MyCase, and PracticePanther with a custom case management, client intake, and automation platform built for your practice area.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/law.png",
 
   metaTitle: "Custom Apps for Law Firms & Legal",
   metaDescription:

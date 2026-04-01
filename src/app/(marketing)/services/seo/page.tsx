@@ -35,6 +35,8 @@ export default function SEOPage() {
         { question: "What's included in your SEO service?", answer: "Our SEO service includes technical audits, keyword research, on-page optimization, content creation, Google Business Profile management, link building, and monthly reporting. Everything is tailored to your industry and local market." },
         { question: "Do I need SEO if I'm already running ads?", answer: "Yes. Ads stop working the moment you stop paying. SEO builds long-term organic traffic that compounds over time. The best strategy combines both — ads for immediate results and SEO for sustainable growth." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/seo-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/seo-showcase.png"
       relatedServices={[
         { title: "Web Design", slug: "web-design" },
         { title: "Digital Marketing", slug: "digital-marketing" },

@@ -13,6 +13,12 @@ function markdownToHtml(md: string): string {
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
 
+  // Images (must come before links)
+  html = html.replace(
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    '<figure class="my-8"><img src="$2" alt="$1" class="rounded-xl w-full border border-gray-200 shadow-sm" loading="lazy" /><figcaption class="text-center text-xs text-gray-400 mt-2">$1</figcaption></figure>'
+  );
+
   // Links
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary underline hover:text-primary/80">$1</a>');
 

@@ -35,6 +35,8 @@ export default function DigitalMarketingPage() {
         { question: "Do you manage social media content too?", answer: "Yes. We offer social media content creation and management as part of our digital marketing service. This includes content strategy, post creation, scheduling, and community management." },
         { question: "Are you a Google Partner?", answer: "We're a Microsoft Advertising Partner and Semrush Certified Agency Partner. We manage Google Ads, Microsoft Ads, and social media advertising across all major platforms." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/dm-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/dm-showcase.png"
       relatedServices={[
         { title: "SEO & Content", slug: "seo" },
         { title: "Email Marketing", slug: "email-marketing" },

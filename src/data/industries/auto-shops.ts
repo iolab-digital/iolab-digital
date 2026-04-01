@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Auto Shops",
   description:
     "Replace Shop-Ware, Mitchell, and Tekmetric with a custom platform built around your bays, your techs, and your customers.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/auto.png",
 
   metaTitle: "Custom Apps for Auto Repair Shops",
   metaDescription:

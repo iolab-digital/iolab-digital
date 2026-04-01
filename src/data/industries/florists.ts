@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Florists",
   description:
     "Replace bloated POS systems and wire services with a custom platform that handles orders, delivery, events, and customer relationships — your way.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/florists.png",
 
   metaTitle: "Custom Apps for Florists & Flower Shops",
   metaDescription:

@@ -22,6 +22,7 @@ export type IndustryPageData = {
   title: string;
   highlight: string;
   description: string;
+  heroImage?: string;
 
   // Business Context
   businessContext: {

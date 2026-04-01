@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "HVAC & Plumbing",
   description:
     "ServiceTitan charges you $400/month for features you don't use. We build a custom system around YOUR dispatch, maintenance plans, and service workflows.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/hvac.png",
 
   metaTitle: "Custom Apps for HVAC & Plumbing Companies",
   metaDescription:

@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Restaurants",
   description:
     "Stop paying Toast, Square, Yelp, and Mailchimp separately. We build one custom platform that handles it all — branded to your restaurant.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/restaurants.png",
 
   metaTitle: "Custom Apps for Restaurants & Bars",
   metaDescription:

@@ -35,6 +35,8 @@ export default function AIAutomationPage() {
         { question: "How do AI chatbots compare to live chat?", answer: "AI chatbots handle 80%+ of common questions instantly, 24/7, without wait times. They escalate complex issues to your team. This means faster response times for customers and less workload for your staff." },
         { question: "Can AI automation integrate with our existing tools?", answer: "Yes. We integrate AI automation with your CRM, email, calendar, payment processor, and any other business tools you use. Everything works together seamlessly." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/ai-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/ai-showcase.png"
       relatedServices={[
         { title: "Custom CRM", slug: "custom-crm" },
         { title: "Email Marketing", slug: "email-marketing" },

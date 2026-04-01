@@ -35,6 +35,8 @@ export default function MobileAppsPage() {
         { question: "Will you publish the app to the App Store and Google Play?", answer: "Yes. We handle the entire submission process for both the Apple App Store and Google Play Store, including meeting all platform requirements, creating store listings, and managing the review process." },
         { question: "Can the app integrate with our existing systems?", answer: "Absolutely. We build APIs and integrations to connect your app with existing tools — CRM, payment processors, inventory systems, booking engines, and more." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/mobile-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/mobile-showcase.png"
       relatedServices={[
         { title: "Custom CRM", slug: "custom-crm" },
         { title: "AI Automation", slug: "ai-automation" },

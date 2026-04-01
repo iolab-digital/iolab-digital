@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Healthcare",
   description:
     "Dentrix, Weave, and RevenueWell are expensive and inflexible. We build patient management tools tailored to your practice.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/dental.png",
 
   metaTitle: "Custom Apps for Dental & Medical Practices",
   metaDescription:

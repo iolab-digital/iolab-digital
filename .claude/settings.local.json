@@ -68,7 +68,12 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/project-management)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/ai-chatbot)",
       "Bash(curl -s http://localhost:3000/demos)",
-      "Bash(curl -s http://localhost:3000/demos/crm)"
+      "Bash(curl -s http://localhost:3000/demos/crm)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/crm-hero.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/restaurants.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/blog/crm-vs-salesforce-cover.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/pages/pricing-value.png)",
+      "Bash(curl -s http://localhost:3000/services/custom-crm)"
     ]
   }
 }

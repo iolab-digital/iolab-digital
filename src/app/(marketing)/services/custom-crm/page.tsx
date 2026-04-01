@@ -35,6 +35,8 @@ export default function CustomCRMPage() {
         { question: "Can you migrate our data from our current CRM?", answer: "Yes. We handle full data migration from Salesforce, HubSpot, Zoho, Pipedrive, or any other CRM. We map your existing data to the new system and verify everything transfers correctly before going live." },
         { question: "What happens if we need changes after launch?", answer: "Every project includes a support period. After that, we offer affordable monthly support plans. Since we built it, we can modify, extend, or add features quickly — unlike SaaS tools where you're stuck with what they give you." },
       ]}
+      heroImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/crm-hero.png"
+      showcaseImage="https://iolab.nyc3.digitaloceanspaces.com/images/generated/services/crm-showcase.png"
       relatedServices={[
         { title: "AI Automation", slug: "ai-automation" },
         { title: "Mobile Apps", slug: "mobile-apps" },

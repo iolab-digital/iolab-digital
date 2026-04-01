@@ -8,6 +8,7 @@ export const data: IndustryPageData = {
   highlight: "Contractors",
   description:
     "Jobber, Housecall Pro, ServiceTitan — they charge $200-$500/mo and barely fit your workflow. We build a custom system that does exactly what you need.",
+  heroImage: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/industries/contractors.png",
 
   metaTitle: "Custom Apps for Contractors & Construction",
   metaDescription:
