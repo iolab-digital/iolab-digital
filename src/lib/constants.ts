@@ -42,6 +42,8 @@ export const NAV_LINKS = [
     ],
   },
   { label: "Demos", href: "/demos" },
+  { label: "Tools", href: "/tools/saas-calculator" },
+  { label: "Compare", href: "/compare" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Industries", href: "/industries" },
   { label: "Blog", href: "/blog" },

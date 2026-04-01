@@ -127,7 +127,14 @@
       "Bash(curl -s -b \"iolab-admin-token=test\" http://localhost:3000/admin/blog)",
       "Bash(curl -s -X POST http://localhost:3000/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"mavensj.com\"\"}')",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/portfolio/maven)",
-      "Bash(curl -s http://localhost:3000/portfolio)"
+      "Bash(curl -s http://localhost:3000/portfolio)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/tools/saas-calculator)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/tools/ai-quiz)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/salesforce)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/hubspot)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/monday)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare/zendesk)"
     ]
   }
 }

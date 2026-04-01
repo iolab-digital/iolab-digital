@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { ALL_INDUSTRY_SLUGS } from "@/data/industries";
 import { getAllPosts } from "@/lib/blog";
+import { ALL_COMPARISON_SLUGS } from "@/data/comparisons";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://iolab.co";
 
@@ -35,11 +36,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/demos/analytics`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/demos/loyalty`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/demos/documents`, priority: 0.8, changeFrequency: "monthly" as const },
+    { url: `${BASE_URL}/tools/saas-calculator`, priority: 0.9, changeFrequency: "monthly" as const },
+    { url: `${BASE_URL}/tools/ai-quiz`, priority: 0.9, changeFrequency: "monthly" as const },
+    { url: `${BASE_URL}/compare`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/about`, priority: 0.7, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/contact`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/pricing`, priority: 0.8, changeFrequency: "monthly" as const },
     { url: `${BASE_URL}/why-custom`, priority: 0.8, changeFrequency: "monthly" as const },
   ];
+
+  const comparisonPages = ALL_COMPARISON_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/compare/${slug}`,
+    priority: 0.8 as const,
+    changeFrequency: "monthly" as const,
+  }));
 
   const industryPages = ALL_INDUSTRY_SLUGS.map((slug) => ({
     url: `${BASE_URL}/industries/${slug}`,
@@ -60,5 +70,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
   }));
 
-  return [...staticPages, ...industryPages, ...blogPages, ...portfolioPages];
+  return [...staticPages, ...comparisonPages, ...industryPages, ...blogPages, ...portfolioPages];
 }

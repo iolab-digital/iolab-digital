@@ -1,21 +1,24 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CheckCircle2, Trash2, Loader2 } from "lucide-react";
 
 export function ApproveButton({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handle() {
     setLoading(true);
-    await fetch("/api/blog/publish", {
+    const res = await fetch("/api/blog/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug, action: "publish" }),
     });
-    router.refresh();
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      setLoading(false);
+      alert("Failed to publish. Please try again.");
+    }
   }
 
   return (
@@ -32,17 +35,21 @@ export function ApproveButton({ slug }: { slug: string }) {
 
 export function RejectButton({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handle() {
     if (!confirm("Delete this draft permanently?")) return;
     setLoading(true);
-    await fetch("/api/blog/publish", {
+    const res = await fetch("/api/blog/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug, action: "reject" }),
     });
-    router.refresh();
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      setLoading(false);
+      alert("Failed to delete. Please try again.");
+    }
   }
 
   return (

@@ -8,6 +8,7 @@ import { ProblemSolution } from "@/components/home/ProblemSolution";
 import { ServiceCards } from "@/components/home/ServiceCards";
 import { CRMFeatureExplorer } from "@/components/home/CRMFeatureExplorer";
 import { PortfolioShowcase } from "@/components/home/PortfolioShowcase";
+import { SocialProof } from "@/components/home/SocialProof";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { IndustriesGrid } from "@/components/home/IndustriesGrid";
 import { FAQ } from "@/components/shared/FAQ";
@@ -54,6 +55,7 @@ export default function HomePage() {
         <ServiceCards />
         <CRMFeatureExplorer />
         <PortfolioShowcase />
+        <SocialProof />
         <HowItWorks />
         <IndustriesGrid />
         <FAQ items={HOME_FAQS} />
