@@ -85,7 +85,17 @@ ${html}`,
       });
     }
 
-    const brandData = JSON.parse(jsonMatch[0]);
+    const raw = JSON.parse(jsonMatch[0]);
+
+    // Fill in defaults for any null/missing fields
+    const brandData = {
+      businessName: raw.businessName || extractDomainName(fetchUrl),
+      primaryColor: raw.primaryColor || "#2563eb",
+      accentColor: raw.accentColor || "#f59e0b",
+      logoUrl: raw.logoUrl || null,
+      fontStyle: raw.fontStyle || "sans-serif",
+      industry: raw.industry || "business",
+    };
 
     return NextResponse.json(brandData);
   } catch (error) {

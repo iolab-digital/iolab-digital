@@ -102,7 +102,29 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/3.png)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/5.png)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/4.png)",
-      "Bash(curl -s -o /dev/null -w \"\\\\n%{http_code}\" http://localhost:3000/)"
+      "Bash(curl -s -o /dev/null -w \"\\\\n%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -X POST http://localhost:3000/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"joesplumbing.com\"\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"stripe.com\"\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/demos/lead -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"stripe.com\"\",\"\"name\"\":\"\"Test\"\",\"\"email\"\":\"\"\"\",\"\"demoType\"\":\"\"crm\"\",\"\"brandData\"\":{\"\"businessName\"\":\"\"Stripe\"\",\"\"primaryColor\"\":\"\"#635bff\"\",\"\"accentColor\"\":\"\"#0a2540\"\",\"\"logoUrl\"\":null,\"\"fontStyle\"\":\"\"sans-serif\"\",\"\"industry\"\":\"\"financial\"\"}}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/booking)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/client-portal)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/analytics)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/loyalty)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/documents)",
+      "Bash(for d:*)",
+      "Bash(echo \" $d\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin/login)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -H \"Authorization: Bearer iolab-cron-secret-2026\" http://localhost:3000/api/demos/drip)",
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/auth -H \"Content-Type: application/json\" -d '{\"\"password\"\":\"\"iolab-admin-2026\"\"}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/leads)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/campaigns)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/contacts)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/blog)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:3000/api/blog/publish -H \"Content-Type: application/json\" -d '{\"\"\"\"slug\"\"\"\":\"\"\"\"nonexistent\"\"\"\",\"\"\"\"action\"\"\"\":\"\"\"\"publish\"\"\"\"}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/api/blog/auto-generate)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -H \"Authorization: Bearer iolab-cron-secret-2026\" http://localhost:3000/api/blog/auto-generate)",
+      "Bash(curl -s -b \"iolab-admin-token=test\" http://localhost:3000/admin/blog)"
     ]
   }
 }

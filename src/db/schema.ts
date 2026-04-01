@@ -77,6 +77,16 @@ export const demoLeads = pgTable("demo_leads", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const demoDripEmails = pgTable("demo_drip_emails", {
+  id: serial("id").primaryKey(),
+  leadId: integer("lead_id").notNull(),
+  emailNumber: integer("email_number").notNull(),
+  scheduledFor: timestamp("scheduled_for").notNull(),
+  sentAt: timestamp("sent_at"),
+  stopped: boolean("stopped").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const blogPosts = pgTable("blog_posts", {
   id: serial("id").primaryKey(),
   slug: text("slug").notNull().unique(),

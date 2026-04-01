@@ -6,6 +6,11 @@ import {
   FolderKanban,
   Bot,
   Receipt,
+  Calendar,
+  Monitor,
+  BarChart3,
+  Gift,
+  FileText,
   ArrowRight,
 } from "lucide-react";
 import { Section } from "@/components/ui/Section";
@@ -69,6 +74,46 @@ const DEMOS = [
     href: "/demos/invoicing",
     icon: Receipt,
     color: "text-emerald-500 bg-emerald-50",
+  },
+  {
+    title: "Booking & Scheduling",
+    description:
+      "Visual calendar with staff columns, click-to-book appointments, waitlist management, and automated confirmations.",
+    href: "/demos/booking",
+    icon: Calendar,
+    color: "text-cyan-500 bg-cyan-50",
+  },
+  {
+    title: "Client Portal",
+    description:
+      "Project tracking with milestones, document management, messaging, and billing — all from your client's perspective.",
+    href: "/demos/client-portal",
+    icon: Monitor,
+    color: "text-indigo-500 bg-indigo-50",
+  },
+  {
+    title: "Analytics Dashboard",
+    description:
+      "Revenue trends, team performance, lead source attribution, and top client rankings with interactive charts.",
+    href: "/demos/analytics",
+    icon: BarChart3,
+    color: "text-rose-500 bg-rose-50",
+  },
+  {
+    title: "Loyalty & Rewards",
+    description:
+      "Tier progression, points tracking, rewards catalog with live redemption, referral system, and birthday rewards.",
+    href: "/demos/loyalty",
+    icon: Gift,
+    color: "text-amber-500 bg-amber-50",
+  },
+  {
+    title: "Document Automation",
+    description:
+      "Template library with auto-populated fields from your CRM, inline editing, PDF generation, and e-signatures.",
+    href: "/demos/documents",
+    icon: FileText,
+    color: "text-teal-500 bg-teal-50",
   },
 ];
 

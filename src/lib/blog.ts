@@ -11,6 +11,7 @@ export type BlogPost = {
   updatedAt?: string;
   tags: string[];
   image?: string;
+  status: "published" | "draft";
   content: string;
   readingTime: number;
 };
@@ -24,39 +25,9 @@ function calculateReadingTime(content: string): number {
   return Math.max(1, Math.ceil(words / 230));
 }
 
-export function getAllPosts(): BlogPostMeta[] {
-  if (!fs.existsSync(BLOG_DIR)) return [];
-
-  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
-
-  const posts = files.map((file) => {
-    const slug = file.replace(/\.mdx$/, "");
-    const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf-8");
-    const { data, content } = matter(raw);
-
-    return {
-      slug,
-      title: data.title || slug,
-      description: data.description || "",
-      author: data.author || "Rauf Tur",
-      publishedAt: data.publishedAt || "",
-      updatedAt: data.updatedAt,
-      tags: data.tags || [],
-      image: data.image,
-      readingTime: calculateReadingTime(content),
-    } satisfies BlogPostMeta;
-  });
-
-  return posts.sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
-}
-
-export function getPostBySlug(slug: string): BlogPost | undefined {
-  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
-  if (!fs.existsSync(filePath)) return undefined;
-
-  const raw = fs.readFileSync(filePath, "utf-8");
+function parsePost(file: string): BlogPostMeta & { content: string } {
+  const slug = file.replace(/\.mdx$/, "");
+  const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf-8");
   const { data, content } = matter(raw);
 
   return {
@@ -68,9 +39,51 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
     updatedAt: data.updatedAt,
     tags: data.tags || [],
     image: data.image,
+    status: data.status === "draft" ? "draft" : "published",
     content,
     readingTime: calculateReadingTime(content),
   };
+}
+
+function sortByDate(posts: BlogPostMeta[]): BlogPostMeta[] {
+  return posts.sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+}
+
+/** Returns only published posts (for the public site) */
+export function getAllPosts(): BlogPostMeta[] {
+  if (!fs.existsSync(BLOG_DIR)) return [];
+  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+  const posts = files.map((f) => {
+    const { content: _, ...meta } = parsePost(f);
+    return meta;
+  });
+  return sortByDate(posts.filter((p) => p.status === "published"));
+}
+
+/** Returns ALL posts including drafts (for admin) */
+export function getAllPostsIncludingDrafts(): BlogPostMeta[] {
+  if (!fs.existsSync(BLOG_DIR)) return [];
+  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+  const posts = files.map((f) => {
+    const { content: _, ...meta } = parsePost(f);
+    return meta;
+  });
+  return sortByDate(posts);
+}
+
+/** Returns only draft posts (for admin review queue) */
+export function getDraftPosts(): BlogPostMeta[] {
+  return getAllPostsIncludingDrafts().filter((p) => p.status === "draft");
+}
+
+export function getPostBySlug(slug: string): BlogPost | undefined {
+  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) return undefined;
+
+  const { content, ...meta } = parsePost(`${slug}.mdx`);
+  return { ...meta, content };
 }
 
 export function getRelatedPosts(currentSlug: string, tags: string[], limit = 3): BlogPostMeta[] {
@@ -84,9 +97,6 @@ export function getRelatedPosts(currentSlug: string, tags: string[], limit = 3):
 }
 
 export function getAllSlugs(): string[] {
-  if (!fs.existsSync(BLOG_DIR)) return [];
-  return fs
-    .readdirSync(BLOG_DIR)
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""));
+  // Only return published slugs for static generation
+  return getAllPosts().map((p) => p.slug);
 }
