@@ -60,6 +60,23 @@ export const portfolioItems = pgTable("portfolio_items", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const demoLeads = pgTable("demo_leads", {
+  id: serial("id").primaryKey(),
+  websiteUrl: text("website_url").notNull(),
+  name: text("name"),
+  email: text("email"),
+  demoType: text("demo_type").notNull(),
+  brandData: json("brand_data").$type<{
+    businessName: string;
+    primaryColor: string;
+    accentColor: string;
+    logoUrl: string | null;
+    fontStyle: string;
+    industry: string;
+  }>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const blogPosts = pgTable("blog_posts", {
   id: serial("id").primaryKey(),
   slug: text("slug").notNull().unique(),

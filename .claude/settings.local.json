@@ -60,7 +60,15 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/signs-outgrown-saas)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/what-is-ivr-system-ai)",
       "Bash(curl -s http://localhost:3000/blog/custom-crm-vs-salesforce)",
-      "Bash(curl -s http://localhost:3000/blog)"
+      "Bash(curl -s http://localhost:3000/blog)",
+      "Bash(docker cp:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/crm)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/customer-support)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/project-management)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/demos/ai-chatbot)",
+      "Bash(curl -s http://localhost:3000/demos)",
+      "Bash(curl -s http://localhost:3000/demos/crm)"
     ]
   }
 }

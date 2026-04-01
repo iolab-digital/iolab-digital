@@ -41,6 +41,7 @@ export const NAV_LINKS = [
       { label: "Digital Marketing", href: "/services/digital-marketing" },
     ],
   },
+  { label: "Demos", href: "/demos" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Industries", href: "/industries" },
   { label: "Blog", href: "/blog" },
@@ -71,7 +72,7 @@ export const SERVICES = [
   },
   {
     title: "Customer Service Apps",
-    slug: "custom-crm",
+    slug: "customer-service",
     description:
       "Custom support portals, ticketing systems, and client dashboards — no more generic SaaS tools.",
     icon: Headphones,
