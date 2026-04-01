@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Client Profiles & Preferences",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/salons/0.png",
       description:
         "Rich profiles with service history, color formulas, product preferences, style photos, allergies, and personal notes. Every stylist has complete context before the client sits down.",
     },
     {
       title: "Branded Booking System",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/salons/1.png",
       description:
         "Online booking with your branding, your service menu, stylist selection, and real-time availability. No third-party logos, no competitor recommendations, no per-booking fees.",
     },
     {
       title: "Color Formula & Treatment Tracker",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/salons/2.png",
       description:
         "Digital color formula library tied to each client. Track mixing ratios, processing times, and results. Share formulas between stylists without relying on handwritten notes.",
     },
     {
       title: "Staff Scheduling & Commissions",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/salons/3.png",
       description:
         "Build schedules by stylist availability and expertise. Track commissions on services and retail automatically. Staff see their book and earnings from their phone.",
     },
     {
       title: "Loyalty & Rewards Program",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/salons/4.png",
       description:
         "Points per visit, birthday perks, referral bonuses, and VIP tiers — all branded to your salon. Clients earn rewards through YOUR app, not a marketplace.",
     },
     {
       title: "Retail & Product Tracking",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/salons/5.png",
       description:
         "Track product purchases per client, manage inventory levels, and trigger reorder alerts. Know which products sell and which clients are due for a restock recommendation.",
     },

@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Property Profiles & Mapping",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/landscaping/0.png",
       description:
         "Detailed property records with service history, photos, measurements, access notes, and special instructions. Your crew sees the full picture before they arrive on site.",
     },
     {
       title: "Estimate Builder with Photos",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/landscaping/1.png",
       description:
         "Create professional branded estimates with property photos, line items, and optional service tiers. Customers approve online with a digital signature.",
     },
     {
       title: "Seasonal Contract Manager",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/landscaping/2.png",
       description:
         "Track seasonal contracts with auto-renewal reminders, pricing adjustments, and service plan rollover. Reduce churn by making re-signing effortless.",
     },
     {
       title: "Crew Scheduling & Dispatch",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/landscaping/3.png",
       description:
         "Assign crews by skill level, equipment availability, and location. Daily schedules pushed to mobile with job details, property notes, and navigation.",
     },
     {
       title: "Photo Documentation System",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/landscaping/4.png",
       description:
         "Crews capture before/after photos that auto-attach to the property record. Build visual portfolios that close future deals and protect against liability disputes.",
     },
     {
       title: "Job Costing Dashboard",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/landscaping/5.png",
       description:
         "Track labor hours, material costs, and subcontractor expenses per property and per contract. Know your margin on every job in real time.",
     },

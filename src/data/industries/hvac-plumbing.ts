@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Equipment & Asset Tracking",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/hvac-plumbing/0.png",
       description:
         "Track every unit by model, serial number, install date, warranty status, and full service history. When a tech arrives, they see the equipment's complete story.",
     },
     {
       title: "Priority Dispatch Board",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/hvac-plumbing/1.png",
       description:
         "Visual dispatch with emergency flags, tech availability, skill matching, and proximity-based assignment. Drag and drop to reassign. Techs get instant push notifications.",
     },
     {
       title: "Maintenance Agreement Manager",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/hvac-plumbing/2.png",
       description:
         "Track all active agreements, auto-schedule seasonal visits, send renewal reminders, and bill automatically. Never let a maintenance plan lapse again.",
     },
     {
       title: "Flat-Rate Price Book",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/hvac-plumbing/3.png",
       description:
         "Mobile-accessible pricing guide with parts, labor, and markup calculated automatically. Techs present professional options on-site and close on the spot.",
     },
     {
       title: "Customer & Property Records",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/hvac-plumbing/4.png",
       description:
         "Full customer profiles with every property, every unit, every service call, and every invoice. Your team has complete context before they knock on the door.",
     },
     {
       title: "Revenue & Performance Dashboard",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/hvac-plumbing/5.png",
       description:
         "Track revenue by tech, by service type, by time period. See close rates on recommended repairs, average ticket values, and maintenance agreement metrics.",
     },

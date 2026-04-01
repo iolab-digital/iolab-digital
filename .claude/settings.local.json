@@ -97,7 +97,12 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/industries)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/contact)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/pricing)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/why-custom)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/why-custom)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/all/0.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/3.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/5.png)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/4.png)",
+      "Bash(curl -s -o /dev/null -w \"\\\\n%{http_code}\" http://localhost:3000/)"
     ]
   }
 }

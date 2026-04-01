@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Patient Profiles & History",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/dental/0.png",
       description:
         "Complete patient records with visit history, treatment plans, communication log, insurance details, and preferences — all in one place. Know every patient before they sit in the chair.",
     },
     {
       title: "Smart Scheduling System",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/dental/1.png",
       description:
         "Online booking with real-time availability, appointment type routing, automated confirmations, and intelligent waitlist management that fills cancellations automatically.",
     },
     {
       title: "Digital Intake & Forms",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/dental/2.png",
       description:
         "Patients complete custom intake forms, medical history, and consent documents online before their visit. E-signatures included. Zero clipboard paperwork.",
     },
     {
       title: "Treatment Plan Tracker",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/dental/3.png",
       description:
         "Track recommended treatments, completion status, and follow-up schedules. Automatically remind patients about pending treatment plans they haven't scheduled.",
     },
     {
       title: "Billing & Insurance Module",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/dental/4.png",
       description:
         "Patient-facing billing portal with payment plans, insurance claim tracking, and automated statements. Reduce accounts receivable without chasing patients.",
     },
     {
       title: "Reputation Management",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/dental/5.png",
       description:
         "Automated post-visit review requests via SMS. Happy patients go to Google; unhappy patients get routed to internal feedback. Protect and build your online reputation on autopilot.",
     },

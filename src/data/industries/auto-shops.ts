@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Vehicle Profiles & Service History",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/auto-shops/0.png",
       description:
         "Complete vehicle records with VIN, mileage, past services, parts used, and manufacturer maintenance schedules. Your techs see the full picture before popping the hood.",
     },
     {
       title: "Digital Vehicle Inspection (DVI)",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/auto-shops/1.png",
       description:
         "Techs capture photos and videos during inspections. Customers see exactly what's going on with red/yellow/green condition indicators and approve repairs from their phone.",
     },
     {
       title: "Bay Management Board",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/auto-shops/2.png",
       description:
         "Visual board showing every bay, current job status, tech assignment, and estimated completion. Your service advisors know exactly where every vehicle stands.",
     },
     {
       title: "Declined Service Tracker",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/auto-shops/3.png",
       description:
         "When a customer declines a recommended repair, the system tracks it and triggers follow-up reminders at the right interval. Recover lost revenue without being pushy.",
     },
     {
       title: "Customer Communication Hub",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/auto-shops/4.png",
       description:
         "Automated text updates at each stage — vehicle received, inspection complete, repairs in progress, ready for pickup. Customers never have to call and ask 'is it done yet?'",
     },
     {
       title: "Revenue & Tech Performance",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/auto-shops/5.png",
       description:
         "Track hours flagged vs. hours billed, average repair order value, service type breakdown, and customer retention rates. Data-driven management for your shop.",
     },

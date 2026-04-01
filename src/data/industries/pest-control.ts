@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Service Address Profiles",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/pest-control/0.png",
       description:
         "Property-level records with pest history, treatment logs, chemical applications, access instructions, and photos. Your techs know exactly what they're walking into every time.",
     },
     {
       title: "Recurring Plan Management",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/pest-control/1.png",
       description:
         "Set up quarterly, monthly, or seasonal plans. The system auto-schedules visits, sends customer reminders, adjusts for weather delays, and generates invoices on completion.",
     },
     {
       title: "Chemical Application Logging",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/pest-control/2.png",
       description:
         "Digital logs tied to each service address with chemical name, quantity, EPA number, and application method. Generate compliance reports in seconds, not hours.",
     },
     {
       title: "Route Optimization Board",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/pest-control/3.png",
       description:
         "Visual daily routes with drag-and-drop adjustments, travel time estimates, and stop density scoring. Fit more stops into every day with less driving.",
     },
     {
       title: "Lead Conversion Pipeline",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/pest-control/4.png",
       description:
         "Track every inquiry from first call through inspection, quote, and close. Automated follow-ups nudge prospects who haven't booked. See conversion rates by source, service type, and tech.",
     },
     {
       title: "Seasonal Campaign Engine",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/pest-control/5.png",
       description:
         "Automatically trigger marketing campaigns when termite season, mosquito season, or rodent season approaches. Target customers by service history and location.",
     },

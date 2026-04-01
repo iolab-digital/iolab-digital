@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Customer Database & History",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/home-services/0.png",
       description:
         "Every customer's service history, preferences, property details, and communication log in one place. Your team knows exactly what to expect before they arrive on site.",
     },
     {
       title: "Online Booking Portal",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/home-services/1.png",
       description:
         "Branded booking page where customers select services, choose dates, see pricing, and book instantly. Automated confirmations and reminders reduce no-shows.",
     },
     {
       title: "Scheduling & Dispatch Board",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/home-services/2.png",
       description:
         "Visual scheduling with drag-and-drop crew assignment, availability tracking, and travel time awareness. Your team gets push notifications with job details and directions.",
     },
     {
       title: "Recurring Service Management",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/home-services/3.png",
       description:
         "Set up weekly, bi-weekly, or monthly service plans. The system auto-schedules recurring visits, sends reminders, and generates invoices without manual intervention.",
     },
     {
       title: "Invoicing & Online Payments",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/home-services/4.png",
       description:
         "Generate branded invoices from completed jobs. Customers pay online via credit card or ACH. Automated payment reminders chase outstanding balances for you.",
     },
     {
       title: "Crew Performance Tracking",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/home-services/5.png",
       description:
         "Track job completion times, customer ratings, revenue per crew, and on-time arrival rates. Identify your top performers and spots for improvement.",
     },

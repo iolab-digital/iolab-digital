@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Case Management Pipeline",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/0.png",
       description:
         "Visual case pipeline customized for your practice area — from intake through discovery, negotiation, trial, and settlement. Every case has a clear status and next action.",
     },
     {
       title: "Client Intake Automation",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/1.png",
       description:
         "Online intake forms with conditional logic, e-signatures, and automatic conflict checks. New leads get an instant response and a seamless onboarding experience.",
     },
     {
       title: "Document Automation",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/2.png",
       description:
         "Generate demand letters, retainer agreements, court filings, and correspondence from templates with case data auto-populated. Minutes instead of hours per document.",
     },
     {
       title: "Client Portal & Communication",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/3.png",
       description:
         "Secure client portal where clients check case status, upload documents, view invoices, and message their attorney. Reduce 'what's happening with my case?' calls by 80%.",
     },
     {
       title: "Billing & Trust Accounting",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/4.png",
       description:
         "Time tracking, trust account management, IOLTA compliance, automated invoicing, and online payments. Every billable minute captured and accounted for.",
     },
     {
       title: "Deadline & Statute Tracker",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/law-firms/5.png",
       description:
         "Automated deadline tracking with cascading reminders. Never miss a statute of limitations, filing deadline, or court date. Escalation alerts if deadlines approach unacknowledged.",
     },

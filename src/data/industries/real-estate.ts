@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Lead Management & Scoring",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/0.png",
       description:
         "Capture leads from every source — website, Zillow, referrals, open houses — into one pipeline. AI scores leads by engagement and likelihood to transact, so agents focus on the hottest prospects.",
     },
     {
       title: "Instant Lead Routing",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/1.png",
       description:
         "New leads get routed to the right agent in seconds based on territory, specialization, availability, and round-robin fairness. Speed-to-lead drops from hours to under a minute.",
     },
     {
       title: "Transaction Coordinator",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/2.png",
       description:
         "Manage every deal from accepted offer to close — contingency deadlines, inspection schedules, document tracking, and milestone communications. Nothing falls through the cracks.",
     },
     {
       title: "Property Match & Search",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/3.png",
       description:
         "Custom property search with saved criteria, new listing alerts, and personalized recommendations. Buyers find their dream home through YOUR platform, not Zillow.",
     },
     {
       title: "Agent Dashboard & Reporting",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/4.png",
       description:
         "Individual and brokerage-wide views of pipeline health, lead conversion rates, deal velocity, and commission projections. Managers see exactly where coaching is needed.",
     },
     {
       title: "Commission & Split Tracker",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/real-estate/5.png",
       description:
         "Automatically calculate commissions based on deal type, agent tier, referral splits, and brokerage caps. Agents see projected earnings in real time.",
     },

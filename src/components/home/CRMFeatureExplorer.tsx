@@ -23,38 +23,38 @@ import { data as lawFirms } from "@/data/industries/law-firms";
 import { data as florists } from "@/data/industries/florists";
 import { data as realEstate } from "@/data/industries/real-estate";
 
+type Feature = { title: string; description: string; image?: string };
+
 type FeatureSet = {
-  features: { title: string; description: string }[];
-  image: string;
+  features: Feature[];
   link: string;
 };
 
 const CURATED_ALL: FeatureSet = {
   features: [
-    { title: "Lead-to-Deal Pipeline", description: "Track every opportunity from first contact to closed deal. Visual Kanban boards, automated follow-ups, and conversion tracking built around your sales process." },
-    { title: "Smart Scheduling & Dispatch", description: "Drag-and-drop scheduling with availability tracking, skill matching, and route optimization. Your team gets push notifications with job details." },
-    { title: "AI-Powered Automation", description: "AI drafts responses, qualifies leads, triggers follow-up sequences, and handles routine customer inquiries 24/7 — so your team focuses on high-value work." },
-    { title: "Customer Portal", description: "Give your clients a branded login where they check project status, approve quotes, view invoices, and communicate with your team. Fewer phone calls, happier customers." },
-    { title: "Invoicing & Payments", description: "Generate branded invoices from completed work. Customers pay online via credit card or ACH. Automated reminders chase overdue balances for you." },
-    { title: "Analytics Dashboard", description: "Real-time metrics on revenue, team performance, customer retention, and pipeline health. Make decisions with data instead of gut feeling." },
+    { title: "Lead-to-Deal Pipeline", description: "Track every opportunity from first contact to closed deal. Visual Kanban boards, automated follow-ups, and conversion tracking built around your sales process.", image: `${CDN}/images/generated/features/all/0.png` },
+    { title: "Smart Scheduling & Dispatch", description: "Drag-and-drop scheduling with availability tracking, skill matching, and route optimization. Your team gets push notifications with job details.", image: `${CDN}/images/generated/features/all/1.png` },
+    { title: "AI-Powered Automation", description: "AI drafts responses, qualifies leads, triggers follow-up sequences, and handles routine customer inquiries 24/7 — so your team focuses on high-value work.", image: `${CDN}/images/generated/features/all/2.png` },
+    { title: "Customer Portal", description: "Give your clients a branded login where they check project status, approve quotes, view invoices, and communicate with your team. Fewer phone calls, happier customers.", image: `${CDN}/images/generated/features/all/3.png` },
+    { title: "Invoicing & Payments", description: "Generate branded invoices from completed work. Customers pay online via credit card or ACH. Automated reminders chase overdue balances for you.", image: `${CDN}/images/generated/features/all/4.png` },
+    { title: "Analytics Dashboard", description: "Real-time metrics on revenue, team performance, customer retention, and pipeline health. Make decisions with data instead of gut feeling.", image: `${CDN}/images/generated/features/all/5.png` },
   ],
-  image: `${CDN}/images/generated/services/crm-hero.png`,
   link: "/services/custom-crm",
 };
 
 const INDUSTRY_DATA: Record<string, FeatureSet> = {
-  restaurants: { features: restaurants.crmFeatures, image: restaurants.heroImage || `${CDN}/images/generated/industries/restaurants.png`, link: "/industries/restaurants" },
-  contractors: { features: contractors.crmFeatures, image: contractors.heroImage || `${CDN}/images/generated/industries/contractors.png`, link: "/industries/contractors" },
-  dental: { features: dental.crmFeatures, image: dental.heroImage || `${CDN}/images/generated/industries/dental.png`, link: "/industries/dental" },
-  "home-services": { features: homeServices.crmFeatures, image: homeServices.heroImage || `${CDN}/images/generated/industries/home-services.png`, link: "/industries/home-services" },
-  "pest-control": { features: pestControl.crmFeatures, image: pestControl.heroImage || `${CDN}/images/generated/industries/pest-control.png`, link: "/industries/pest-control" },
-  landscaping: { features: landscaping.crmFeatures, image: landscaping.heroImage || `${CDN}/images/generated/industries/landscaping.png`, link: "/industries/landscaping" },
-  "hvac-plumbing": { features: hvacPlumbing.crmFeatures, image: hvacPlumbing.heroImage || `${CDN}/images/generated/industries/hvac.png`, link: "/industries/hvac-plumbing" },
-  "auto-shops": { features: autoShops.crmFeatures, image: autoShops.heroImage || `${CDN}/images/generated/industries/auto.png`, link: "/industries/auto-shops" },
-  salons: { features: salons.crmFeatures, image: salons.heroImage || `${CDN}/images/generated/industries/salons.png`, link: "/industries/salons" },
-  "law-firms": { features: lawFirms.crmFeatures, image: lawFirms.heroImage || `${CDN}/images/generated/industries/law.png`, link: "/industries/law-firms" },
-  florists: { features: florists.crmFeatures, image: florists.heroImage || `${CDN}/images/generated/industries/florists.png`, link: "/industries/florists" },
-  "real-estate": { features: realEstate.crmFeatures, image: realEstate.heroImage || `${CDN}/images/generated/industries/realestate.png`, link: "/industries/real-estate" },
+  restaurants: { features: restaurants.crmFeatures, link: "/industries/restaurants" },
+  contractors: { features: contractors.crmFeatures, link: "/industries/contractors" },
+  dental: { features: dental.crmFeatures, link: "/industries/dental" },
+  "home-services": { features: homeServices.crmFeatures, link: "/industries/home-services" },
+  "pest-control": { features: pestControl.crmFeatures, link: "/industries/pest-control" },
+  landscaping: { features: landscaping.crmFeatures, link: "/industries/landscaping" },
+  "hvac-plumbing": { features: hvacPlumbing.crmFeatures, link: "/industries/hvac-plumbing" },
+  "auto-shops": { features: autoShops.crmFeatures, link: "/industries/auto-shops" },
+  salons: { features: salons.crmFeatures, link: "/industries/salons" },
+  "law-firms": { features: lawFirms.crmFeatures, link: "/industries/law-firms" },
+  florists: { features: florists.crmFeatures, link: "/industries/florists" },
+  "real-estate": { features: realEstate.crmFeatures, link: "/industries/real-estate" },
 };
 
 export function CRMFeatureExplorer() {
@@ -128,15 +128,17 @@ export function CRMFeatureExplorer() {
               className="group rounded-2xl border border-gray-200 bg-white overflow-hidden hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
             >
               {/* Card image */}
-              <div className="relative h-40 overflow-hidden bg-gray-100">
-                <Image
-                  src={current.image}
-                  alt={`${feature.title} — Custom CRM Feature by iOLab Digital`}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-              </div>
+              {feature.image && (
+                <div className="relative h-40 overflow-hidden bg-gray-100">
+                  <Image
+                    src={feature.image}
+                    alt={`${feature.title} — Custom CRM Feature by iOLab Digital`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </div>
+              )}
 
               {/* Card content */}
               <div className="p-5">

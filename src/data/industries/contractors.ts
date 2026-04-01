@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Lead-to-Job Pipeline",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/contractors/0.png",
       description:
         "Track every opportunity from first contact through estimate, approval, scheduling, completion, and payment. Visual Kanban boards show your entire pipeline at a glance.",
     },
     {
       title: "Estimate & Invoice Builder",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/contractors/1.png",
       description:
         "Create branded estimates with your templates, labor rates, and material costs. One-click conversion from estimate to invoice. Customers approve and pay online.",
     },
     {
       title: "Crew Scheduling & Dispatch",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/contractors/2.png",
       description:
         "Drag-and-drop scheduling with crew availability, skill matching, and travel time awareness. Your team gets their schedule and job details on their phone.",
     },
     {
       title: "Customer Project Portal",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/contractors/3.png",
       description:
         "Clients log in to see real-time project status, photo updates, upcoming milestones, and outstanding invoices. Fewer phone calls, happier customers.",
     },
     {
       title: "Job Costing & Profitability",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/contractors/4.png",
       description:
         "Track actual labor, materials, and subcontractor costs against estimates in real time. Know which jobs are profitable and which are bleeding money before it's too late.",
     },
     {
       title: "Document & Photo Management",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/contractors/5.png",
       description:
         "Before/after photos, permits, contracts, and change orders — all attached to the job record. Your crew uploads from the field, and it's instantly available in the office.",
     },

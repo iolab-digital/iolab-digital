@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Customer Occasion Database",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/florists/0.png",
       description:
         "Track every customer's important dates — birthdays, anniversaries, memorials. Automated reminders trigger before each occasion so they never forget (and neither do you).",
     },
     {
       title: "Order & Arrangement Manager",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/florists/1.png",
       description:
         "Custom order flow with arrangement type, size, budget, delivery details, and card messages. Visual pipeline from order to design to delivery.",
     },
     {
       title: "Event Coordination Portal",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/florists/2.png",
       description:
         "Manage wedding and event orders with timelines, consultations, mood boards, itemized quotes, and delivery schedules. Clients approve arrangements online.",
     },
     {
       title: "Perishable Inventory System",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/florists/3.png",
       description:
         "Track flower stock by type, quantity, freshness date, and supplier. Get alerts when inventory is aging and needs to be used or discounted.",
     },
     {
       title: "Delivery Management",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/florists/4.png",
       description:
         "Route-optimized delivery scheduling with driver tracking, delivery confirmation photos, and automatic customer notifications on dispatch and delivery.",
     },
     {
       title: "Subscription & Recurring Orders",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/florists/5.png",
       description:
         "Set up weekly, bi-weekly, or monthly flower subscriptions. The system auto-generates orders, schedules deliveries, and bills automatically.",
     },

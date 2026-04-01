@@ -54,31 +54,37 @@ export const data: IndustryPageData = {
   crmFeatures: [
     {
       title: "Guest Profiles & Preferences",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/0.png",
       description:
         "Automatically build rich guest profiles from every touchpoint — online orders, reservations, loyalty check-ins. Know their favorite dishes, dietary restrictions, and visit frequency without asking.",
     },
     {
       title: "Reservation & Waitlist Management",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/1.png",
       description:
         "Custom booking system with real-time table availability, automated confirmation texts, waitlist management, and no-show tracking — all branded to your restaurant.",
     },
     {
       title: "Order Pipeline & Kitchen Display",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/2.png",
       description:
         "Track every order from placement to plating. Kitchen display integration shows your team exactly what to prepare, with timing coordinated across courses.",
     },
     {
       title: "Loyalty & Rewards Engine",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/3.png",
       description:
         "Design your own rewards program — points per visit, birthday perks, VIP tiers. Customers engage with YOUR brand, not a third-party app, and you own every data point.",
     },
     {
       title: "Marketing Automation Hub",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/4.png",
       description:
         "Send targeted campaigns based on actual behavior — re-engage lapsed customers, promote slow nights to regulars, trigger birthday offers automatically. No more spray-and-pray.",
     },
     {
       title: "Revenue & Performance Dashboard",
+      image: "https://iolab.nyc3.digitaloceanspaces.com/images/generated/features/restaurants/5.png",
       description:
         "Real-time sales by day, item, server, and channel. See what's working, what's not, and make decisions with data instead of gut feeling.",
     },
