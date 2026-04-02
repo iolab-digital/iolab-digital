@@ -11,7 +11,7 @@ type DemoShellProps = {
 
 export function DemoShell({ title, brand, children }: DemoShellProps) {
   const displayTitle = brand ? `${brand.businessName} — ${title}` : title;
-  const faviconUrl = brand?.logoUrl;
+  const logoUrl = brand?.logoUrl;
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white shadow-xl shadow-black/5 overflow-hidden">
@@ -23,21 +23,26 @@ export function DemoShell({ title, brand, children }: DemoShellProps) {
           <div className="w-3 h-3 rounded-full bg-green-400" />
         </div>
         <div className="flex-1 flex items-center justify-center gap-2">
-          {faviconUrl && (
-            <Image
-              src={faviconUrl}
-              alt=""
-              width={16}
-              height={16}
-              className="rounded-sm object-contain"
-              unoptimized
+          {logoUrl && (
+            <img
+              src={logoUrl}
+              alt={brand?.businessName || ""}
+              className="h-5 w-auto rounded-sm object-contain max-w-[80px]"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
           )}
           <span className="text-xs text-gray-500 font-medium truncate max-w-xs">
             {displayTitle}
           </span>
         </div>
-        <div className="w-[54px]" /> {/* Spacer to center title */}
+        {brand && (
+          <span
+            className="text-[9px] font-medium px-2 py-0.5 rounded-full text-white shrink-0"
+            style={{ background: brand.primaryColor }}
+          >
+            Branded
+          </span>
+        )}
       </div>
 
       {/* Demo content */}

@@ -19,6 +19,8 @@ export async function POST(request: Request) {
       fetchUrl = `https://${fetchUrl}`;
     }
 
+    const domain = extractDomain(fetchUrl);
+
     // Fetch the website HTML
     let html: string;
     try {
@@ -30,10 +32,9 @@ export async function POST(request: Request) {
         signal: AbortSignal.timeout(10000),
       });
       html = await response.text();
-      // Truncate to avoid token limits — head section + first chunk of body is enough
-      html = html.substring(0, 15000);
+      // Get more HTML for better extraction — head + top of body
+      html = html.substring(0, 20000);
     } catch {
-      // If we can't fetch, return sensible defaults
       return NextResponse.json({
         businessName: extractDomainName(fetchUrl),
         primaryColor: "#2563eb",
@@ -44,32 +45,51 @@ export async function POST(request: Request) {
       });
     }
 
-    // Ask Claude to extract brand identity
+    // Improved prompt for brand extraction
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 500,
+      max_tokens: 800,
       messages: [
         {
           role: "user",
-          content: `Analyze this website HTML and extract the brand identity. Return ONLY valid JSON with these fields:
-{
-  "businessName": "The business name",
-  "primaryColor": "#hex color (the main brand color from the site)",
-  "accentColor": "#hex color (secondary/accent color)",
-  "logoUrl": "absolute URL to the logo image, or null if not found",
-  "fontStyle": "sans-serif" or "serif" or "rounded",
-  "industry": "one word describing their industry (e.g. plumbing, dental, restaurant, legal, realestate, construction)"
-}
+          content: `You are a brand identity extraction expert. Analyze this website HTML and extract the brand identity.
 
-Important: For logoUrl, make sure it's an absolute URL (starts with http). If you find a relative path like /logo.png, prepend the site's domain. If no clear logo, return null.
+INSTRUCTIONS:
+1. **businessName**: Find the actual business/company name. Look in: <title> tag, <meta property="og:site_name">, <h1>, logo alt text, footer copyright text, or schema.org data. Remove taglines — just the business name.
 
-Website HTML (truncated):
+2. **primaryColor**: Find the MAIN brand color. Look in:
+   - CSS custom properties (--primary, --brand-color, --main-color)
+   - Inline styles on the header, nav, or hero section
+   - Button background colors
+   - Link colors
+   - <meta name="theme-color">
+   - Common CSS classes (.btn-primary, .bg-primary)
+   Return a hex color like "#1a2b3c". If the site is mostly red, return the specific red. If blue, the specific blue.
+
+3. **accentColor**: Find a SECONDARY color used for highlights, CTAs, or accents. Should contrast with primaryColor.
+
+4. **logoUrl**: Find the logo image. Look in:
+   - <img> tags inside <header>, <nav>, or elements with class containing "logo", "brand", "header"
+   - <link rel="icon"> or <link rel="apple-touch-icon"> (as fallback)
+   - SVG inline logos
+   - The src/href MUST be an absolute URL starting with http. If you find a relative path like /wp-content/uploads/logo.png, prepend "${domain}" to make it absolute.
+   - For WordPress sites, logos are often in /wp-content/uploads/
+   - Return null ONLY if truly no logo found.
+
+5. **fontStyle**: Determine the primary font family: "sans-serif", "serif", or "rounded"
+
+6. **industry**: One word: restaurant, plumbing, dental, legal, realestate, construction, salon, florist, hvac, automotive, pest-control, landscaping, ecommerce, saas, agency, fitness, education, healthcare, finance, or "business" as fallback.
+
+Return ONLY valid JSON — no explanation, no markdown:
+{"businessName":"...","primaryColor":"#...","accentColor":"#...","logoUrl":"...or null","fontStyle":"...","industry":"..."}
+
+Website domain: ${domain}
+Website HTML:
 ${html}`,
         },
       ],
     });
 
-    // Extract JSON from Claude's response
     const responseText =
       message.content[0].type === "text" ? message.content[0].text : "";
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
@@ -97,6 +117,11 @@ ${html}`,
       industry: raw.industry || "business",
     };
 
+    // Validate logo URL — must be absolute
+    if (brandData.logoUrl && !brandData.logoUrl.startsWith("http")) {
+      brandData.logoUrl = `${domain}${brandData.logoUrl.startsWith("/") ? "" : "/"}${brandData.logoUrl}`;
+    }
+
     return NextResponse.json(brandData);
   } catch (error) {
     console.error("Brand extraction error:", error);
@@ -107,10 +132,18 @@ ${html}`,
   }
 }
 
+function extractDomain(url: string): string {
+  try {
+    const u = new URL(url);
+    return `${u.protocol}//${u.hostname}`;
+  } catch {
+    return url;
+  }
+}
+
 function extractDomainName(url: string): string {
   try {
     const hostname = new URL(url).hostname;
-    // Remove www. and .com/.net/etc, capitalize
     const name = hostname
       .replace(/^www\./, "")
       .replace(/\.(com|net|org|co|io|biz)$/, "");
