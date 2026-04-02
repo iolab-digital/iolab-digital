@@ -8,7 +8,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
-import { ChatbotToggle } from "@/components/admin/ChatbotToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -101,10 +100,6 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Controls */}
-      <div className="mb-8">
-        <ChatbotToggle />
-      </div>
 
       {/* Quick links */}
       <div className="grid grid-cols-3 gap-4 mb-8">

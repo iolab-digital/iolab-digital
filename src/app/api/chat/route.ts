@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { IOLAB_KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 import { db } from "@/db";
-import { demoLeads } from "@/db/schema";
+import { demoLeads, siteSettings } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import {
   checkRateLimit,
   checkDailyLimit,
@@ -87,7 +88,22 @@ export async function POST(request: Request) {
     }
 
     // --- All guards passed — call Claude ---
-    let systemPrompt = IOLAB_KNOWLEDGE_BASE;
+    // Read custom prompt from DB, fall back to hardcoded default
+    let basePrompt = IOLAB_KNOWLEDGE_BASE;
+    try {
+      const [customPrompt] = await db
+        .select()
+        .from(siteSettings)
+        .where(eq(siteSettings.key, "chatbot_prompt"))
+        .limit(1);
+      if (customPrompt?.value && customPrompt.value.trim().length > 0) {
+        basePrompt = customPrompt.value;
+      }
+    } catch {
+      // Fall back to hardcoded if DB fails
+    }
+
+    let systemPrompt = basePrompt;
     if (visitorInfo?.page) {
       systemPrompt += `\n\nThe visitor is currently on: ${visitorInfo.page}`;
     }

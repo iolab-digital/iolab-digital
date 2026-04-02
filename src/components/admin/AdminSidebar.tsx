@@ -9,6 +9,7 @@ import {
   Mail,
   MessageSquare,
   FileText,
+  Settings,
   LogOut,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const NAV = [
   { label: "Drip Campaigns", href: "/admin/campaigns", icon: Mail },
   { label: "Contact Leads", href: "/admin/contacts", icon: MessageSquare },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
+  { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export function AdminSidebar() {

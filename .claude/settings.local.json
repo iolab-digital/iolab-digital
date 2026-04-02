@@ -140,7 +140,12 @@
       "Bash(curl -s -X POST http://localhost:3000/api/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"messages\"\"\"\":[{\"\"\"\"role\"\"\"\":\"\"\"\"user\"\"\"\",\"\"\"\"content\"\"\"\":\"\"\"\"What services do you offer?\"\"\"\"}]}')",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/portfolio/maven.png)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://iolab.nyc3.digitaloceanspaces.com/images/clients/maven.png)",
-      "Bash(curl -s \"http://localhost:3000/api/admin/settings?key=chatbot_enabled\")"
+      "Bash(curl -s \"http://localhost:3000/api/admin/settings?key=chatbot_enabled\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/settings)",
+      "Bash(curl -s http://localhost:3000/api/chat/knowledge-base)",
+      "Bash(curl -s -X POST http://localhost:3000/api/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"messages\"\"\"\":[{\"\"\"\"role\"\"\"\":\"\"\"\"user\"\"\"\",\"\"\"\"content\"\"\"\":\"\"\"\"Hi\"\"\"\"}]}')",
+      "Bash(npm list:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
