@@ -8,6 +8,27 @@ import {
   json,
 } from "drizzle-orm/pg-core";
 
+export const chatSessions = pgTable("chat_sessions", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull().unique(),
+  visitorIp: text("visitor_ip"),
+  visitorPage: text("visitor_page"),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  lastActiveAt: timestamp("last_active_at").defaultNow().notNull(),
+  messageCount: integer("message_count").default(0).notNull(),
+  userRating: integer("user_rating"),
+  adminRating: integer("admin_rating"),
+  status: text("status").default("active").notNull(),
+});
+
+export const chatMessages = pgTable("chat_messages", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull(),
+  role: text("role").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const siteSettings = pgTable("site_settings", {
   id: serial("id").primaryKey(),
   key: text("key").notNull().unique(),

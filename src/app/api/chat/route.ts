@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { IOLAB_KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 import { db } from "@/db";
-import { demoLeads, siteSettings } from "@/db/schema";
+import { demoLeads, siteSettings, chatSessions, chatMessages } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import {
   checkRateLimit,
@@ -27,8 +27,9 @@ export async function POST(request: Request) {
   try {
     const ip = getClientIP(request);
 
-    const { messages, visitorInfo } = (await request.json()) as {
+    const { messages, sessionId, visitorInfo } = (await request.json()) as {
       messages: Message[];
+      sessionId?: string;
       visitorInfo?: { page?: string };
     };
 
@@ -40,10 +41,7 @@ export async function POST(request: Request) {
     const rateCheck = checkRateLimit(ip);
     if (!rateCheck.allowed) {
       return NextResponse.json(
-        {
-          reply: "You're sending messages too quickly. Please wait a moment and try again. Or reach us directly at hello@iolab.co.",
-          rateLimited: true,
-        },
+        { reply: "You're sending messages too quickly. Please wait a moment and try again. Or reach us directly at hello@iolab.co.", rateLimited: true },
         { status: 429 }
       );
     }
@@ -51,10 +49,7 @@ export async function POST(request: Request) {
     // --- GUARD 2: Daily global limit ---
     if (!checkDailyLimit()) {
       return NextResponse.json(
-        {
-          reply: "Our chat is experiencing high volume right now. For immediate help, reach us at hello@iolab.co or call (609) 200-1127.",
-          rateLimited: true,
-        },
+        { reply: "Our chat is experiencing high volume right now. For immediate help, reach us at hello@iolab.co or call (609) 200-1127.", rateLimited: true },
         { status: 429 }
       );
     }
@@ -87,8 +82,18 @@ export async function POST(request: Request) {
       });
     }
 
-    // --- All guards passed — call Claude ---
-    // Read custom prompt from DB, fall back to hardcoded default
+    // --- Save user message to DB ---
+    if (sessionId) {
+      try {
+        await db.insert(chatMessages).values({
+          sessionId,
+          role: "user",
+          content: sanitized,
+        });
+      } catch { /* silent */ }
+    }
+
+    // --- Build system prompt ---
     let basePrompt = IOLAB_KNOWLEDGE_BASE;
     try {
       const [customPrompt] = await db
@@ -99,9 +104,25 @@ export async function POST(request: Request) {
       if (customPrompt?.value && customPrompt.value.trim().length > 0) {
         basePrompt = customPrompt.value;
       }
-    } catch {
-      // Fall back to hardcoded if DB fails
-    }
+    } catch { /* fallback to hardcoded */ }
+
+    // --- Append learned Q&A from 5-star chats ---
+    try {
+      const [learned] = await db
+        .select()
+        .from(siteSettings)
+        .where(eq(siteSettings.key, "chatbot_learned_qa"))
+        .limit(1);
+      if (learned?.value && learned.value.trim().length > 0) {
+        const qaItems = JSON.parse(learned.value) as { q: string; a: string }[];
+        if (qaItems.length > 0) {
+          basePrompt += "\n\n## LEARNED FROM HIGH-RATED CONVERSATIONS\nThese Q&A pairs were extracted from conversations rated 5 stars by admin. Use them as reference for similar questions:\n";
+          for (const qa of qaItems.slice(-50)) {
+            basePrompt += `\nQ: ${qa.q}\nA: ${qa.a}\n`;
+          }
+        }
+      }
+    } catch { /* ignore */ }
 
     let systemPrompt = basePrompt;
     if (visitorInfo?.page) {
@@ -128,11 +149,29 @@ export async function POST(request: Request) {
     const reply =
       response.content[0].type === "text" ? response.content[0].text : "";
 
+    // --- Save assistant reply to DB ---
+    if (sessionId) {
+      try {
+        await db.insert(chatMessages).values({
+          sessionId,
+          role: "assistant",
+          content: reply,
+        });
+        // Update session
+        await db
+          .update(chatSessions)
+          .set({
+            lastActiveAt: new Date(),
+            messageCount: messages.length + 1,
+          })
+          .where(eq(chatSessions.sessionId, sessionId));
+      } catch { /* silent */ }
+    }
+
     // Auto-capture email if shared in message
     const emailMatch = sanitized.match(
       /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/
     );
-
     if (emailMatch) {
       try {
         await db.insert(demoLeads).values({
@@ -148,18 +187,14 @@ export async function POST(request: Request) {
             industry: "business",
           },
         });
-      } catch {
-        // Silent
-      }
+      } catch { /* silent */ }
     }
 
     return NextResponse.json({ reply });
   } catch (error) {
     console.error("Chat API error:", error);
     return NextResponse.json(
-      {
-        reply: "I'm having trouble connecting right now. You can reach us directly at hello@iolab.co or call (609) 200-1127.",
-      },
+      { reply: "I'm having trouble connecting right now. You can reach us directly at hello@iolab.co or call (609) 200-1127." },
       { status: 200 }
     );
   }

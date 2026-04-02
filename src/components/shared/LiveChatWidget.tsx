@@ -14,6 +14,7 @@ import {
   Minimize2,
   UserCircle,
   Check,
+  Star,
 } from "lucide-react";
 
 type Message = {
@@ -45,11 +46,15 @@ export function LiveChatWidget() {
   const [escEmail, setEscEmail] = useState("");
   const [escLoading, setEscLoading] = useState(false);
   const [enabled, setEnabled] = useState(true);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [showRating, setShowRating] = useState(false);
+  const [userRating, setUserRating] = useState<number | null>(null);
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
 
-  // Check if chatbot is enabled via admin settings
+  // Check if chatbot is enabled
   useEffect(() => {
     fetch("/api/admin/settings?key=chatbot_enabled")
       .then((r) => r.json())
@@ -58,6 +63,59 @@ export function LiveChatWidget() {
       })
       .catch(() => {});
   }, []);
+
+  // Session persistence — load or create on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const stored = localStorage.getItem("iolab-chat-session");
+    if (stored) {
+      try {
+        const { id, startedAt } = JSON.parse(stored);
+        const age = Date.now() - startedAt;
+        if (age < 24 * 60 * 60 * 1000) {
+          // Resume session
+          setSessionId(id);
+          fetch("/api/chat/session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId: id, page: pathname }),
+          })
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.resumed && data.messages?.length > 0) {
+                setMessages(data.messages);
+                setMessageCount(data.messageCount || data.messages.length);
+                setHasInteracted(true);
+                if (data.userRating) {
+                  setRatingSubmitted(true);
+                  setUserRating(data.userRating);
+                }
+              }
+              setSessionId(data.sessionId);
+            })
+            .catch(() => {});
+          return;
+        }
+      } catch { /* ignore corrupt data */ }
+    }
+
+    // Create new session
+    fetch("/api/chat/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ page: pathname }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        setSessionId(data.sessionId);
+        localStorage.setItem(
+          "iolab-chat-session",
+          JSON.stringify({ id: data.sessionId, startedAt: Date.now() })
+        );
+      })
+      .catch(() => {});
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isAdmin = pathname.startsWith("/admin");
   if (isAdmin || !enabled) return null;
@@ -106,6 +164,7 @@ export function LiveChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: updatedMessages,
+          sessionId,
           visitorInfo: { page: pathname },
         }),
       });
@@ -258,7 +317,14 @@ export function LiveChatWidget() {
                   </button>
                 )}
                 <button
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    // Show rating prompt if enough messages and not already rated
+                    if (messageCount >= 3 && !ratingSubmitted && !showRating) {
+                      setShowRating(true);
+                    } else {
+                      setOpen(false);
+                    }
+                  }}
                   className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
                 >
                   <Minimize2 className="h-4 w-4" />
@@ -393,6 +459,45 @@ export function LiveChatWidget() {
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Rating prompt */}
+            {showRating && !ratingSubmitted && (
+              <div className="px-4 py-4 border-t border-gray-200 bg-white text-center shrink-0">
+                <p className="text-sm font-medium text-gray-700 mb-2">How did the iOLab chatbot do?</p>
+                <div className="flex justify-center gap-1 mb-3">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <button
+                      key={s}
+                      onClick={async () => {
+                        setUserRating(s);
+                        setRatingSubmitted(true);
+                        setShowRating(false);
+                        try {
+                          await fetch("/api/chat/rate", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ sessionId, rating: s }),
+                          });
+                        } catch { /* silent */ }
+                      }}
+                      className="p-1 hover:scale-125 transition-transform"
+                    >
+                      <Star className={`h-7 w-7 ${userRating && s <= userRating ? "fill-amber-400 text-amber-400" : "text-gray-300 hover:text-amber-300"}`} />
+                    </button>
+                  ))}
+                </div>
+                <button onClick={() => { setShowRating(false); setOpen(false); }} className="text-[10px] text-gray-400 hover:text-gray-600">
+                  Skip
+                </button>
+              </div>
+            )}
+
+            {/* Rating thank you */}
+            {ratingSubmitted && showRating && (
+              <div className="px-4 py-3 border-t border-green-200 bg-green-50 text-center shrink-0">
+                <p className="text-xs text-green-700 font-medium">Thanks for your feedback! {userRating === 5 && "⭐"}</p>
               </div>
             )}
 

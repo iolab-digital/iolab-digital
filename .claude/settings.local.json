@@ -145,7 +145,20 @@
       "Bash(curl -s http://localhost:3000/api/chat/knowledge-base)",
       "Bash(curl -s -X POST http://localhost:3000/api/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"messages\"\"\"\":[{\"\"\"\"role\"\"\"\":\"\"\"\"user\"\"\"\",\"\"\"\"content\"\"\"\":\"\"\"\"Hi\"\"\"\"}]}')",
       "Bash(npm list:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(docker ps:*)",
+      "Bash(while read:*)",
+      "Bash(do docker:*)",
+      "Bash(rm -f D:/Docker_Apps/iolab-digital/scripts/test-db.mjs)",
+      "Bash(rmdir D:/Docker_Apps/iolab-digital/scripts)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/)",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat/session -H \"Content-Type: application/json\" -d '{\"\"\"\"page\"\"\"\":\"\"\"\"/\"\"\"\"}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"messages\"\"\"\":[{\"\"\"\"role\"\"\"\":\"\"\"\"user\"\"\"\",\"\"\"\"content\"\"\"\":\"\"\"\"Hi\"\"\"\"}],\"\"\"\"sessionId\"\"\"\":\"\"\"\"test-123\"\"\"\"}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/chats)",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat/rate -H \"Content-Type: application/json\" -d '{\"\"\"\"sessionId\"\"\"\":\"\"\"\"fda09860-7af5-49f7-97ac-2eb47f8fe738\"\"\"\",\"\"\"\"rating\"\"\"\":4}')",
+      "Bash(curl -s http://localhost:3001/api/admin/chat)",
+      "Bash(curl -s -X POST http://localhost:3001/api/admin/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"sessionId\"\"\"\":\"\"\"\"fda09860-7af5-49f7-97ac-2eb47f8fe738\"\"\"\",\"\"\"\"rating\"\"\"\":5}')",
+      "Bash(curl -s \"http://localhost:3001/api/admin/settings?key=chatbot_learned_qa\")"
     ]
   }
 }
