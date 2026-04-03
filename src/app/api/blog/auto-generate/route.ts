@@ -133,7 +133,7 @@ The full markdown blog post content here...
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-image-1",
+          model: "gpt-image-1.5",
           prompt: imagePrompt,
           n: 1,
           size: "1536x1024",
@@ -173,6 +173,7 @@ publishedAt: "${today}"
 tags: [${tagsStr}]
 status: "draft"
 ${coverImageUrl ? `image: "${coverImageUrl}"` : ""}
+imagePrompt: "${imagePrompt.replace(/"/g, '\\"')}"
 ---
 
 ${blogContent}

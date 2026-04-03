@@ -32,8 +32,10 @@ export async function GET() {
         publishedAt: data.publishedAt || "",
         tags: data.tags || [],
         image: data.image || null,
+        imagePrompt: data.imagePrompt || null,
         status: data.status === "draft" ? "draft" : "published",
         readingTime: calculateReadingTime(content),
+        content,
       };
     });
 

@@ -11,6 +11,7 @@ export type BlogPost = {
   updatedAt?: string;
   tags: string[];
   image?: string;
+  imagePrompt?: string;
   status: "published" | "draft";
   content: string;
   readingTime: number;
@@ -39,6 +40,7 @@ function parsePost(file: string): BlogPostMeta & { content: string } {
     updatedAt: data.updatedAt,
     tags: data.tags || [],
     image: data.image,
+    imagePrompt: data.imagePrompt,
     status: data.status === "draft" ? "draft" : "published",
     content,
     readingTime: calculateReadingTime(content),

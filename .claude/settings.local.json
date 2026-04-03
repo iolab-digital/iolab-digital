@@ -160,7 +160,9 @@
       "Bash(curl -s -X POST http://localhost:3001/api/admin/chat -H \"Content-Type: application/json\" -d '{\"\"\"\"sessionId\"\"\"\":\"\"\"\"fda09860-7af5-49f7-97ac-2eb47f8fe738\"\"\"\",\"\"\"\"rating\"\"\"\":5}')",
       "Bash(curl -s \"http://localhost:3001/api/admin/settings?key=chatbot_learned_qa\")",
       "Bash(curl -s -X POST http://localhost:3001/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"gouldsburgers.com\"\"}')",
-      "Bash(curl -s -X POST http://localhost:3001/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"mavensj.com\"\"}')"
+      "Bash(curl -s -X POST http://localhost:3001/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"mavensj.com\"\"}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/blog)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:3001/api/blog/regenerate-image -H \"Content-Type: application/json\" -d '{\"\"slug\"\":\"\"nonexistent\"\",\"\"imagePrompt\"\":\"\"test\"\"}')"
     ]
   }
 }

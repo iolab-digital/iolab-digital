@@ -12,6 +12,11 @@ import {
   Sparkles,
   Loader2,
   Trash2,
+  Image as ImageIcon,
+  RefreshCw,
+  X,
+  Eye,
+  Link2,
 } from "lucide-react";
 
 type Post = {
@@ -23,6 +28,8 @@ type Post = {
   publishedAt: string;
   readingTime: number;
   image: string | null;
+  imagePrompt: string | null;
+  content: string;
 };
 
 export default function AdminBlogPage() {
@@ -30,6 +37,9 @@ export default function AdminBlogPage() {
   const [drafts, setDrafts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [previewPost, setPreviewPost] = useState<Post | null>(null);
+  const [editPrompt, setEditPrompt] = useState("");
+  const [regenerating, setRegenerating] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -64,6 +74,33 @@ export default function AdminBlogPage() {
       alert(`Failed to ${action}. Please try again.`);
     }
     setActionLoading(null);
+  }
+
+  function openPreview(post: Post) {
+    setPreviewPost(post);
+    setEditPrompt(post.imagePrompt || "");
+  }
+
+  async function handleRegenerateImage() {
+    if (!previewPost || !editPrompt.trim()) return;
+    setRegenerating(true);
+    try {
+      const res = await fetch("/api/blog/regenerate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: previewPost.slug, imagePrompt: editPrompt }),
+      });
+      const data = await res.json();
+      if (data.success && data.imageUrl) {
+        setPreviewPost({ ...previewPost, image: data.imageUrl, imagePrompt: editPrompt });
+        await fetchPosts();
+      } else {
+        alert(data.error || "Failed to regenerate image.");
+      }
+    } catch {
+      alert("Failed to regenerate image.");
+    }
+    setRegenerating(false);
   }
 
   const published = allPosts.filter((p) => p.status === "published");
@@ -174,12 +211,18 @@ export default function AdminBlogPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => openPreview(draft)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium border border-primary/30 text-primary hover:bg-primary/5 flex items-center gap-1"
+                  >
+                    <Eye className="h-3 w-3" /> Full Preview
+                  </button>
                   <Link
                     href={`/blog/${draft.slug}`}
                     target="_blank"
                     className="px-3 py-1.5 rounded-lg text-xs font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 flex items-center gap-1"
                   >
-                    <ExternalLink className="h-3 w-3" /> Preview
+                    <ExternalLink className="h-3 w-3" /> Live
                   </Link>
                   <button
                     onClick={() => handleAction(draft.slug, "publish")}
@@ -290,6 +333,122 @@ export default function AdminBlogPage() {
           ))}
         </div>
       </div>
+
+      {/* Draft Preview Panel */}
+      {previewPost && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-start justify-center overflow-y-auto py-8">
+          <div className="w-full max-w-4xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <Eye className="h-5 w-5 text-primary" />
+                <h3 className="font-bold">Draft Preview</h3>
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Draft</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => { handleAction(previewPost.slug, "publish"); setPreviewPost(null); }}
+                  disabled={actionLoading === previewPost.slug}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-600 text-white hover:bg-green-700 flex items-center gap-1"
+                >
+                  <CheckCircle2 className="h-3 w-3" /> Approve & Publish
+                </button>
+                <button
+                  onClick={() => { handleAction(previewPost.slug, "reject"); setPreviewPost(null); }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium border border-red-200 text-red-600 hover:bg-red-50 flex items-center gap-1"
+                >
+                  <Trash2 className="h-3 w-3" /> Reject
+                </button>
+                <button onClick={() => setPreviewPost(null)} className="p-1.5 rounded-lg hover:bg-gray-200">
+                  <X className="h-4 w-4 text-gray-500" />
+                </button>
+              </div>
+            </div>
+
+            {/* Meta info */}
+            <div className="px-6 py-4 bg-gray-50/50 border-b border-gray-100 space-y-2">
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-medium text-gray-500 w-16">Title:</span>
+                <span className="font-bold text-gray-900">{previewPost.title}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-medium text-gray-500 w-16">URL:</span>
+                <span className="flex items-center gap-1 text-primary">
+                  <Link2 className="h-3 w-3" />
+                  /blog/{previewPost.slug}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-medium text-gray-500 w-16">Desc:</span>
+                <span className="text-gray-600">{previewPost.description}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-medium text-gray-500 w-16">Tags:</span>
+                <div className="flex flex-wrap gap-1">
+                  {previewPost.tags.map((tag) => (
+                    <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-medium text-gray-500 w-16">Date:</span>
+                <span className="text-gray-600">{previewPost.publishedAt}</span>
+                <span className="text-gray-400">·</span>
+                <span className="text-gray-600">{previewPost.readingTime} min read</span>
+              </div>
+            </div>
+
+            {/* Cover Image + Prompt Editor */}
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center gap-2 mb-3">
+                <ImageIcon className="h-4 w-4 text-gray-500" />
+                <h4 className="text-sm font-bold">Cover Image</h4>
+              </div>
+              {previewPost.image ? (
+                <div className="rounded-xl overflow-hidden border border-gray-200 mb-3">
+                  <img
+                    src={previewPost.image}
+                    alt={previewPost.title}
+                    className="w-full h-auto max-h-64 object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="rounded-xl border-2 border-dashed border-gray-200 p-8 text-center mb-3">
+                  <ImageIcon className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">No cover image generated</p>
+                </div>
+              )}
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-gray-500">Image Prompt (edit and regenerate):</label>
+                <textarea
+                  value={editPrompt}
+                  onChange={(e) => setEditPrompt(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-mono h-20 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-y"
+                  placeholder="Enter a DALL-E prompt for the cover image..."
+                />
+                <button
+                  onClick={handleRegenerateImage}
+                  disabled={regenerating || !editPrompt.trim()}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium bg-primary text-white hover:bg-primary/90 disabled:opacity-50"
+                >
+                  {regenerating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                  {regenerating ? "Generating..." : "Regenerate Image"}
+                </button>
+              </div>
+            </div>
+
+            {/* Article Body */}
+            <div className="px-6 py-6">
+              <h4 className="text-sm font-bold mb-4 flex items-center gap-2">
+                <FileText className="h-4 w-4 text-gray-500" /> Article Body
+              </h4>
+              <div className="prose prose-sm max-w-none rounded-xl bg-gray-50 border border-gray-200 p-6 max-h-[500px] overflow-y-auto">
+                <pre className="whitespace-pre-wrap text-xs text-gray-700 font-mono leading-relaxed">{previewPost.content}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
