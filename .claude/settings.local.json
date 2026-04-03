@@ -162,7 +162,9 @@
       "Bash(curl -s -X POST http://localhost:3001/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"gouldsburgers.com\"\"}')",
       "Bash(curl -s -X POST http://localhost:3001/api/demos/brand -H \"Content-Type: application/json\" -d '{\"\"url\"\":\"\"mavensj.com\"\"}')",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/blog)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:3001/api/blog/regenerate-image -H \"Content-Type: application/json\" -d '{\"\"slug\"\":\"\"nonexistent\"\",\"\"imagePrompt\"\":\"\"test\"\"}')"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:3001/api/blog/regenerate-image -H \"Content-Type: application/json\" -d '{\"\"slug\"\":\"\"nonexistent\"\",\"\"imagePrompt\"\":\"\"test\"\"}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat -H \"Content-Type: application/json\" -d '{\"\"messages\"\":[{\"\"role\"\":\"\"user\"\",\"\"content\"\":\"\"test\"\"}]}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/campaigns)"
     ]
   }
 }
