@@ -151,14 +151,14 @@ export default function AdminBlogPage() {
   }
 
   return (
-    <div className="p-6 max-w-6xl">
+    <div className="p-3 md:p-6 max-w-6xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Blog Posts</h1>
+        <h1 className="text-xl md:text-2xl font-bold">Blog Posts</h1>
         <span className="text-sm text-gray-500">{allPosts.length} total</span>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
         <div className="rounded-xl bg-white border border-gray-200 p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -251,7 +251,7 @@ export default function AdminBlogPage() {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
                   <button
                     onClick={() => openPreview(draft)}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium border border-primary/30 text-primary hover:bg-primary/5 flex items-center gap-1"

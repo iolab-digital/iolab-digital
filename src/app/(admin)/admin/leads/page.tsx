@@ -42,9 +42,9 @@ export default async function AdminLeadsPage() {
   const leads = await getLeads();
 
   return (
-    <div className="p-6 max-w-6xl">
+    <div className="p-3 md:p-6 max-w-6xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Demo Leads</h1>
+        <h1 className="text-xl md:text-2xl font-bold">Demo Leads</h1>
         <span className="text-sm text-gray-500">{leads.length} total</span>
       </div>
 

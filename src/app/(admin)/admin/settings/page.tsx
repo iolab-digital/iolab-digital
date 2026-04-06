@@ -114,9 +114,9 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="p-6 max-w-5xl">
+    <div className="p-3 md:p-6 max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold font-display">Settings</h1>
+        <h1 className="text-xl md:text-2xl font-bold font-display">Settings</h1>
         <p className="text-sm text-gray-500">Manage chatbot behavior and site-wide settings.</p>
       </div>
 

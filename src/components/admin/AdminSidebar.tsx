@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Settings,
   LogOut,
+  X,
 } from "lucide-react";
 
 const NAV = [
@@ -24,19 +25,24 @@ const NAV = [
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
-export function AdminSidebar() {
+export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
   const pathname = usePathname();
   const router = useRouter();
 
   async function handleLogout() {
     await fetch("/api/admin/auth", { method: "DELETE" });
+    onClose?.();
     router.push("/admin/login");
   }
 
+  function handleNavClick() {
+    onClose?.();
+  }
+
   return (
-    <aside className="w-56 bg-gray-950 text-white flex flex-col shrink-0 min-h-screen">
-      <div className="p-4 border-b border-gray-800">
-        <Link href="/admin" className="flex items-center gap-3">
+    <aside className="w-56 md:w-56 bg-gray-950 text-white flex flex-col shrink-0 min-h-screen">
+      <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+        <Link href="/admin" onClick={handleNavClick} className="flex items-center gap-3">
           <Image
             src="https://iolab.nyc3.cdn.digitaloceanspaces.com/images/logo/iolab-logo-latest-white.png"
             alt="iOLab Digital"
@@ -48,6 +54,11 @@ export function AdminSidebar() {
             Admin
           </span>
         </Link>
+        {onClose && (
+          <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-800 md:hidden">
+            <X className="h-4 w-4 text-gray-400" />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 p-3 space-y-1">
@@ -60,6 +71,7 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={handleNavClick}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
                   ? "bg-primary text-white"

@@ -57,11 +57,11 @@ export default async function AdminCampaignsPage() {
   const { emailStats, activeCampaigns, completedCampaigns } = await getCampaignStats();
 
   return (
-    <div className="p-6 max-w-6xl">
-      <h1 className="text-2xl font-bold mb-6">Email Drip Campaigns</h1>
+    <div className="p-3 md:p-6 max-w-6xl">
+      <h1 className="text-xl md:text-2xl font-bold mb-6">Email Drip Campaigns</h1>
 
       {/* Overview stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-8">
         <div className="rounded-xl bg-white border border-gray-200 p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
             <Send className="h-5 w-5 text-blue-600" />

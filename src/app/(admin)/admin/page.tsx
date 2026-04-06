@@ -76,14 +76,14 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="p-6 max-w-6xl">
+    <div className="p-3 md:p-6 max-w-6xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold font-display">{greeting}, Rauf</h1>
+        <h1 className="text-xl md:text-2xl font-bold font-display">{greeting}, Rauf</h1>
         <p className="text-sm text-gray-500">Here&apos;s what&apos;s happening with iOLab Digital today.</p>
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
         {statCards.map((stat) => (
           <div
             key={stat.label}
@@ -102,7 +102,7 @@ export default async function AdminDashboardPage() {
 
 
       {/* Quick links */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-8">
         <Link href="/admin/leads" className="rounded-xl bg-white border border-gray-200 p-4 hover:border-primary/30 hover:shadow-lg transition-all text-center">
           <Users className="h-6 w-6 mx-auto mb-2 text-blue-500" />
           <span className="text-sm font-medium">View All Demo Leads</span>

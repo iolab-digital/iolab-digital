@@ -127,11 +127,11 @@ export default function AdminChatsPage() {
   }
 
   return (
-    <div className="p-6 max-w-6xl">
-      <h1 className="text-2xl font-bold font-display mb-6">Chat Sessions</h1>
+    <div className="p-3 md:p-6 max-w-6xl">
+      <h1 className="text-xl md:text-2xl font-bold font-display mb-6">Chat Sessions</h1>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
         <div className="rounded-xl bg-white border border-gray-200 p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -178,7 +178,7 @@ export default function AdminChatsPage() {
         </div>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         {/* Sessions list */}
         <div className="flex-1 rounded-xl bg-white border border-gray-200 overflow-hidden">
           <div className="p-4 border-b border-gray-200">
@@ -238,7 +238,7 @@ export default function AdminChatsPage() {
 
         {/* Transcript panel */}
         {selectedSession && (
-          <div className="w-96 rounded-xl bg-white border border-gray-200 overflow-hidden flex flex-col shrink-0">
+          <div className="w-full md:w-96 rounded-xl bg-white border border-gray-200 overflow-hidden flex flex-col shrink-0">
             <div className="p-4 border-b border-gray-200 flex items-center justify-between">
               <h3 className="font-bold text-sm">Transcript</h3>
               <button onClick={() => setSelectedSession(null)} className="text-gray-400 hover:text-gray-600">
