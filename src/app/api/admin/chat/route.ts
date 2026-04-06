@@ -6,9 +6,11 @@ import { desc, eq, sql } from "drizzle-orm";
 // GET — list all chat sessions for admin
 export async function GET() {
   try {
+    // Only show sessions that have at least 1 message
     const sessions = await db
       .select()
       .from(chatSessions)
+      .where(sql`${chatSessions.messageCount} > 0`)
       .orderBy(desc(chatSessions.lastActiveAt))
       .limit(200);
 

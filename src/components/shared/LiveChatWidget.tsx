@@ -64,7 +64,7 @@ export function LiveChatWidget() {
       .catch(() => {});
   }, []);
 
-  // Session persistence — load or create on mount
+  // Session persistence — only RESUME existing sessions on mount, don't create new ones
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -74,7 +74,7 @@ export function LiveChatWidget() {
         const { id, startedAt } = JSON.parse(stored);
         const age = Date.now() - startedAt;
         if (age < 24 * 60 * 60 * 1000) {
-          // Resume session
+          // Resume existing session — only if it has messages
           setSessionId(id);
           fetch("/api/chat/session", {
             method: "POST",
@@ -96,25 +96,23 @@ export function LiveChatWidget() {
             })
             .catch(() => {});
           return;
+        } else {
+          // Expired — clear
+          localStorage.removeItem("iolab-chat-session");
         }
-      } catch { /* ignore corrupt data */ }
+      } catch {
+        localStorage.removeItem("iolab-chat-session");
+      }
     }
 
-    // Create new session
-    fetch("/api/chat/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ page: pathname }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        setSessionId(data.sessionId);
-        localStorage.setItem(
-          "iolab-chat-session",
-          JSON.stringify({ id: data.sessionId, startedAt: Date.now() })
-        );
-      })
-      .catch(() => {});
+    // Don't create a DB session yet — just generate a client-side ID
+    // The DB session will be created on the first message sent
+    const newId = crypto.randomUUID();
+    setSessionId(newId);
+    localStorage.setItem(
+      "iolab-chat-session",
+      JSON.stringify({ id: newId, startedAt: Date.now() })
+    );
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isAdmin = pathname.startsWith("/admin");

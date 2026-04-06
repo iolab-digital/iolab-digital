@@ -82,9 +82,26 @@ export async function POST(request: Request) {
       });
     }
 
-    // --- Save user message to DB ---
+    // --- Create DB session on first message (if doesn't exist) + save user message ---
     if (sessionId) {
       try {
+        // Check if session exists in DB
+        const [existing] = await db
+          .select({ id: chatSessions.id })
+          .from(chatSessions)
+          .where(eq(chatSessions.sessionId, sessionId))
+          .limit(1);
+
+        if (!existing) {
+          // First message — create the session now
+          await db.insert(chatSessions).values({
+            sessionId,
+            visitorIp: ip,
+            visitorPage: visitorInfo?.page || null,
+            status: "active",
+          });
+        }
+
         await db.insert(chatMessages).values({
           sessionId,
           role: "user",
