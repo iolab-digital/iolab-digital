@@ -40,6 +40,8 @@ export default function AdminBlogPage() {
   const [previewPost, setPreviewPost] = useState<Post | null>(null);
   const [editPrompt, setEditPrompt] = useState("");
   const [regenerating, setRegenerating] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -61,6 +63,8 @@ export default function AdminBlogPage() {
     if (action === "reject" && !confirm("Delete this draft permanently?")) return;
 
     setActionLoading(slug);
+    if (action === "publish") setPublishing(true);
+
     const res = await fetch("/api/blog/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -68,12 +72,32 @@ export default function AdminBlogPage() {
     });
 
     if (res.ok) {
-      // Re-fetch fresh data from API
       await fetchPosts();
     } else {
       alert(`Failed to ${action}. Please try again.`);
     }
     setActionLoading(null);
+    setPublishing(false);
+  }
+
+  async function handleGenerateNow() {
+    setGenerating(true);
+    try {
+      const res = await fetch("/api/blog/auto-generate", {
+        headers: { Authorization: `Bearer ${document.cookie.includes("iolab-admin-token") ? "admin-session" : ""}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        alert(`Draft created: "${data.title}"`);
+        await fetchPosts();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Generation failed.");
+      }
+    } catch {
+      alert("Generation failed. Check the console.");
+    }
+    setGenerating(false);
   }
 
   function openPreview(post: Post) {
@@ -180,6 +204,23 @@ export default function AdminBlogPage() {
           </div>
         </div>
       </div>
+
+      {/* Generate Now button when no drafts */}
+      {drafts.length === 0 && (
+        <div className="rounded-xl bg-gray-50 border border-gray-200 p-8 text-center mb-8">
+          <Sparkles className="h-8 w-8 text-gray-300 mx-auto mb-3" />
+          <p className="text-sm font-medium text-gray-600 mb-1">No drafts pending review</p>
+          <p className="text-xs text-gray-400 mb-4">Generate a new AI blog post on demand</p>
+          <button
+            onClick={handleGenerateNow}
+            disabled={generating}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
+          >
+            {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {generating ? "Generating... This may take up to a minute" : "Generate New Blog Post"}
+          </button>
+        </div>
+      )}
 
       {/* Drafts pending review */}
       {drafts.length > 0 && (
@@ -333,6 +374,17 @@ export default function AdminBlogPage() {
           ))}
         </div>
       </div>
+
+      {/* Publishing overlay */}
+      {publishing && (
+        <div className="fixed inset-0 z-[60] bg-white/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-lg font-bold font-display">Publishing...</p>
+            <p className="text-sm text-gray-500 mt-1">Making the post live on the site</p>
+          </div>
+        </div>
+      )}
 
       {/* Draft Preview Panel */}
       {previewPost && (

@@ -24,10 +24,13 @@ function getResend() {
 }
 
 export async function GET(request: Request) {
-  // Auth check
+  // Auth check — accept CRON_SECRET header OR admin session cookie
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET || "cron-secret-default";
-  if (authHeader !== `Bearer ${cronSecret}`) {
+  const cookies = request.headers.get("cookie") || "";
+  const hasAdminCookie = cookies.includes("iolab-admin-token=");
+
+  if (authHeader !== `Bearer ${cronSecret}` && !hasAdminCookie) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
