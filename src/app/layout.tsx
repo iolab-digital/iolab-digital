@@ -69,6 +69,19 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JCN31084NK" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-JCN31084NK');
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <JsonLd data={organizationSchema()} />
         {children}
