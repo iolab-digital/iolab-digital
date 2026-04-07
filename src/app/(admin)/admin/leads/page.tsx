@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { demoLeads, demoDripEmails } from "@/db/schema";
 import { desc, eq, sql } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateDemoLeads } from "@/lib/demo-mock-data";
 import { Globe, Mail, Building2, Tag } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +41,8 @@ async function getLeads() {
 }
 
 export default async function AdminLeadsPage() {
-  const leads = await getLeads();
+  const demo = await getDemoContext();
+  const leads = demo.isDemo ? generateDemoLeads(demo.industry!) : await getLeads();
 
   return (
     <div className="p-3 md:p-6 max-w-6xl">

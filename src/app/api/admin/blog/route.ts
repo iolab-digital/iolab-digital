@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateBlogPosts } from "@/lib/demo-mock-data";
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
@@ -13,6 +15,15 @@ function calculateReadingTime(content: string): number {
 // This API always reads fresh from the filesystem — no caching
 export async function GET() {
   try {
+    const demo = await getDemoContext();
+    if (demo.isDemo) {
+      const posts = generateBlogPosts(demo.industry!);
+      return NextResponse.json({
+        posts,
+        drafts: posts.filter((p) => p.status === "draft"),
+      });
+    }
+
     if (!fs.existsSync(BLOG_DIR)) {
       return NextResponse.json({ posts: [], drafts: [] });
     }

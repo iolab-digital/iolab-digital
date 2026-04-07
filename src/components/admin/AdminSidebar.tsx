@@ -11,6 +11,7 @@ import {
   FileText,
   MessageCircle,
   Settings,
+  Link2,
   LogOut,
   X,
 } from "lucide-react";
@@ -22,12 +23,16 @@ const NAV = [
   { label: "Contact Leads", href: "/admin/contacts", icon: MessageSquare },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
   { label: "Chat Sessions", href: "/admin/chats", icon: MessageCircle },
+  { label: "Demo Links", href: "/admin/demos", icon: Link2, adminOnly: true },
   { label: "Settings", href: "/admin/settings", icon: Settings },
-];
+] as const;
 
 export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
   const pathname = usePathname();
   const router = useRouter();
+
+  // Detect if in demo mode
+  const isDemo = typeof document !== "undefined" && document.cookie.includes("iolab-demo-token=");
 
   async function handleLogout() {
     await fetch("/api/admin/auth", { method: "DELETE" });
@@ -51,7 +56,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
             className="h-7 w-auto"
           />
           <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-gray-500 border-l border-gray-700 pl-3">
-            Admin
+            {isDemo ? "Demo" : "Admin"}
           </span>
         </Link>
         {onClose && (
@@ -62,7 +67,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
       </div>
 
       <nav className="flex-1 p-3 space-y-1">
-        {NAV.map((item) => {
+        {NAV.filter((item) => !("adminOnly" in item && item.adminOnly && isDemo)).map((item) => {
           const isActive =
             item.href === "/admin"
               ? pathname === "/admin"
@@ -87,10 +92,18 @@ export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
 
       <div className="p-3 border-t border-gray-800">
         <button
-          onClick={handleLogout}
+          onClick={() => {
+            if (isDemo) {
+              document.cookie = "iolab-demo-token=; path=/; max-age=0";
+              onClose?.();
+              window.location.href = "https://iolab.co";
+            } else {
+              handleLogout();
+            }
+          }}
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 w-full transition-colors"
         >
-          <LogOut className="h-4 w-4" /> Sign Out
+          <LogOut className="h-4 w-4" /> {isDemo ? "Exit Demo" : "Sign Out"}
         </button>
         <Link
           href="/"

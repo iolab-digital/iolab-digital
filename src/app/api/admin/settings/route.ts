@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { siteSettings } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateSettings } from "@/lib/demo-mock-data";
 
 // GET — fetch a setting (public, no auth needed for chatbot check)
 export async function GET(request: Request) {
@@ -13,6 +15,13 @@ export async function GET(request: Request) {
   }
 
   try {
+    const demo = await getDemoContext();
+    if (demo.isDemo) {
+      const settings = generateSettings(demo.industry!);
+      const value = settings[key as keyof typeof settings] ?? null;
+      return NextResponse.json({ value });
+    }
+
     const [setting] = await db
       .select()
       .from(siteSettings)
@@ -31,6 +40,11 @@ export async function GET(request: Request) {
 // POST — update a setting (admin only, checked by middleware)
 export async function POST(request: Request) {
   try {
+    const demo = await getDemoContext();
+    if (demo.isDemo) {
+      return NextResponse.json({ success: true });
+    }
+
     const { key, value } = await request.json();
 
     if (!key || value === undefined) {

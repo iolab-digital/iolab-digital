@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { demoDripEmails, demoLeads } from "@/db/schema";
 import { sql, eq, isNull, and } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateDripCampaigns } from "@/lib/demo-mock-data";
 import { Mail, CheckCircle2, Clock, XCircle, Send } from "lucide-react";
 import { generateDripEmail } from "@/lib/drip-emails";
 
@@ -54,7 +56,10 @@ const EMAIL_LABELS = [
 const EMAIL_DELAYS = ["Immediate", "Day 2", "Day 4", "Day 7", "Day 9", "Day 12", "Day 14"];
 
 export default async function AdminCampaignsPage() {
-  const { emailStats, activeCampaigns, completedCampaigns } = await getCampaignStats();
+  const demo = await getDemoContext();
+  const { emailStats, activeCampaigns, completedCampaigns } = demo.isDemo
+    ? generateDripCampaigns(demo.industry!)
+    : await getCampaignStats();
 
   return (
     <div className="p-3 md:p-6 max-w-6xl">

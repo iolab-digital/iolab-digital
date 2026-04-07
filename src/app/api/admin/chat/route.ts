@@ -2,10 +2,17 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { chatSessions, chatMessages, siteSettings } from "@/db/schema";
 import { desc, eq, sql } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateChatSessions } from "@/lib/demo-mock-data";
 
 // GET — list all chat sessions for admin
 export async function GET() {
   try {
+    const demo = await getDemoContext();
+    if (demo.isDemo) {
+      return NextResponse.json({ sessions: generateChatSessions(demo.industry!) });
+    }
+
     // Only show sessions that have at least 1 message
     const sessions = await db
       .select()
@@ -24,6 +31,11 @@ export async function GET() {
 // POST — admin rates a session (and optionally extracts for learning)
 export async function POST(request: Request) {
   try {
+    const demo = await getDemoContext();
+    if (demo.isDemo) {
+      return NextResponse.json({ success: true });
+    }
+
     const { sessionId, rating } = await request.json();
 
     if (!sessionId || !rating || rating < 1 || rating > 5) {

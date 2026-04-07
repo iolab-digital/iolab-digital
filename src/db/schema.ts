@@ -8,6 +8,20 @@ import {
   json,
 } from "drizzle-orm/pg-core";
 
+export const demoTokens = pgTable("demo_tokens", {
+  id: serial("id").primaryKey(),
+  token: text("token").notNull().unique(),
+  industry: text("industry").notNull(),
+  prospectName: text("prospect_name"),
+  prospectEmail: text("prospect_email"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  lastAccessedAt: timestamp("last_accessed_at"),
+  accessCount: integer("access_count").default(0).notNull(),
+  totalDurationSeconds: integer("total_duration_seconds").default(0).notNull(),
+  pagesViewed: integer("pages_viewed").default(0).notNull(),
+});
+
 export const chatSessions = pgTable("chat_sessions", {
   id: serial("id").primaryKey(),
   sessionId: text("session_id").notNull().unique(),

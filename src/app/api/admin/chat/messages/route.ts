@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { chatMessages } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateChatMessages } from "@/lib/demo-mock-data";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -12,6 +14,11 @@ export async function GET(request: Request) {
   }
 
   try {
+    const demo = await getDemoContext();
+    if (demo.isDemo) {
+      return NextResponse.json({ messages: generateChatMessages(demo.industry!, sessionId) });
+    }
+
     const messages = await db
       .select()
       .from(chatMessages)

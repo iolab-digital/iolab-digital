@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { demoLeads, demoDripEmails, contacts } from "@/db/schema";
 import { sql, eq, gte, desc } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateDashboardStats } from "@/lib/demo-mock-data";
 import {
   Users,
   Mail,
@@ -64,9 +66,11 @@ async function getStats() {
 }
 
 export default async function AdminDashboardPage() {
-  const stats = await getStats();
+  const demo = await getDemoContext();
+  const stats = demo.isDemo ? generateDashboardStats(demo.industry!) : await getStats();
   const now = new Date();
   const greeting = now.getHours() < 12 ? "Good morning" : now.getHours() < 18 ? "Good afternoon" : "Good evening";
+  const displayName = demo.isDemo ? (demo.prospectName || "there") : "Rauf";
 
   const statCards = [
     { label: "Demo Leads (All Time)", value: stats.totalLeads, icon: Users, color: "text-blue-600 bg-blue-50" },
@@ -78,7 +82,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="p-3 md:p-6 max-w-6xl">
       <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold font-display">{greeting}, Rauf</h1>
+        <h1 className="text-xl md:text-2xl font-bold font-display">{greeting}, {displayName}</h1>
         <p className="text-sm text-gray-500">Here&apos;s what&apos;s happening with iOLab Digital today.</p>
       </div>
 

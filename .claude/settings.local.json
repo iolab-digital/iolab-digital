@@ -164,7 +164,24 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/blog)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:3001/api/blog/regenerate-image -H \"Content-Type: application/json\" -d '{\"\"slug\"\":\"\"nonexistent\"\",\"\"imagePrompt\"\":\"\"test\"\"}')",
       "Bash(curl -s -X POST http://localhost:3001/api/chat -H \"Content-Type: application/json\" -d '{\"\"messages\"\":[{\"\"role\"\":\"\"user\"\",\"\"content\"\":\"\"test\"\"}]}')",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/campaigns)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3001/admin/campaigns)",
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/demo -H \"Content-Type: application/json\" -b \"iolab-admin-token=test\" -d '{\"\"industry\"\":\"\"restaurants\"\",\"\"prospectName\"\":\"\"John Smith\"\",\"\"prospectEmail\"\":\"\"john@test.com\"\"}')",
+      "Bash(TOKEN=\"8b9b1276-c14b-44c1-a6f2-5be0b4015662\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/demo/validate -H \"Content-Type: application/json\" -d \"{\"\"token\"\":\"\"$TOKEN\"\"}\")",
+      "Bash(COOKIE='iolab-demo-token=%7B%22token%22%3A%22'$TOKEN'%22%2C%22industry%22%3A%22restaurants%22%2C%22prospectName%22%3A%22John%20Smith%22%2C%22expiresAt%22%3A%222026-04-08T01%3A42%3A04.902Z%22%7D')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"$COOKIE\" http://localhost:3000/admin)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"$COOKIE\" http://localhost:3000/admin/leads)",
+      "Bash(COOKIE='iolab-demo-token=%7B%22token%22%3A%228b9b1276-c14b-44c1-a6f2-5be0b4015662%22%2C%22industry%22%3A%22restaurants%22%2C%22prospectName%22%3A%22John%20Smith%22%2C%22expiresAt%22%3A%222026-04-08T01%3A42%3A04.902Z%22%7D')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"$COOKIE\" http://localhost:3000/admin/campaigns)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"$COOKIE\" http://localhost:3000/admin/contacts)",
+      "Bash(for page:*)",
+      "Bash(echo \" /$page\")",
+      "Bash(curl -s -b \"$COOKIE\" http://localhost:3000/admin)",
+      "Bash(curl -s -b \"iolab-admin-token=test\" http://localhost:3000/admin)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/demos)",
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/demo/heartbeat -H \"Content-Type: application/json\" -d '{\"\"\"\"token\"\"\"\":\"\"\"\"8b9b1276-c14b-44c1-a6f2-5be0b4015662\"\"\"\",\"\"\"\"page\"\"\"\":\"\"\"\"/admin\"\"\"\"}')",
+      "Bash(curl -s http://localhost:3000/api/admin/demo -b \"iolab-admin-token=test\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/demo/heartbeat -H \"Content-Type: application/json\" -d '{\"\"\"\"token\"\"\"\":\"\"\"\"8b9b1276-c14b-44c1-a6f2-5be0b4015662\"\"\"\",\"\"\"\"page\"\"\"\":\"\"\"\"/admin/leads\"\"\"\"}')"
     ]
   }
 }

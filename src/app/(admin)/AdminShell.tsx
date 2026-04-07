@@ -4,13 +4,16 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { DemoBanner } from "@/components/admin/DemoBanner";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const isLoginPage = pathname === "/admin/login";
 
-  if (isLoginPage) {
+  const isDemoEntry = pathname.startsWith("/admin/demo/");
+
+  if (isLoginPage || isDemoEntry) {
     return <>{children}</>;
   }
 
@@ -38,6 +41,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
       {/* Main content */}
       <main className="flex-1 overflow-auto">
+        <DemoBanner />
         {/* Mobile header with hamburger */}
         <div className="sticky top-0 z-40 flex items-center gap-3 bg-white border-b border-gray-200 px-3 py-3 md:hidden">
           <button

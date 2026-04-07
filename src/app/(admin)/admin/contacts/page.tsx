@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { contacts } from "@/db/schema";
 import { desc } from "drizzle-orm";
+import { getDemoContext } from "@/lib/demo-context";
+import { generateContacts } from "@/lib/demo-mock-data";
 import { Mail, Phone, Building2, Calendar, MessageSquare } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +24,8 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export default async function AdminContactsPage() {
-  const contactList = await getContacts();
+  const demo = await getDemoContext();
+  const contactList = demo.isDemo ? generateContacts(demo.industry!) : await getContacts();
 
   return (
     <div className="p-3 md:p-6 max-w-6xl">
