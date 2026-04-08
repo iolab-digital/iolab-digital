@@ -5,6 +5,8 @@ import matter from "gray-matter";
 import { getDemoContext } from "@/lib/demo-context";
 import { generateBlogPosts } from "@/lib/demo-mock-data";
 
+export const dynamic = "force-dynamic";
+
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
 function calculateReadingTime(content: string): number {

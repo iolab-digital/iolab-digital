@@ -8,8 +8,10 @@ import {
   Mail,
   MessageSquare,
   TrendingUp,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
+import { getAllPostsIncludingDrafts, getDraftPosts } from "@/lib/blog";
 
 export const dynamic = "force-dynamic";
 
@@ -72,11 +74,18 @@ export default async function AdminDashboardPage() {
   const greeting = now.getHours() < 12 ? "Good morning" : now.getHours() < 18 ? "Good afternoon" : "Good evening";
   const displayName = demo.isDemo ? (demo.prospectName || "there") : "Rauf";
 
+  // Blog stats
+  const allBlogPosts = demo.isDemo ? [] : getAllPostsIncludingDrafts();
+  const blogDrafts = demo.isDemo ? [] : getDraftPosts();
+  const blogPublished = allBlogPosts.length - blogDrafts.length;
+
   const statCards = [
     { label: "Demo Leads (All Time)", value: stats.totalLeads, icon: Users, color: "text-blue-600 bg-blue-50" },
     { label: "Leads This Week", value: stats.weekLeads, icon: TrendingUp, color: "text-green-600 bg-green-50" },
     { label: "Active Drip Campaigns", value: stats.activeDrips, icon: Mail, color: "text-purple-600 bg-purple-50" },
     { label: "Contact Form Leads", value: stats.totalContacts, icon: MessageSquare, color: "text-orange-600 bg-orange-50" },
+    { label: "Blog Posts Published", value: blogPublished, icon: FileText, color: "text-cyan-600 bg-cyan-50" },
+    ...(blogDrafts.length > 0 ? [{ label: "Blog Drafts Pending", value: blogDrafts.length, icon: FileText, color: "text-amber-600 bg-amber-50" }] : []),
   ];
 
   return (

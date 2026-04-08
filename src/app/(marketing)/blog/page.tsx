@@ -18,6 +18,8 @@ export const metadata: Metadata = pageMetadata(
   ["AI automation blog", "custom software insights", "small business technology", "SaaS alternatives"]
 );
 
+export const dynamic = "force-dynamic";
+
 export default function BlogPage() {
   noStore();
   const posts = getAllPosts();

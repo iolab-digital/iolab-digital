@@ -16,6 +16,8 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }

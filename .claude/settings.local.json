@@ -181,7 +181,12 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -b \"iolab-admin-token=test\" http://localhost:3000/admin/demos)",
       "Bash(curl -s -X POST http://localhost:3000/api/admin/demo/heartbeat -H \"Content-Type: application/json\" -d '{\"\"\"\"token\"\"\"\":\"\"\"\"8b9b1276-c14b-44c1-a6f2-5be0b4015662\"\"\"\",\"\"\"\"page\"\"\"\":\"\"\"\"/admin\"\"\"\"}')",
       "Bash(curl -s http://localhost:3000/api/admin/demo -b \"iolab-admin-token=test\")",
-      "Bash(curl -s -X POST http://localhost:3000/api/admin/demo/heartbeat -H \"Content-Type: application/json\" -d '{\"\"\"\"token\"\"\"\":\"\"\"\"8b9b1276-c14b-44c1-a6f2-5be0b4015662\"\"\"\",\"\"\"\"page\"\"\"\":\"\"\"\"/admin/leads\"\"\"\"}')"
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/demo/heartbeat -H \"Content-Type: application/json\" -d '{\"\"\"\"token\"\"\"\":\"\"\"\"8b9b1276-c14b-44c1-a6f2-5be0b4015662\"\"\"\",\"\"\"\"page\"\"\"\":\"\"\"\"/admin/leads\"\"\"\"}')",
+      "Bash(ls D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
+      "Bash(grep -l 'status: \"published\"' D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
+      "Bash(grep -l 'status: \"draft\"' D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
+      "Bash(grep -rL \"status:\" D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
+      "Bash(curl -s http://localhost:3000/api/admin/blog -b \"iolab-admin-token=test\")"
     ]
   }
 }
