@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 import fs from "fs";
 import path from "path";
 
@@ -23,16 +22,31 @@ export async function POST(request: Request) {
       let content = fs.readFileSync(filePath, "utf-8");
       content = content.replace(/^status:\s*"draft"/m, 'status: "published"');
       fs.writeFileSync(filePath, content, "utf-8");
-      revalidatePath("/admin/blog");
-      revalidatePath("/blog");
-      revalidatePath(`/blog/${slug}`);
+
+      // Try to revalidate cache — non-fatal if it fails
+      try {
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/admin/blog");
+        revalidatePath("/blog");
+        revalidatePath(`/blog/${slug}`);
+      } catch {
+        // revalidatePath can throw in standalone/edge contexts — that's OK
+      }
+
       return NextResponse.json({ success: true, action: "published" });
     }
 
     if (action === "reject") {
       fs.unlinkSync(filePath);
-      revalidatePath("/admin/blog");
-      revalidatePath("/blog");
+
+      try {
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/admin/blog");
+        revalidatePath("/blog");
+      } catch {
+        // Non-fatal
+      }
+
       return NextResponse.json({ success: true, action: "deleted" });
     }
 

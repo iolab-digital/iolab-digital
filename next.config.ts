@@ -66,6 +66,108 @@ const nextConfig: NextConfig = {
         destination: "/blog/multi-platform-management-tools",
         permanent: true,
       },
+      // Legacy WordPress URLs — batch 2
+      {
+        source: "/free-digital-kickstart",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/free-digital-kickstart/",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/restaurant-email-marketing-ideas",
+        destination: "/blog/restaurant-email-marketing-ideas",
+        permanent: true,
+      },
+      {
+        source: "/restaurant-email-marketing-ideas/",
+        destination: "/blog/restaurant-email-marketing-ideas",
+        permanent: true,
+      },
+      {
+        source: "/category/social-media-marketing",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/category/social-media-marketing/",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/category/:slug",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/leveraging-ai-to-elevate-seo-for-small-businesses-emerging-trends",
+        destination: "/blog/leveraging-ai-to-elevate-seo-for-small-businesses-emerging-trends",
+        permanent: true,
+      },
+      {
+        source: "/leveraging-ai-to-elevate-seo-for-small-businesses-emerging-trends/",
+        destination: "/blog/leveraging-ai-to-elevate-seo-for-small-businesses-emerging-trends",
+        permanent: true,
+      },
+      {
+        source: "/brat-girl-marketing-and-gen-z-marketing-trends",
+        destination: "/blog/brat-girl-marketing-and-gen-z-marketing-trends",
+        permanent: true,
+      },
+      {
+        source: "/brat-girl-marketing-and-gen-z-marketing-trends/",
+        destination: "/blog/brat-girl-marketing-and-gen-z-marketing-trends",
+        permanent: true,
+      },
+      {
+        source: "/how-ai-for-small-businesses-elevates-digital-marketing",
+        destination: "/blog/how-ai-for-small-businesses-elevates-digital-marketing",
+        permanent: true,
+      },
+      {
+        source: "/how-ai-for-small-businesses-elevates-digital-marketing/",
+        destination: "/blog/how-ai-for-small-businesses-elevates-digital-marketing",
+        permanent: true,
+      },
+      {
+        source: "/ai-tools-revolutionize-audience-analysis-in-small-business-sector",
+        destination: "/blog/ai-tools-revolutionize-audience-analysis-in-small-business-sector",
+        permanent: true,
+      },
+      {
+        source: "/ai-tools-revolutionize-audience-analysis-in-small-business-sector/",
+        destination: "/blog/ai-tools-revolutionize-audience-analysis-in-small-business-sector",
+        permanent: true,
+      },
+      // Catch-all WordPress file requests
+      {
+        source: "/wp-login.php",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/wp-admin/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/wp-content/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/wp-includes/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/xmlrpc.php",
+        destination: "/",
+        permanent: true,
+      },
     ];
   },
 };
