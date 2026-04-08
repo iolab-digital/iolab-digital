@@ -65,6 +65,11 @@ export default function AdminBlogPage() {
     setActionLoading(slug);
     if (action === "publish") setPublishing(true);
 
+    // Optimistic update: remove draft from local state immediately
+    if (action === "reject") {
+      setDrafts((prev) => prev.filter((d) => d.slug !== slug));
+    }
+
     const res = await fetch("/api/blog/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

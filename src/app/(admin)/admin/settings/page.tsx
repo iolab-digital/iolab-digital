@@ -27,11 +27,11 @@ export default function AdminSettingsPage() {
     async function load() {
       try {
         // Fetch the current custom prompt (if any)
-        const customRes = await fetch("/api/admin/settings?key=chatbot_prompt");
+        const customRes = await fetch("/api/admin/settings?key=chatbot_prompt", { cache: "no-store" });
         const customData = await customRes.json();
 
         // Fetch the default prompt
-        const defaultRes = await fetch("/api/admin/settings?key=chatbot_default_prompt");
+        const defaultRes = await fetch("/api/admin/settings?key=chatbot_default_prompt", { cache: "no-store" });
         const defaultData = await defaultRes.json();
 
         // If we have a default stored, use it. Otherwise fetch from the knowledge base endpoint.

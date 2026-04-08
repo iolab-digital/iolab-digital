@@ -1,5 +1,52 @@
 # iOLab Digital — Project Rules
 
+## CRITICAL: Fix Stale UI After Mutations in Next.js App Router
+
+This project uses Next.js App Router. There is a known pattern where the UI does not update after API mutations (POST/PUT/DELETE). Apply these rules to EVERY admin/dashboard page:
+
+### Rule 1: After any router.push(), always call router.refresh()
+```
+router.push("/destination");
+router.refresh();
+```
+
+### Rule 2: After any API mutation, update local state immediately (optimistic update)
+```
+// 1. Update UI immediately
+setItems(prev => prev.map(item => item.id === targetId ? { ...item, status: newStatus } : item));
+// 2. Call API
+await fetch("/api/endpoint", { method: "POST", body: ... });
+// 3. Refetch to sync
+await fetchData();
+```
+
+### Rule 3: Show loading + disabled state during async operations
+Every button that triggers an API call must:
+- Set a loading state before the call
+- Be disabled while loading (prevent double-clicks)
+- Show visual feedback (spinner, "Saving...", disabled opacity)
+- Show confirmation after success ("Saved!", "Published!", checkmark)
+- Auto-dismiss confirmation after 2-3 seconds
+
+### Rule 4: Lift all editable state to the parent component
+Never let form state live in a child that the parent's Save button can't reach.
+
+### Rule 5: fetch() calls in useEffect for data loading should use cache: "no-store"
+```
+fetch("/api/data", { cache: "no-store" })
+```
+
+### Rule 6: Never rely on revalidatePath() alone in production
+`revalidatePath()` is unreliable in standalone Docker builds. Always combine with client-side re-fetch:
+```
+// API route: try revalidatePath but don't fail if it throws
+try { revalidatePath("/path"); } catch {}
+
+// Client: always re-fetch after mutation
+await fetch("/api/mutate", { method: "POST", body: ... });
+await fetchData(); // re-fetch from API with cache: "no-store"
+```
+
 ## Tech Stack
 - Next.js 15 (App Router, TypeScript)
 - Tailwind CSS v4 (CSS-first config in globals.css)

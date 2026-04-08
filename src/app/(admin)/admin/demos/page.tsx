@@ -44,7 +44,7 @@ export default function AdminDemosPage() {
 
   async function fetchTokens() {
     try {
-      const res = await fetch("/api/admin/demo");
+      const res = await fetch("/api/admin/demo", { cache: "no-store" });
       const data = await res.json();
       setTokens(data.tokens || []);
     } catch { /* silent */ }
@@ -71,6 +71,8 @@ export default function AdminDemosPage() {
 
   async function handleDelete(id: number) {
     if (!confirm("Revoke this demo link?")) return;
+    // Optimistic update: remove token from local state immediately
+    setTokens((prev) => prev.filter((t) => t.id !== id));
     await fetch("/api/admin/demo", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },

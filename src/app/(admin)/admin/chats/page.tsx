@@ -76,7 +76,7 @@ export default function AdminChatsPage() {
 
   async function fetchSessions() {
     try {
-      const res = await fetch("/api/admin/chat");
+      const res = await fetch("/api/admin/chat", { cache: "no-store" });
       const data = await res.json();
       setSessions(data.sessions || []);
     } catch { /* silent */ }
@@ -96,17 +96,18 @@ export default function AdminChatsPage() {
 
   async function rateSession(sessionId: string, rating: number) {
     setRatingLoading(sessionId);
+    // Optimistic update: update local state immediately
+    setSessions((prev) =>
+      prev.map((s) =>
+        s.sessionId === sessionId ? { ...s, adminRating: rating } : s
+      )
+    );
     try {
       await fetch("/api/admin/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId, rating }),
       });
-      setSessions((prev) =>
-        prev.map((s) =>
-          s.sessionId === sessionId ? { ...s, adminRating: rating } : s
-        )
-      );
     } catch { /* silent */ }
     setRatingLoading(null);
   }

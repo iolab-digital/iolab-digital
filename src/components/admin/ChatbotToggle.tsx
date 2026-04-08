@@ -9,7 +9,7 @@ export function ChatbotToggle() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/settings?key=chatbot_enabled")
+    fetch("/api/admin/settings?key=chatbot_enabled", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
         setEnabled(data.value !== "false");
