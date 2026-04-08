@@ -1,5 +1,15 @@
 # iOLab Digital — Project Rules
 
+## CRITICAL: Blog Posts Live in the DATABASE, Images on DO Spaces CDN
+
+**NEVER rely on the filesystem for blog post storage in production.** The Docker container is ephemeral — files written at runtime are lost on every deploy.
+
+- **Blog post content** → stored in the `blog_posts` PostgreSQL table (Neon DB)
+- **Cover images** → uploaded to DigitalOcean Spaces CDN, URL stored in `featured_image` column
+- **Filesystem `.mdx` files** → only used for Git-committed posts (local dev convenience). Runtime-generated posts may also write to filesystem as a secondary copy, but the DB is the source of truth.
+- **All blog reading functions** must check BOTH filesystem and database, merging results (DB-only posts show alongside Git posts)
+- **Publish/reject/regenerate** must update BOTH the DB and filesystem (filesystem is optional/best-effort)
+
 ## CRITICAL: Fix Stale UI After Mutations in Next.js App Router
 
 This project uses Next.js App Router. There is a known pattern where the UI does not update after API mutations (POST/PUT/DELETE). Apply these rules to EVERY admin/dashboard page:
