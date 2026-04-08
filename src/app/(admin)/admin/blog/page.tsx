@@ -55,9 +55,37 @@ export default function AdminBlogPage() {
     setLoading(false);
   }, []);
 
+  // Check if a generation is already in progress (persisted in DB)
+  const checkGenerationStatus = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/settings?key=blog_generation_status", { cache: "no-store" });
+      const data = await res.json();
+      if (data.value === "generating") {
+        setGenerating(true);
+      }
+    } catch { /* silent */ }
+  }, []);
+
   useEffect(() => {
     fetchPosts();
-  }, [fetchPosts]);
+    checkGenerationStatus();
+  }, [fetchPosts, checkGenerationStatus]);
+
+  // Poll while generating — check every 8 seconds for completion
+  useEffect(() => {
+    if (!generating) return;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch("/api/admin/settings?key=blog_generation_status", { cache: "no-store" });
+        const data = await res.json();
+        if (data.value !== "generating") {
+          setGenerating(false);
+          await fetchPosts(); // Refresh posts to show the new draft
+        }
+      } catch { /* silent */ }
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [generating, fetchPosts]);
 
   async function handleAction(slug: string, action: "publish" | "reject") {
     if (action === "reject" && !confirm("Delete this draft permanently?")) return;
@@ -66,8 +94,12 @@ export default function AdminBlogPage() {
     if (action === "publish") setPublishing(true);
 
     // Optimistic update: remove draft from local state immediately
-    if (action === "reject") {
-      setDrafts((prev) => prev.filter((d) => d.slug !== slug));
+    setDrafts((prev) => prev.filter((d) => d.slug !== slug));
+    if (action === "publish") {
+      // Move to published in allPosts
+      setAllPosts((prev) =>
+        prev.map((p) => (p.slug === slug ? { ...p, status: "published" as const } : p))
+      );
     }
 
     const res = await fetch("/api/blog/publish", {
@@ -103,6 +135,14 @@ export default function AdminBlogPage() {
       alert("Generation failed. Check the console.");
     }
     setGenerating(false);
+    // Clear the flag explicitly in case the API didn't
+    try {
+      await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: "blog_generation_status", value: "idle" }),
+      });
+    } catch { /* non-fatal */ }
   }
 
   function openPreview(post: Post) {
@@ -161,6 +201,17 @@ export default function AdminBlogPage() {
         <h1 className="text-xl md:text-2xl font-bold">Blog Posts</h1>
         <span className="text-sm text-gray-500">{allPosts.length} total</span>
       </div>
+
+      {/* Generation in progress banner */}
+      {generating && (
+        <div className="rounded-xl bg-primary/5 border border-primary/20 p-4 mb-6 flex items-center gap-3">
+          <Loader2 className="h-5 w-5 animate-spin text-primary shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-primary">Generating a new blog post...</p>
+            <p className="text-xs text-gray-500 mt-0.5">This takes about a minute. You can navigate away — it will keep going.</p>
+          </div>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">

@@ -6,7 +6,8 @@ import fs from "fs";
 import path from "path";
 import { getAllPostsIncludingDrafts } from "@/lib/blog";
 import { db } from "@/db";
-import { blogPosts } from "@/db/schema";
+import { blogPosts, siteSettings } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 const CDN_URL = process.env.DO_SPACES_CDN_URL || "https://iolab.nyc3.digitaloceanspaces.com";
@@ -35,6 +36,20 @@ export async function GET(request: Request) {
   if (authHeader !== `Bearer ${cronSecret}` && !hasAdminCookie) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // Set generation-in-progress flag in DB (survives page reload)
+  async function setGenerationFlag(value: string) {
+    try {
+      const [existing] = await db.select().from(siteSettings).where(eq(siteSettings.key, "blog_generation_status")).limit(1);
+      if (existing) {
+        await db.update(siteSettings).set({ value, updatedAt: new Date() }).where(eq(siteSettings.key, "blog_generation_status"));
+      } else {
+        await db.insert(siteSettings).values({ key: "blog_generation_status", value });
+      }
+    } catch { /* non-fatal */ }
+  }
+
+  await setGenerationFlag("generating");
 
   try {
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -245,6 +260,8 @@ ${blogContent}
       console.error("Notification email failed:", emailErr);
     }
 
+    await setGenerationFlag("idle");
+
     return NextResponse.json({
       success: true,
       slug,
@@ -253,6 +270,7 @@ ${blogContent}
     });
   } catch (error) {
     console.error("Auto-generate error:", error);
+    await setGenerationFlag("idle");
     return NextResponse.json({ error: "Generation failed" }, { status: 500 });
   }
 }
