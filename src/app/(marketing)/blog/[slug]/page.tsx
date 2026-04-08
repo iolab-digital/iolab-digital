@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { articleSchema, breadcrumbSchema, pageMetadata } from "@/lib/seo";
-import { getPostBySlug, getAllSlugs, getRelatedPosts } from "@/lib/blog";
+import { getPostBySlug, getAllSlugs, getRelatedPosts, getPostBySlugMerged } from "@/lib/blog";
 import { formatDate } from "@/lib/utils";
 import { BlogContent } from "./BlogContent";
 
@@ -24,7 +24,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlugMerged(slug);
   if (!post) return {};
 
   return {
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlugMerged(slug);
 
   if (!post) {
     notFound();

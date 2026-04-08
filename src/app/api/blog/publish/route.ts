@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { db } from "@/db";
+import { blogPosts } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
@@ -13,39 +16,64 @@ export async function POST(request: Request) {
     }
 
     const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
+    const fileExists = fs.existsSync(filePath);
 
-    if (!fs.existsSync(filePath)) {
+    // Check if post exists in DB
+    let dbPostExists = false;
+    try {
+      const [row] = await db.select({ id: blogPosts.id }).from(blogPosts).where(eq(blogPosts.slug, slug)).limit(1);
+      dbPostExists = !!row;
+    } catch { /* DB might not have the post */ }
+
+    if (!fileExists && !dbPostExists) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     if (action === "publish") {
-      let content = fs.readFileSync(filePath, "utf-8");
-      content = content.replace(/^status:\s*"draft"/m, 'status: "published"');
-      fs.writeFileSync(filePath, content, "utf-8");
+      // Update filesystem if file exists
+      if (fileExists) {
+        try {
+          let content = fs.readFileSync(filePath, "utf-8");
+          content = content.replace(/^status:\s*"draft"/m, 'status: "published"');
+          fs.writeFileSync(filePath, content, "utf-8");
+        } catch { /* Filesystem write may fail in production */ }
+      }
 
-      // Try to revalidate cache — non-fatal if it fails
+      // Update database
+      try {
+        await db
+          .update(blogPosts)
+          .set({ status: "published", isPublished: true, updatedAt: new Date() })
+          .where(eq(blogPosts.slug, slug));
+      } catch { /* DB update may fail if post isn't in DB */ }
+
+      // Try to revalidate cache — non-fatal
       try {
         const { revalidatePath } = await import("next/cache");
         revalidatePath("/admin/blog");
         revalidatePath("/blog");
         revalidatePath(`/blog/${slug}`);
-      } catch {
-        // revalidatePath can throw in standalone/edge contexts — that's OK
-      }
+      } catch { /* OK */ }
 
       return NextResponse.json({ success: true, action: "published" });
     }
 
     if (action === "reject") {
-      fs.unlinkSync(filePath);
+      // Delete from filesystem
+      if (fileExists) {
+        try { fs.unlinkSync(filePath); } catch { /* OK */ }
+      }
+
+      // Delete from database
+      try {
+        await db.delete(blogPosts).where(eq(blogPosts.slug, slug));
+      } catch { /* OK */ }
 
       try {
         const { revalidatePath } = await import("next/cache");
         revalidatePath("/admin/blog");
         revalidatePath("/blog");
-      } catch {
-        // Non-fatal
-      }
+      } catch { /* OK */ }
 
       return NextResponse.json({ success: true, action: "deleted" });
     }

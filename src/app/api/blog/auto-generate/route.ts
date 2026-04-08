@@ -5,6 +5,8 @@ import { Resend } from "resend";
 import fs from "fs";
 import path from "path";
 import { getAllPostsIncludingDrafts } from "@/lib/blog";
+import { db } from "@/db";
+import { blogPosts } from "@/db/schema";
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 const CDN_URL = process.env.DO_SPACES_CDN_URL || "https://iolab.nyc3.digitaloceanspaces.com";
@@ -182,7 +184,34 @@ imagePrompt: "${imagePrompt.replace(/"/g, '\\"')}"
 ${blogContent}
 `;
 
-    fs.writeFileSync(path.join(BLOG_DIR, `${slug}.mdx`), mdxContent, "utf-8");
+    // Write to filesystem (works for local dev, ephemeral in production)
+    try {
+      fs.writeFileSync(path.join(BLOG_DIR, `${slug}.mdx`), mdxContent, "utf-8");
+    } catch {
+      // Filesystem write may fail in some environments — that's OK, DB is the source of truth
+    }
+
+    // Write to database (persists across deploys — this is the primary store)
+    try {
+      const tagsArray = tagsStr.replace(/"/g, "").split(",").map((t: string) => t.trim());
+      await db.insert(blogPosts).values({
+        slug,
+        title,
+        description,
+        content: blogContent,
+        featuredImage: coverImageUrl || null,
+        imagePrompt,
+        tags: tagsArray,
+        author: "Rauf Tur",
+        status: "draft",
+        isPublished: false,
+        readTimeMinutes: Math.ceil(blogContent.split(/\s+/).length / 230),
+        publishedAt: new Date(today),
+      });
+    } catch (dbErr) {
+      console.error("Failed to save blog post to DB:", dbErr);
+      // Continue — filesystem copy may still work
+    }
 
     // Step 4: Send notification email
     try {

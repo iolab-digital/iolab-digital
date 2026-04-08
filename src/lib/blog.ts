@@ -102,3 +102,82 @@ export function getAllSlugs(): string[] {
   // Only return published slugs for static generation
   return getAllPosts().map((p) => p.slug);
 }
+
+// --- Async versions that merge filesystem + database posts ---
+
+export async function getAllPostsMerged(): Promise<BlogPostMeta[]> {
+  const fsPosts = getAllPosts(); // filesystem (published only)
+
+  let dbPosts: BlogPostMeta[] = [];
+  try {
+    const { db } = await import("@/db");
+    const { blogPosts: blogPostsTable } = await import("@/db/schema");
+    const { desc, eq } = await import("drizzle-orm");
+
+    const rows = await db
+      .select()
+      .from(blogPostsTable)
+      .where(eq(blogPostsTable.status, "published"));
+
+    dbPosts = rows.map((row) => ({
+      slug: row.slug,
+      title: row.title,
+      description: row.description || "",
+      author: row.author || "Rauf Tur",
+      publishedAt: row.publishedAt ? row.publishedAt.toISOString().split("T")[0] : "",
+      tags: (row.tags || []) as string[],
+      image: row.featuredImage || undefined,
+      imagePrompt: row.imagePrompt || undefined,
+      status: "published" as const,
+      readingTime: row.readTimeMinutes || 3,
+    }));
+  } catch {
+    // DB read failed — filesystem only
+  }
+
+  // Merge: filesystem wins for duplicates (Git is source of truth for committed posts)
+  const slugSet = new Set(fsPosts.map((p) => p.slug));
+  const dbOnly = dbPosts.filter((p) => !slugSet.has(p.slug));
+  const merged = [...fsPosts, ...dbOnly];
+
+  return sortByDate(merged);
+}
+
+export async function getPostBySlugMerged(slug: string): Promise<BlogPost | undefined> {
+  // Try filesystem first
+  const fsPost = getPostBySlug(slug);
+  if (fsPost) return fsPost;
+
+  // Try database
+  try {
+    const { db } = await import("@/db");
+    const { blogPosts: blogPostsTable } = await import("@/db/schema");
+    const { eq } = await import("drizzle-orm");
+
+    const [row] = await db
+      .select()
+      .from(blogPostsTable)
+      .where(eq(blogPostsTable.slug, slug))
+      .limit(1);
+
+    if (row && row.content) {
+      return {
+        slug: row.slug,
+        title: row.title,
+        description: row.description || "",
+        author: row.author || "Rauf Tur",
+        publishedAt: row.publishedAt ? row.publishedAt.toISOString().split("T")[0] : "",
+        tags: (row.tags || []) as string[],
+        image: row.featuredImage || undefined,
+        imagePrompt: row.imagePrompt || undefined,
+        status: (row.status || "published") as "published" | "draft",
+        content: row.content,
+        readingTime: row.readTimeMinutes || Math.ceil(row.content.split(/\s+/).length / 230),
+      };
+    }
+  } catch {
+    // DB read failed
+  }
+
+  return undefined;
+}

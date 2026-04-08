@@ -4,6 +4,9 @@ import path from "path";
 import matter from "gray-matter";
 import { getDemoContext } from "@/lib/demo-context";
 import { generateBlogPosts } from "@/lib/demo-mock-data";
+import { db } from "@/db";
+import { blogPosts } from "@/db/schema";
+import { desc } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +17,7 @@ function calculateReadingTime(content: string): number {
   return Math.max(1, Math.ceil(words / 230));
 }
 
-// This API always reads fresh from the filesystem — no caching
+// Reads from BOTH filesystem (Git-committed posts) and database (runtime-generated posts)
 export async function GET() {
   try {
     const demo = await getDemoContext();
@@ -26,37 +29,81 @@ export async function GET() {
       });
     }
 
-    if (!fs.existsSync(BLOG_DIR)) {
-      return NextResponse.json({ posts: [], drafts: [] });
+    // 1. Read filesystem posts (committed to Git)
+    const fsPosts: Record<string, any> = {};
+    try {
+      if (fs.existsSync(BLOG_DIR)) {
+        const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+        for (const file of files) {
+          const slug = file.replace(/\.mdx$/, "");
+          const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf-8");
+          const { data, content } = matter(raw);
+          fsPosts[slug] = {
+            slug,
+            title: data.title || slug,
+            description: data.description || "",
+            author: data.author || "Rauf Tur",
+            publishedAt: data.publishedAt || "",
+            tags: data.tags || [],
+            image: data.image || null,
+            imagePrompt: data.imagePrompt || null,
+            status: data.status === "draft" ? "draft" : "published",
+            readingTime: calculateReadingTime(content),
+            content,
+            source: "filesystem",
+          };
+        }
+      }
+    } catch {
+      // Filesystem read failed — continue with DB only
     }
 
-    const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+    // 2. Read database posts (runtime-generated, persists across deploys)
+    const dbPosts: Record<string, any> = {};
+    try {
+      const rows = await db
+        .select()
+        .from(blogPosts)
+        .orderBy(desc(blogPosts.publishedAt));
 
-    const posts = files.map((file) => {
-      const slug = file.replace(/\.mdx$/, "");
-      const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf-8");
-      const { data, content } = matter(raw);
+      for (const row of rows) {
+        dbPosts[row.slug] = {
+          slug: row.slug,
+          title: row.title,
+          description: row.description || "",
+          author: row.author || "Rauf Tur",
+          publishedAt: row.publishedAt
+            ? row.publishedAt.toISOString().split("T")[0]
+            : "",
+          tags: row.tags || [],
+          image: row.featuredImage || null,
+          imagePrompt: row.imagePrompt || null,
+          status: row.status || (row.isPublished ? "published" : "draft"),
+          readingTime: row.readTimeMinutes || (row.content ? calculateReadingTime(row.content) : 3),
+          content: row.content || "",
+          source: "database",
+        };
+      }
+    } catch {
+      // DB read failed — continue with filesystem only
+    }
 
-      return {
-        slug,
-        title: data.title || slug,
-        description: data.description || "",
-        author: data.author || "Rauf Tur",
-        publishedAt: data.publishedAt || "",
-        tags: data.tags || [],
-        image: data.image || null,
-        imagePrompt: data.imagePrompt || null,
-        status: data.status === "draft" ? "draft" : "published",
-        readingTime: calculateReadingTime(content),
-        content,
-      };
-    });
+    // 3. Merge: DB posts override filesystem posts (DB is more up-to-date for runtime posts)
+    // Filesystem posts take precedence for Git-committed posts (they're the source of truth for those)
+    const merged = { ...dbPosts, ...fsPosts };
 
-    posts.sort(
-      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    // But for posts that exist in DB but NOT in filesystem (runtime-only), keep the DB version
+    for (const slug of Object.keys(dbPosts)) {
+      if (!fsPosts[slug]) {
+        merged[slug] = dbPosts[slug];
+      }
+    }
+
+    const posts = Object.values(merged).sort(
+      (a: any, b: any) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     );
 
-    const drafts = posts.filter((p) => p.status === "draft");
+    const drafts = posts.filter((p: any) => p.status === "draft");
 
     return NextResponse.json(
       { posts, drafts },

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, pageMetadata } from "@/lib/seo";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPostsMerged } from "@/lib/blog";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = pageMetadata(
@@ -20,9 +20,9 @@ export const metadata: Metadata = pageMetadata(
 
 export const dynamic = "force-dynamic";
 
-export default function BlogPage() {
+export default async function BlogPage() {
   noStore();
-  const posts = getAllPosts();
+  const posts = await getAllPostsMerged();
   const [featured, ...rest] = posts;
 
   if (!featured) {
