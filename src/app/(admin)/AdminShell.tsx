@@ -19,8 +19,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Desktop sidebar — always visible */}
-      <div className="hidden md:block">
+      {/* Desktop sidebar — sticky, doesn't scroll with content */}
+      <div className="hidden md:block sticky top-0 h-screen">
         <AdminSidebar />
       </div>
 

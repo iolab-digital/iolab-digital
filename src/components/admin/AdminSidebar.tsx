@@ -45,7 +45,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
   }
 
   return (
-    <aside className="w-56 md:w-56 bg-gray-950 text-white flex flex-col shrink-0 min-h-screen">
+    <aside className="w-56 md:w-56 bg-gray-950 text-white flex flex-col shrink-0 h-screen overflow-y-auto">
       <div className="p-4 border-b border-gray-800 flex items-center justify-between">
         <Link href="/admin" onClick={handleNavClick} className="flex items-center gap-3">
           <Image
