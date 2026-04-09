@@ -11,6 +11,7 @@ import { articleSchema, breadcrumbSchema, pageMetadata } from "@/lib/seo";
 import { getPostBySlug, getAllSlugs, getRelatedPosts, getPostBySlugMerged } from "@/lib/blog";
 import { formatDate } from "@/lib/utils";
 import { BlogContent } from "./BlogContent";
+import { ShareButtons } from "@/components/shared/ShareButtons";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       modifiedTime: post.updatedAt || post.publishedAt,
       authors: [post.author],
       tags: post.tags,
-      ...(post.image ? { images: [{ url: post.image }] } : {}),
+      ...(post.image ? { images: [{ url: post.image, width: 1200, height: 630, alt: post.title }] } : {}),
     },
   };
 }
@@ -129,6 +130,11 @@ export default async function BlogPostPage({ params }: Props) {
       <Section>
         <article className="mx-auto max-w-3xl">
           <BlogContent content={post.content} />
+
+          {/* Share buttons */}
+          <div className="mt-10 pt-8 border-t border-gray-200">
+            <ShareButtons url={`/blog/${slug}`} title={post.title} />
+          </div>
         </article>
       </Section>
 

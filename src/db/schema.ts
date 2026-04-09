@@ -6,6 +6,7 @@ import {
   boolean,
   integer,
   json,
+  index,
 } from "drizzle-orm/pg-core";
 
 export const demoTokens = pgTable("demo_tokens", {
@@ -41,7 +42,9 @@ export const chatMessages = pgTable("chat_messages", {
   role: text("role").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("idx_chat_messages_session").on(table.sessionId),
+]);
 
 export const siteSettings = pgTable("site_settings", {
   id: serial("id").primaryKey(),
@@ -117,7 +120,9 @@ export const demoLeads = pgTable("demo_leads", {
     industry: string;
   }>(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("idx_demo_leads_email").on(table.email),
+]);
 
 export const demoDripEmails = pgTable("demo_drip_emails", {
   id: serial("id").primaryKey(),
@@ -127,7 +132,9 @@ export const demoDripEmails = pgTable("demo_drip_emails", {
   sentAt: timestamp("sent_at"),
   stopped: boolean("stopped").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("idx_drip_lead_schedule").on(table.leadId, table.scheduledFor),
+]);
 
 export const blogPosts = pgTable("blog_posts", {
   id: serial("id").primaryKey(),

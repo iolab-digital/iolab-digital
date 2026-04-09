@@ -107,7 +107,7 @@ export async function POST(request: Request) {
           role: "user",
           content: sanitized,
         });
-      } catch { /* silent */ }
+      } catch (err) { console.error("[chat] Failed to save session/message:", err); }
     }
 
     // --- Build system prompt ---
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
     );
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: process.env.CLAUDE_MODEL || "claude-sonnet-4-20250514",
       max_tokens: 300,
       system: systemPrompt,
       messages: cleanedMessages.map((m) => ({
@@ -182,7 +182,7 @@ export async function POST(request: Request) {
             messageCount: messages.length + 1,
           })
           .where(eq(chatSessions.sessionId, sessionId));
-      } catch { /* silent */ }
+      } catch (err) { console.error("[chat] Failed to save assistant message:", err); }
     }
 
     // Auto-capture email if shared in message
@@ -204,7 +204,7 @@ export async function POST(request: Request) {
             industry: "business",
           },
         });
-      } catch { /* silent */ }
+      } catch (err) { console.error("[chat] Failed to capture email lead:", err); }
     }
 
     return NextResponse.json({ reply });

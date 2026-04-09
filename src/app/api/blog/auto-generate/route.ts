@@ -49,6 +49,14 @@ export async function GET(request: Request) {
     } catch { /* non-fatal */ }
   }
 
+  // Double-click guard: reject if generation is already in progress
+  try {
+    const [statusRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "blog_generation_status")).limit(1);
+    if (statusRow?.value === "generating") {
+      return NextResponse.json({ error: "A blog post is already being generated. Please wait." }, { status: 409 });
+    }
+  } catch { /* non-fatal, proceed */ }
+
   await setGenerationFlag("generating");
 
   try {
@@ -62,7 +70,7 @@ export async function GET(request: Request) {
     const today = new Date().toISOString().split("T")[0];
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: process.env.CLAUDE_MODEL || "claude-sonnet-4-20250514",
       max_tokens: 4000,
       messages: [
         {

@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
     // Improved prompt for brand extraction
     const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: process.env.CLAUDE_MODEL || "claude-sonnet-4-20250514",
       max_tokens: 800,
       messages: [
         {

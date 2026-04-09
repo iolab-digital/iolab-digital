@@ -186,7 +186,9 @@
       "Bash(grep -l 'status: \"published\"' D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
       "Bash(grep -l 'status: \"draft\"' D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
       "Bash(grep -rL \"status:\" D:/Docker_Apps/iolab-digital/content/blog/*.mdx)",
-      "Bash(curl -s http://localhost:3000/api/admin/blog -b \"iolab-admin-token=test\")"
+      "Bash(curl -s http://localhost:3000/api/admin/blog -b \"iolab-admin-token=test\")",
+      "Bash(npx tsc:*)",
+      "Bash(node ./node_modules/.bin/tsc --noEmit)"
     ]
   }
 }

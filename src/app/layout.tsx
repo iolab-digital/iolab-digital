@@ -53,6 +53,10 @@ export const metadata: Metadata = {
     description:
       "Custom CRM, mobile apps, AI automation & digital marketing for small businesses. Enterprise power at small business prices.",
   },
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
   robots: {
     index: true,
     follow: true,

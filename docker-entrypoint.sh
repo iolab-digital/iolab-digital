@@ -12,25 +12,25 @@ if [ "$ENABLE_CRONS" = "true" ]; then
   # Drip campaign — every hour
   (
     while true; do
-      echo "[cron] Running drip campaign..."
-      wget -q -O - --header="Authorization: Bearer ${CRON_SECRET}" \
-        --post-data="" "http://127.0.0.1:3000/api/demos/drip" 2>&1 || true
+      echo "[cron] $(date) Running drip campaign..."
+      wget -O - --header="Authorization: Bearer ${CRON_SECRET}" \
+        --post-data="" "http://127.0.0.1:3000/api/demos/drip" 2>&1 || echo "[cron] Drip campaign failed"
       sleep 3600
     done
   ) &
 
-  # Auto blog generation — every 3 days (259200 seconds)
-  # First run happens after 3 days, then repeats
+  # Auto blog generation — first run after 1 day, then every 3 days
   (
+    sleep 86400
     while true; do
+      echo "[cron] $(date) Running blog auto-generate..."
+      wget -O - --header="Authorization: Bearer ${CRON_SECRET}" \
+        "http://127.0.0.1:3000/api/blog/auto-generate" 2>&1 || echo "[cron] Blog auto-generate failed"
       sleep 259200
-      echo "[cron] Running blog auto-generate..."
-      wget -q -O - --header="Authorization: Bearer ${CRON_SECRET}" \
-        "http://127.0.0.1:3000/api/blog/auto-generate" 2>&1 || true
     done
   ) &
 
-  echo "[cron] Cron loops active (drip: hourly, blog: every 3 days)"
+  echo "[cron] Cron loops active (drip: hourly, blog: 1 day then every 3 days)"
 else
   echo "[cron] Crons disabled (set ENABLE_CRONS=true to enable)"
 fi
