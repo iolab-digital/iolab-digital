@@ -12,7 +12,7 @@ type PostMeta = {
   tags: string[];
   publishedAt: string;
   readingTime: number;
-  image: string | null;
+  image?: string | null;
 };
 
 const PAGE_SIZE = 12;
