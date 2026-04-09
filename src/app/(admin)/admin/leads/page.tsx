@@ -51,7 +51,52 @@ export default async function AdminLeadsPage() {
         <span className="text-sm text-gray-500">{leads.length} total</span>
       </div>
 
-      <div className="rounded-xl bg-white border border-gray-200 overflow-hidden">
+      {/* Mobile card view */}
+      <div className="md:hidden space-y-3">
+        {leads.map((lead) => (
+          <div key={lead.id} className="rounded-xl bg-white border border-gray-200 p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {lead.brandData?.primaryColor && (
+                  <div className="w-3 h-3 rounded-full shrink-0" style={{ background: lead.brandData.primaryColor }} />
+                )}
+                <span className="font-medium text-sm">{lead.brandData?.businessName || "Unknown"}</span>
+              </div>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">{lead.demoType}</span>
+            </div>
+            <div className="text-xs text-gray-400 flex items-center gap-1">
+              <Globe className="h-3 w-3" />
+              <a href={lead.websiteUrl.startsWith("http") ? lead.websiteUrl : `https://${lead.websiteUrl}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary truncate">{lead.websiteUrl}</a>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <div>
+                {lead.email ? (
+                  <span className="text-gray-600 flex items-center gap-1"><Mail className="h-3 w-3" /> {lead.email}</span>
+                ) : (
+                  <span className="text-gray-300">No email</span>
+                )}
+              </div>
+              <div className="text-gray-400">{lead.createdAt.toLocaleDateString()}</div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500 flex items-center gap-1"><Tag className="h-3 w-3" />{lead.brandData?.industry || "—"}</span>
+              {lead.drip.total > 0 ? (
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${lead.drip.stopped ? "bg-red-100 text-red-600" : lead.drip.sent >= 7 ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600"}`}>
+                  {lead.drip.stopped ? "Stopped" : lead.drip.sent >= 7 ? "Complete" : "Active"} ({lead.drip.sent}/{lead.drip.total})
+                </span>
+              ) : (
+                <span className="text-[10px] text-gray-300">No drip</span>
+              )}
+            </div>
+          </div>
+        ))}
+        {leads.length === 0 && (
+          <div className="rounded-xl bg-white border border-gray-200 p-12 text-center text-gray-400">No demo leads yet.</div>
+        )}
+      </div>
+
+      {/* Desktop table view */}
+      <div className="hidden md:block rounded-xl bg-white border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
@@ -70,10 +115,7 @@ export default async function AdminLeadsPage() {
                   <td className="p-3">
                     <div className="flex items-center gap-2">
                       {lead.brandData?.primaryColor && (
-                        <div
-                          className="w-3 h-3 rounded-full shrink-0"
-                          style={{ background: lead.brandData.primaryColor }}
-                        />
+                        <div className="w-3 h-3 rounded-full shrink-0" style={{ background: lead.brandData.primaryColor }} />
                       )}
                       <div>
                         <div className="font-medium flex items-center gap-1.5">
@@ -82,14 +124,7 @@ export default async function AdminLeadsPage() {
                         </div>
                         <div className="text-[11px] text-gray-400 flex items-center gap-1">
                           <Globe className="h-3 w-3" />
-                          <a
-                            href={lead.websiteUrl.startsWith("http") ? lead.websiteUrl : `https://${lead.websiteUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-primary"
-                          >
-                            {lead.websiteUrl}
-                          </a>
+                          <a href={lead.websiteUrl.startsWith("http") ? lead.websiteUrl : `https://${lead.websiteUrl}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{lead.websiteUrl}</a>
                         </div>
                       </div>
                     </div>
@@ -98,24 +133,17 @@ export default async function AdminLeadsPage() {
                     {lead.email ? (
                       <div>
                         <div className="text-xs">{lead.name || "—"}</div>
-                        <div className="text-[11px] text-gray-400 flex items-center gap-1">
-                          <Mail className="h-3 w-3" /> {lead.email}
-                        </div>
+                        <div className="text-[11px] text-gray-400 flex items-center gap-1"><Mail className="h-3 w-3" /> {lead.email}</div>
                       </div>
                     ) : (
                       <span className="text-gray-300 text-xs">No email</span>
                     )}
                   </td>
                   <td className="p-3">
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                      {lead.demoType}
-                    </span>
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">{lead.demoType}</span>
                   </td>
                   <td className="p-3">
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
-                      <Tag className="h-3 w-3" />
-                      {lead.brandData?.industry || "—"}
-                    </span>
+                    <span className="text-xs text-gray-500 flex items-center gap-1"><Tag className="h-3 w-3" />{lead.brandData?.industry || "—"}</span>
                   </td>
                   <td className="p-3">
                     {lead.drip.total > 0 ? (
@@ -129,9 +157,7 @@ export default async function AdminLeadsPage() {
                             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-100 text-blue-600">Active</span>
                           )}
                         </div>
-                        <div className="text-[10px] text-gray-400 mt-0.5">
-                          {lead.drip.sent}/{lead.drip.total} sent
-                        </div>
+                        <div className="text-[10px] text-gray-400 mt-0.5">{lead.drip.sent}/{lead.drip.total} sent</div>
                       </div>
                     ) : (
                       <span className="text-[10px] text-gray-300">No drip</span>
@@ -145,9 +171,7 @@ export default async function AdminLeadsPage() {
               ))}
               {leads.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-12 text-center text-gray-400">
-                    No demo leads yet.
-                  </td>
+                  <td colSpan={6} className="p-12 text-center text-gray-400">No demo leads yet.</td>
                 </tr>
               )}
             </tbody>

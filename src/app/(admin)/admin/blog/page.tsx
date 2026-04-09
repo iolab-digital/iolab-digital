@@ -444,22 +444,22 @@ export default function AdminBlogPage() {
 
       {/* Draft Preview Panel */}
       {previewPost && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-start justify-center overflow-y-auto py-8">
-          <div className="w-full max-w-4xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-start justify-center overflow-y-auto py-2 md:py-8">
+          <div className="w-full max-w-4xl mx-2 md:mx-4 bg-white rounded-xl md:rounded-2xl shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-b border-gray-200">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-gray-50 border-b border-gray-200 gap-2">
               <div className="flex items-center gap-2">
                 <Eye className="h-5 w-5 text-primary" />
-                <h3 className="font-bold">Draft Preview</h3>
+                <h3 className="font-bold text-sm md:text-base">Draft Preview</h3>
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Draft</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => { handleAction(previewPost.slug, "publish"); setPreviewPost(null); }}
                   disabled={actionLoading === previewPost.slug}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-600 text-white hover:bg-green-700 flex items-center gap-1"
                 >
-                  <CheckCircle2 className="h-3 w-3" /> Approve & Publish
+                  <CheckCircle2 className="h-3 w-3" /> Approve
                 </button>
                 <button
                   onClick={() => { handleAction(previewPost.slug, "reject"); setPreviewPost(null); }}
@@ -474,7 +474,7 @@ export default function AdminBlogPage() {
             </div>
 
             {/* Meta info */}
-            <div className="px-6 py-4 bg-gray-50/50 border-b border-gray-100 space-y-2">
+            <div className="px-4 md:px-6 py-3 md:py-4 bg-gray-50/50 border-b border-gray-100 space-y-2">
               <div className="flex items-center gap-2 text-xs">
                 <span className="font-medium text-gray-500 w-16">Title:</span>
                 <span className="font-bold text-gray-900">{previewPost.title}</span>
@@ -507,7 +507,7 @@ export default function AdminBlogPage() {
             </div>
 
             {/* Cover Image + Prompt Editor */}
-            <div className="px-6 py-4 border-b border-gray-200">
+            <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200">
               <div className="flex items-center gap-2 mb-3">
                 <ImageIcon className="h-4 w-4 text-gray-500" />
                 <h4 className="text-sm font-bold">Cover Image</h4>
@@ -546,7 +546,7 @@ export default function AdminBlogPage() {
             </div>
 
             {/* Article Body */}
-            <div className="px-6 py-6">
+            <div className="px-4 md:px-6 py-4 md:py-6">
               <h4 className="text-sm font-bold mb-4 flex items-center gap-2">
                 <FileText className="h-4 w-4 text-gray-500" /> Article Body
               </h4>

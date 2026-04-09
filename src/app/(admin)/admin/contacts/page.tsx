@@ -34,7 +34,41 @@ export default async function AdminContactsPage() {
         <span className="text-sm text-gray-500">{contactList.length} total</span>
       </div>
 
-      <div className="rounded-xl bg-white border border-gray-200 overflow-hidden">
+      {/* Mobile card view */}
+      <div className="md:hidden space-y-3">
+        {contactList.map((contact) => (
+          <div key={contact.id} className="rounded-xl bg-white border border-gray-200 p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-sm">{contact.name}</span>
+              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${STATUS_STYLES[contact.status] || STATUS_STYLES.new}`}>{contact.status}</span>
+            </div>
+            <div className="text-xs text-gray-500 space-y-1">
+              <div className="flex items-center gap-1"><Mail className="h-3 w-3" /><a href={`mailto:${contact.email}`} className="hover:text-primary">{contact.email}</a></div>
+              {contact.phone && <div className="flex items-center gap-1"><Phone className="h-3 w-3" /> {contact.phone}</div>}
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              {contact.company ? (
+                <span className="text-gray-500 flex items-center gap-1"><Building2 className="h-3 w-3" /> {contact.company}</span>
+              ) : <span />}
+              {contact.serviceInterest && (
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">{contact.serviceInterest}</span>
+              )}
+            </div>
+            {contact.message && (
+              <div className="text-xs text-gray-400 line-clamp-2 flex items-start gap-1">
+                <MessageSquare className="h-3 w-3 shrink-0 mt-0.5" /> {contact.message}
+              </div>
+            )}
+            <div className="text-[10px] text-gray-400 flex items-center gap-1"><Calendar className="h-3 w-3" />{contact.createdAt.toLocaleDateString()}</div>
+          </div>
+        ))}
+        {contactList.length === 0 && (
+          <div className="rounded-xl bg-white border border-gray-200 p-12 text-center text-gray-400">No contact submissions yet.</div>
+        )}
+      </div>
+
+      {/* Desktop table view */}
+      <div className="hidden md:block rounded-xl bg-white border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
@@ -67,46 +101,32 @@ export default async function AdminContactsPage() {
                   </td>
                   <td className="p-3">
                     {contact.company ? (
-                      <span className="text-xs flex items-center gap-1 text-gray-500">
-                        <Building2 className="h-3 w-3" /> {contact.company}
-                      </span>
+                      <span className="text-xs flex items-center gap-1 text-gray-500"><Building2 className="h-3 w-3" /> {contact.company}</span>
                     ) : (
                       <span className="text-gray-300 text-xs">—</span>
                     )}
                   </td>
                   <td className="p-3">
                     {contact.serviceInterest ? (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                        {contact.serviceInterest}
-                      </span>
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">{contact.serviceInterest}</span>
                     ) : (
                       <span className="text-gray-300 text-xs">—</span>
                     )}
                   </td>
                   <td className="p-3">
-                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${STATUS_STYLES[contact.status] || STATUS_STYLES.new}`}>
-                      {contact.status}
-                    </span>
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${STATUS_STYLES[contact.status] || STATUS_STYLES.new}`}>{contact.status}</span>
                   </td>
                   <td className="p-3 text-xs text-gray-400">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {contact.createdAt.toLocaleDateString()}
-                    </div>
+                    <div className="flex items-center gap-1"><Calendar className="h-3 w-3" />{contact.createdAt.toLocaleDateString()}</div>
                   </td>
                   <td className="p-3">
-                    <div className="max-w-xs truncate text-xs text-gray-500 flex items-center gap-1">
-                      <MessageSquare className="h-3 w-3 shrink-0" />
-                      {contact.message}
-                    </div>
+                    <div className="max-w-xs truncate text-xs text-gray-500 flex items-center gap-1"><MessageSquare className="h-3 w-3 shrink-0" />{contact.message}</div>
                   </td>
                 </tr>
               ))}
               {contactList.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-gray-400">
-                    No contact submissions yet.
-                  </td>
+                  <td colSpan={7} className="p-12 text-center text-gray-400">No contact submissions yet.</td>
                 </tr>
               )}
             </tbody>

@@ -14,6 +14,7 @@ import {
   Link2,
   LogOut,
   X,
+  ExternalLink,
 } from "lucide-react";
 
 const NAV = [
@@ -90,7 +91,14 @@ export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
         })}
       </nav>
 
-      <div className="p-3 border-t border-gray-800">
+      <div className="p-3 border-t border-gray-800 space-y-1">
+        <Link
+          href="/"
+          onClick={handleNavClick}
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 w-full transition-colors"
+        >
+          <ExternalLink className="h-4 w-4" /> View Website
+        </Link>
         <button
           onClick={() => {
             if (isDemo) {
@@ -101,16 +109,10 @@ export function AdminSidebar({ onClose }: { onClose?: () => void } = {}) {
               handleLogout();
             }
           }}
-          className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 w-full transition-colors"
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-gray-800 w-full transition-colors"
         >
           <LogOut className="h-4 w-4" /> {isDemo ? "Exit Demo" : "Sign Out"}
         </button>
-        <Link
-          href="/"
-          className="block text-center text-[10px] text-gray-600 mt-2 hover:text-gray-400"
-        >
-          ← Back to Website
-        </Link>
       </div>
     </aside>
   );

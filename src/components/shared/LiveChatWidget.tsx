@@ -267,7 +267,7 @@ export function LiveChatWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={handleOpen}
-            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-white shadow-xl shadow-primary/25 flex items-center justify-center hover:bg-primary/90 transition-colors"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 rounded-full bg-primary text-white shadow-xl shadow-primary/25 flex items-center justify-center hover:bg-primary/90 transition-colors"
           >
             <MessageCircle className="h-6 w-6" />
             <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent border-2 border-white animate-pulse" />
@@ -283,7 +283,7 @@ export function LiveChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 z-50 w-[380px] h-[520px] rounded-2xl bg-white shadow-2xl shadow-black/15 border border-gray-200 flex flex-col overflow-hidden"
+            className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-24px)] sm:w-[380px] h-[calc(100dvh-100px)] sm:h-[520px] max-h-[600px] rounded-2xl bg-white shadow-2xl shadow-black/15 border border-gray-200 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-primary text-white px-4 py-3 flex items-center justify-between shrink-0">
@@ -331,7 +331,7 @@ export function LiveChatWidget() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" role="log" aria-live="polite" aria-label="Chat messages">
               {messages.map((msg, i) => (
                 <div
                   key={i}
