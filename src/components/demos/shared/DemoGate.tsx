@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Loader2, Globe, User, Mail } from "lucide-react";
@@ -20,7 +20,15 @@ type DemoGateProps = {
   children: (brand: BrandTheme | null) => React.ReactNode;
 };
 
-export function DemoGate({ demoType, demoLabel, children }: DemoGateProps) {
+export function DemoGate(props: DemoGateProps) {
+  return (
+    <Suspense fallback={null}>
+      <DemoGateInner {...props} />
+    </Suspense>
+  );
+}
+
+function DemoGateInner({ demoType, demoLabel, children }: DemoGateProps) {
   const [unlocked, setUnlocked] = useState(false);
   const [brand, setBrand] = useState<BrandTheme | null>(null);
   const [loading, setLoading] = useState(false);
