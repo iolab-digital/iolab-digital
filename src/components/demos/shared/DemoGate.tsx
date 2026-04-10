@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Loader2, Globe, User, Mail } from "lucide-react";
 
@@ -28,6 +29,44 @@ export function DemoGate({ demoType, demoLabel, children }: DemoGateProps) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
+  const searchParams = useSearchParams();
+  const autoTriggered = useRef(false);
+
+  // Auto-unlock if ?url= param present (coming from quiz or shared link)
+  useEffect(() => {
+    const paramUrl = searchParams.get("url");
+    if (paramUrl && !autoTriggered.current) {
+      autoTriggered.current = true;
+      setUrl(paramUrl);
+      setLoading(true);
+      setProgress(0);
+
+      const progressInterval = setInterval(() => {
+        setProgress((p) => Math.min(p + Math.random() * 15, 90));
+      }, 400);
+
+      fetch("/api/demos/brand", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: paramUrl }),
+      })
+        .then((res) => res.json())
+        .then((brandData: BrandTheme) => {
+          setBrand(brandData);
+          setProgress(100);
+          setTimeout(() => {
+            clearInterval(progressInterval);
+            setUnlocked(true);
+          }, 500);
+        })
+        .catch(() => {
+          clearInterval(progressInterval);
+          // Fall back to showing the gate form
+          setLoading(false);
+          setProgress(0);
+        });
+    }
+  }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
