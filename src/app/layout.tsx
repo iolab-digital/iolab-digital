@@ -54,8 +54,8 @@ export const metadata: Metadata = {
       "Custom CRM, mobile apps, AI automation & digital marketing for small businesses. Enterprise power at small business prices.",
   },
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "https://iolab.nyc3.cdn.digitaloceanspaces.com/iolab-logo-design-v0924-v4-SYMBOL.png",
+    apple: "https://iolab.nyc3.cdn.digitaloceanspaces.com/iolab-logo-design-v0924-v4-SYMBOL.png",
   },
   robots: {
     index: true,
