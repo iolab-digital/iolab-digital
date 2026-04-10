@@ -15,6 +15,9 @@ import {
   Star,
   MessageSquare,
   Quote,
+  Globe,
+  Palette,
+  ExternalLink,
 } from "lucide-react";
 import { INDUSTRIES } from "@/lib/constants";
 
@@ -39,6 +42,15 @@ type AIRecommendation = {
   description: string;
   link: string;
   icon: typeof Bot;
+};
+
+type BrandData = {
+  businessName: string;
+  primaryColor: string;
+  accentColor: string;
+  logoUrl: string | null;
+  fontStyle: string;
+  industry: string;
 };
 
 /* ---------- DATA ---------- */
@@ -151,78 +163,47 @@ const TESTIMONIALS: Testimonial[] = [
 // Show testimonial after these question indexes (0-based)
 const TESTIMONIAL_AFTER_Q = [0, 2, 4, 5];
 
+// Map biggestWin category to the best demo slug
+const CATEGORY_TO_DEMO: Record<string, string> = {
+  chatbot: "ai-chatbot",
+  crm: "crm",
+  automation: "invoicing",
+  operations: "booking",
+};
+
 /* ---------- RECOMMENDATION ENGINE ---------- */
 
 function getRecommendations(answers: Record<string, number>, industryLabel: string, biggestWinCategory?: string): AIRecommendation[] {
   const recs: AIRecommendation[] = [];
   const industry = INDUSTRIES.find((i) => industryLabel.includes(i.name))?.slug || "restaurants";
 
-  // Based on lead follow-up gap
   if (answers.leadFollowUp >= 25) {
-    recs.push({
-      title: "AI-Powered Instant Lead Response",
-      description: "Respond to every inquiry in under 60 seconds with AI. Qualify leads, book calls, and never let a prospect go cold again.",
-      link: "/demos/crm",
-      icon: Zap,
-    });
+    recs.push({ title: "AI-Powered Instant Lead Response", description: "Respond to every inquiry in under 60 seconds with AI. Qualify leads, book calls, and never let a prospect go cold again.", link: "/demos/crm", icon: Zap });
   }
-
-  // Based on after-hours gap
   if (answers.afterHours >= 20) {
-    recs.push({
-      title: "24/7 AI Chatbot for Customer Service",
-      description: "An AI assistant handles inquiries, books appointments, and captures leads around the clock — even at 2am on a Saturday.",
-      link: "/demos/ai-chatbot",
-      icon: Bot,
-    });
+    recs.push({ title: "24/7 AI Chatbot for Customer Service", description: "An AI assistant handles inquiries, books appointments, and captures leads around the clock — even at 2am on a Saturday.", link: "/demos/ai-chatbot", icon: Bot });
   }
-
-  // Based on manual work hours
   if (answers.manualWork >= 15) {
-    recs.push({
-      title: "Workflow & Task Automation",
-      description: "Automate invoicing, appointment reminders, status updates, and data entry. Reclaim 10-20+ hours per week for your team.",
-      link: "/services/ai-automation",
-      icon: Clock,
-    });
+    recs.push({ title: "Workflow & Task Automation", description: "Automate invoicing, appointment reminders, status updates, and data entry. Reclaim 10-20+ hours per week for your team.", link: "/services/ai-automation", icon: Clock });
   }
-
-  // Based on review management gap
   if (answers.reviews >= 20) {
-    recs.push({
-      title: "AI Reputation Management",
-      description: "Automatically request reviews after every job, respond to feedback with AI, and monitor your online presence in real-time.",
-      link: "/services/ai-automation",
-      icon: Star,
-    });
+    recs.push({ title: "AI Reputation Management", description: "Automatically request reviews after every job, respond to feedback with AI, and monitor your online presence in real-time.", link: "/services/ai-automation", icon: Star });
   }
-
-  // Based on tool sprawl
   if (answers.toolCount >= 15) {
-    recs.push({
-      title: "Unified Custom Platform",
-      description: "Replace your 5+ separate subscriptions with one platform built for YOUR workflows. All your data in one place, connected by AI.",
-      link: "/tools/saas-calculator",
-      icon: Brain,
-    });
+    recs.push({ title: "Unified Custom Platform", description: "Replace your 5+ separate subscriptions with one platform built for YOUR workflows. All your data in one place, connected by AI.", link: "/tools/saas-calculator", icon: Brain });
   }
-
-  // Biggest win specific
   if (biggestWinCategory === "chatbot" && !recs.find(r => r.link.includes("chatbot"))) {
     recs.push({ title: "AI Customer Communication Hub", description: "Smart chatbot + automated email + SMS in one system. Your customers get instant answers, your team gets fewer interruptions.", link: "/demos/ai-chatbot", icon: MessageSquare });
   }
   if (biggestWinCategory === "crm" && !recs.find(r => r.link.includes("crm"))) {
     recs.push({ title: "Custom AI-Powered CRM", description: "A CRM built around YOUR sales process with AI lead scoring, automated follow-ups, and pipeline intelligence.", link: "/demos/crm", icon: Sparkles });
   }
-
-  // Industry-specific (always add)
   recs.push({
     title: `AI Solutions for ${INDUSTRIES.find((i) => i.slug === industry)?.name || "Your Industry"}`,
     description: "See exactly how AI automation transforms businesses in your specific industry — from smart scheduling to automated customer communication.",
     link: `/industries/${industry}`,
     icon: Brain,
   });
-
   return recs.slice(0, 3);
 }
 
@@ -236,13 +217,20 @@ export function AIAutomationQuiz() {
   const [biggestWinCategory, setBiggestWinCategory] = useState<string | undefined>();
   const [showTestimonial, setShowTestimonial] = useState(false);
   const [testimonialIdx, setTestimonialIdx] = useState(0);
-  const [showResults, setShowResults] = useState(false);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
 
-  const totalSteps = QUESTIONS.length; // for progress bar
+  // Lead capture gate (between questions and results)
+  const [showGate, setShowGate] = useState(false);
+  const [gateUrl, setGateUrl] = useState("");
+  const [gateEmail, setGateEmail] = useState("");
+  const [gateName, setGateName] = useState("");
+  const [gateLoading, setGateLoading] = useState(false);
+  const [gateProgress, setGateProgress] = useState(0);
+  const [gateError, setGateError] = useState("");
+  const [brandData, setBrandData] = useState<BrandData | null>(null);
+
+  // Results
+  const [showResults, setShowResults] = useState(false);
+
   const question = currentQ >= 0 ? QUESTIONS[currentQ] : null;
   const totalScore = Object.values(answers).reduce((s, v) => s + v, 0);
   const maxPossible = 200;
@@ -257,18 +245,19 @@ export function AIAutomationQuiz() {
           ? { label: "High ROI Opportunity", color: "#7B2FF7", bg: "bg-primary/5 border-primary/30" }
           : { label: "AI Would Transform Your Business", color: "#22c55e", bg: "bg-green-50 border-green-300" };
 
-  // Auto-advance testimonial after 4 seconds
+  // The best demo to link to, based on their biggest pain point
+  const bestDemoSlug = biggestWinCategory ? (CATEGORY_TO_DEMO[biggestWinCategory] || "crm") : "crm";
+
+  // Auto-advance testimonial after 5 seconds
   const advanceFromTestimonial = useCallback(() => {
     setShowTestimonial(false);
-    // Move to next question
     if (currentQ < QUESTIONS.length - 1) {
       setCurrentQ((q) => q + 1);
     } else {
-      setShowResults(true);
-      // Analytics
-      try { window.gtag?.("event", "quiz_complete", { score: scorePct, tier: tier.label, quiz: "ai-automation" }); } catch {}
+      // All questions done → show the lead capture gate
+      setShowGate(true);
     }
-  }, [currentQ, scorePct, tier.label]);
+  }, [currentQ]);
 
   useEffect(() => {
     if (!showTestimonial) return;
@@ -285,7 +274,6 @@ export function AIAutomationQuiz() {
       setAnswers((prev) => ({ ...prev, [question!.id]: score }));
       setSelectedOption(null);
 
-      // Check if we should show a testimonial interlude
       const tIdx = TESTIMONIAL_AFTER_Q.indexOf(currentQ);
       if (tIdx !== -1 && tIdx < TESTIMONIALS.length) {
         setTestimonialIdx(tIdx);
@@ -293,39 +281,66 @@ export function AIAutomationQuiz() {
       } else if (currentQ < QUESTIONS.length - 1) {
         setCurrentQ((q) => q + 1);
       } else {
-        setShowResults(true);
-        try { window.gtag?.("event", "quiz_complete", { score: scorePct, tier: tier.label, quiz: "ai-automation" }); } catch {}
+        // Last question → show the lead capture gate
+        setShowGate(true);
       }
     }, 300);
   }
 
-  async function handleEmail() {
-    if (!email) return;
-    setSending(true);
+  // Gate submission: extract brand + capture lead → show results
+  async function handleGateSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!gateUrl.trim() || !gateEmail.trim()) {
+      setGateError("Please enter your website URL and email.");
+      return;
+    }
+    setGateLoading(true);
+    setGateError("");
+    setGateProgress(0);
+
+    const progressInterval = setInterval(() => {
+      setGateProgress((p) => Math.min(p + Math.random() * 12, 90));
+    }, 500);
+
     try {
+      // 1. Extract brand from website
+      const brandRes = await fetch("/api/demos/brand", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: gateUrl.trim() }),
+      });
+      const brand: BrandData = await brandRes.json();
+      setBrandData(brand);
+      setGateProgress(80);
+
+      // 2. Capture lead
+      const industrySlug = INDUSTRIES.find((i) => industryLabel.includes(i.name))?.slug || brand.industry || "business";
       await fetch("/api/demos/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          url: "ai-automation-quiz",
-          name: name || undefined,
-          email,
+          url: gateUrl.trim(),
+          name: gateName.trim() || undefined,
+          email: gateEmail.trim(),
           demoType: "ai-automation-quiz",
-          brandData: {
-            businessName: name || "Quiz User",
-            primaryColor: "#7B2FF7",
-            accentColor: "#FF6B35",
-            logoUrl: null,
-            fontStyle: "sans-serif",
-            industry: INDUSTRIES.find((i) => industryLabel.includes(i.name))?.slug || "business",
-          },
+          brandData: brand,
         }),
       });
-      setSent(true);
+      setGateProgress(100);
+
+      // Analytics
+      try { window.gtag?.("event", "quiz_complete", { score: scorePct, tier: tier.label, quiz: "ai-automation", brand: brand.businessName }); } catch {}
+
+      setTimeout(() => {
+        clearInterval(progressInterval);
+        setShowGate(false);
+        setShowResults(true);
+      }, 600);
     } catch {
-      // silent
+      clearInterval(progressInterval);
+      setGateError("Something went wrong. Please try again.");
+      setGateLoading(false);
     }
-    setSending(false);
   }
 
   /* ---- WELCOME SCREEN ---- */
@@ -341,7 +356,7 @@ export function AIAutomationQuiz() {
         <p className="text-gray-500 mb-2 max-w-md mx-auto">
           Answer 7 quick questions and get a personalized AI automation roadmap — specific to your industry, pain points, and goals.
         </p>
-        <p className="text-xs text-gray-400 mb-8">Takes about 2 minutes. No signup required.</p>
+        <p className="text-xs text-gray-400 mb-8">Takes about 2 minutes. Free personalized results.</p>
         <button
           onClick={() => setCurrentQ(0)}
           className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-colors shadow-xl shadow-primary/20"
@@ -370,18 +385,11 @@ export function AIAutomationQuiz() {
     const t = TESTIMONIALS[testimonialIdx];
     return (
       <div className="max-w-2xl mx-auto">
-        {/* Progress bar stays visible */}
         <div className="flex items-center gap-1 mb-8">
           {QUESTIONS.map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full transition-all duration-500 ${
-                i <= currentQ ? "bg-primary" : "bg-gray-200"
-              }`}
-            />
+            <div key={i} className={`flex-1 h-2 rounded-full transition-all duration-500 ${i <= currentQ ? "bg-primary" : "bg-gray-200"}`} />
           ))}
         </div>
-
         <div className="rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-white p-8 md:p-10 text-center relative overflow-hidden">
           <Quote className="h-10 w-10 text-primary/20 mx-auto mb-4" />
           <p className="text-lg md:text-xl font-medium text-gray-800 leading-relaxed mb-6 max-w-lg mx-auto italic">
@@ -394,29 +402,114 @@ export function AIAutomationQuiz() {
           <div className="inline-block rounded-full bg-primary/10 px-4 py-1.5">
             <span className="text-sm font-bold text-primary">{t.metric}</span>
           </div>
-
-          {/* Auto-advance indicator */}
           <div className="mt-8">
-            <button
-              onClick={advanceFromTestimonial}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
+            <button onClick={advanceFromTestimonial} className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors">
               Continue <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-
-          {/* Subtle progress timer */}
           <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-100">
-            <div className="h-1 bg-primary/40 animate-[grow_5s_linear]" style={{ animation: "grow 5s linear forwards" }} />
+            <div className="h-1 bg-primary/40" style={{ animation: "grow 5s linear forwards" }} />
           </div>
         </div>
+        <style jsx>{`@keyframes grow { from { width: 0%; } to { width: 100%; } }`}</style>
+      </div>
+    );
+  }
 
-        <style jsx>{`
-          @keyframes grow {
-            from { width: 0%; }
-            to { width: 100%; }
-          }
-        `}</style>
+  /* ---- LEAD CAPTURE GATE (after all questions, before results) ---- */
+  if (showGate) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        {/* Full progress bar */}
+        <div className="flex items-center gap-1 mb-8">
+          {QUESTIONS.map((_, i) => (
+            <div key={i} className="flex-1 h-2 rounded-full bg-primary" />
+          ))}
+        </div>
+
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <Sparkles className="h-8 w-8 text-primary" />
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold font-display mb-2">
+            Your results are ready!
+          </h2>
+          <p className="text-gray-500 text-sm max-w-md mx-auto">
+            Enter your business website and we&apos;ll generate a <strong className="text-gray-800">branded AI demo</strong> customized with your logo, colors, and business name — plus your personalized AI scorecard.
+          </p>
+        </div>
+
+        <form onSubmit={handleGateSubmit} className="max-w-md mx-auto space-y-3">
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Your Business Website</label>
+            <div className="relative">
+              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="yourbusiness.com"
+                value={gateUrl}
+                onChange={(e) => setGateUrl(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30"
+                required
+                disabled={gateLoading}
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Your Email</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="email"
+                placeholder="you@yourbusiness.com"
+                value={gateEmail}
+                onChange={(e) => setGateEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30"
+                required
+                disabled={gateLoading}
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Your Name <span className="text-gray-300">(optional)</span></label>
+            <input
+              type="text"
+              placeholder="John Smith"
+              value={gateName}
+              onChange={(e) => setGateName(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30"
+              disabled={gateLoading}
+            />
+          </div>
+
+          {gateError && <p className="text-xs text-red-500 text-center">{gateError}</p>}
+
+          {gateLoading && (
+            <div className="space-y-2">
+              <div className="w-full bg-gray-100 rounded-full h-2.5">
+                <div className="h-2.5 rounded-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-500" style={{ width: `${gateProgress}%` }} />
+              </div>
+              <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+                {gateProgress < 40 ? "Scanning your website..." : gateProgress < 80 ? "Extracting brand colors & logo..." : "Building your personalized demo..."}
+              </div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={gateLoading || !gateUrl.trim() || !gateEmail.trim()}
+            className="w-full py-3.5 rounded-xl bg-primary text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 shadow-lg shadow-primary/20"
+          >
+            {gateLoading ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> Generating Your Results...</>
+            ) : (
+              <><Palette className="h-4 w-4" /> See My AI Score & Branded Demo</>
+            )}
+          </button>
+
+          <p className="text-[10px] text-gray-400 text-center">We&apos;ll use AI to extract your brand from your website. No spam, ever.</p>
+        </form>
       </div>
     );
   }
@@ -424,9 +517,27 @@ export function AIAutomationQuiz() {
   /* ---- RESULTS ---- */
   if (showResults) {
     const recs = getRecommendations(answers, industryLabel, biggestWinCategory);
+    const businessName = brandData?.businessName || gateName || "Your Business";
 
     return (
       <div className="max-w-2xl mx-auto">
+        {/* Brand confirmation banner */}
+        {brandData && (
+          <div className="rounded-xl border border-gray-200 bg-white p-4 mb-6 flex items-center gap-4">
+            {brandData.logoUrl && (
+              <img src={brandData.logoUrl} alt={brandData.businessName} className="h-10 w-auto max-w-[120px] object-contain" />
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-sm">{brandData.businessName}</div>
+              <div className="text-xs text-gray-400 truncate">{gateUrl}</div>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <div className="w-5 h-5 rounded-full border border-gray-200" style={{ background: brandData.primaryColor }} title="Primary color" />
+              <div className="w-5 h-5 rounded-full border border-gray-200" style={{ background: brandData.accentColor }} title="Accent color" />
+            </div>
+          </div>
+        )}
+
         {/* Score */}
         <div className="text-center mb-8">
           <div className={`inline-block rounded-2xl border-2 p-8 ${tier.bg}`}>
@@ -439,13 +550,7 @@ export function AIAutomationQuiz() {
           </div>
           <div className="mt-4 max-w-sm mx-auto">
             <div className="w-full bg-gray-200 rounded-full h-3">
-              <div
-                className="h-3 rounded-full transition-all duration-1000"
-                style={{
-                  width: `${scorePct}%`,
-                  background: `linear-gradient(90deg, #6b7280, #f59e0b, #7B2FF7, #22c55e)`,
-                }}
-              />
+              <div className="h-3 rounded-full transition-all duration-1000" style={{ width: `${scorePct}%`, background: `linear-gradient(90deg, #6b7280, #f59e0b, #7B2FF7, #22c55e)` }} />
             </div>
             <div className="flex justify-between text-[10px] text-gray-400 mt-1">
               <span>Basics Covered</span>
@@ -458,7 +563,7 @@ export function AIAutomationQuiz() {
 
         {/* Summary */}
         <div className="rounded-xl bg-white border border-gray-200 p-6 mb-8">
-          <h3 className="font-bold text-lg mb-2">What This Means for Your Business</h3>
+          <h3 className="font-bold text-lg mb-2">What This Means for {businessName}</h3>
           <p className="text-gray-600 text-sm leading-relaxed">
             {scorePct <= 25
               ? "Your business has solid foundations in place. There are still targeted AI tools that could save you time on specific tasks — like automated follow-ups or smart scheduling. Even small automations add up to big time savings."
@@ -470,15 +575,36 @@ export function AIAutomationQuiz() {
           </p>
         </div>
 
+        {/* BRANDED DEMO CTA — the hero conversion moment */}
+        <div className="rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-white to-primary/5 p-6 mb-8 text-center">
+          <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <Palette className="h-7 w-7 text-primary" />
+          </div>
+          <h3 className="font-bold text-lg mb-2">
+            See AI in Action — Branded for {businessName}
+          </h3>
+          <p className="text-sm text-gray-500 mb-5 max-w-md mx-auto">
+            We built a live demo using <strong className="text-gray-700">your logo, colors, and business name</strong>. Click below to explore what a custom AI-powered {bestDemoSlug === "crm" ? "CRM" : bestDemoSlug === "ai-chatbot" ? "chatbot" : "platform"} would look like for your business.
+          </p>
+          <a
+            href={`/demos/${bestDemoSlug}?url=${encodeURIComponent(gateUrl)}`}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors shadow-xl shadow-primary/25"
+          >
+            <ExternalLink className="h-4 w-4" /> Launch Your Branded Demo
+          </a>
+          {brandData?.logoUrl && (
+            <div className="mt-4 flex items-center justify-center gap-2 opacity-60">
+              <img src={brandData.logoUrl} alt="" className="h-5 w-auto" />
+              <span className="text-[10px] text-gray-400">Powered by your brand</span>
+            </div>
+          )}
+        </div>
+
         {/* Recommendations */}
         <h3 className="font-bold text-lg mb-4">Your Top AI Recommendations</h3>
         <div className="space-y-3 mb-8">
           {recs.map((rec) => (
-            <a
-              key={rec.title}
-              href={rec.link}
-              className="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 hover:border-primary/30 hover:shadow-lg transition-all group"
-            >
+            <a key={rec.title} href={rec.link} className="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 hover:border-primary/30 hover:shadow-lg transition-all group">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <rec.icon className="h-5 w-5 text-primary" />
               </div>
@@ -491,58 +617,9 @@ export function AIAutomationQuiz() {
           ))}
         </div>
 
-        {/* Email capture */}
-        <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-6 mb-8">
-          {!sent ? (
-            <>
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="h-5 w-5 text-primary" />
-                <h3 className="font-bold">Get Your Free AI Automation Playbook</h3>
-              </div>
-              <p className="text-sm text-gray-500 mb-4">
-                We&apos;ll send a personalized implementation plan based on your quiz results — including estimated ROI, timeline, and next steps.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  required
-                />
-                <button
-                  onClick={handleEmail}
-                  disabled={!email || sending}
-                  className="px-6 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm shrink-0 disabled:opacity-50 flex items-center gap-2 hover:bg-primary/90 transition-colors"
-                >
-                  {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
-                  Send Playbook
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="text-center py-4">
-              <Check className="h-8 w-8 text-green-500 mx-auto mb-2" />
-              <h3 className="font-bold text-lg">Playbook Sent!</h3>
-              <p className="text-sm text-gray-500">Check your inbox for your personalized AI automation playbook.</p>
-            </div>
-          )}
-        </div>
-
         {/* CTA */}
         <div className="text-center">
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
-          >
+          <a href="/contact" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
             Book a Free AI Strategy Session <ArrowRight className="h-4 w-4" />
           </a>
           <p className="text-xs text-gray-400 mt-3">No commitment. 15-minute call with our AI specialist.</p>
@@ -554,36 +631,17 @@ export function AIAutomationQuiz() {
   /* ---- QUIZ QUESTIONS ---- */
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Progress */}
       <div className="flex items-center gap-1 mb-8">
         {QUESTIONS.map((_, i) => (
-          <div
-            key={i}
-            className={`flex-1 h-2 rounded-full transition-all duration-300 ${
-              i < currentQ ? "bg-primary" : i === currentQ ? "bg-primary/50" : "bg-gray-200"
-            }`}
-          />
+          <div key={i} className={`flex-1 h-2 rounded-full transition-all duration-300 ${i < currentQ ? "bg-primary" : i === currentQ ? "bg-primary/50" : "bg-gray-200"}`} />
         ))}
       </div>
-
       <div className="text-center mb-2">
-        <span className="text-xs text-gray-400">
-          Question {currentQ + 1} of {totalSteps}
-        </span>
+        <span className="text-xs text-gray-400">Question {currentQ + 1} of {QUESTIONS.length}</span>
       </div>
-
-      <h2 className="text-xl md:text-2xl font-bold font-display text-center mb-2">
-        {question!.question}
-      </h2>
-      {question!.subtitle && (
-        <p className="text-sm text-gray-400 text-center mb-8">{question!.subtitle}</p>
-      )}
-
-      <div
-        className={`${
-          question!.id === "industry" ? "grid grid-cols-2 sm:grid-cols-3" : "flex flex-col"
-        } gap-3 max-w-lg mx-auto`}
-      >
+      <h2 className="text-xl md:text-2xl font-bold font-display text-center mb-2">{question!.question}</h2>
+      {question!.subtitle && <p className="text-sm text-gray-400 text-center mb-8">{question!.subtitle}</p>}
+      <div className={`${question!.id === "industry" ? "grid grid-cols-2 sm:grid-cols-3" : "flex flex-col"} gap-3 max-w-lg mx-auto`}>
         {question!.options.map((opt) => (
           <button
             key={opt.label}
@@ -598,12 +656,8 @@ export function AIAutomationQuiz() {
           </button>
         ))}
       </div>
-
       {currentQ > 0 && (
-        <button
-          onClick={() => setCurrentQ((q) => q - 1)}
-          className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 mt-6 mx-auto transition-colors"
-        >
+        <button onClick={() => setCurrentQ((q) => q - 1)} className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 mt-6 mx-auto transition-colors">
           <ChevronLeft className="h-4 w-4" /> Previous question
         </button>
       )}
