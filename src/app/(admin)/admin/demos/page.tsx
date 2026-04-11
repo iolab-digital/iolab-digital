@@ -11,6 +11,8 @@ import {
   Clock,
   Eye,
   Activity,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 import { INDUSTRIES } from "@/lib/constants";
 
@@ -37,6 +39,30 @@ export default function AdminDemosPage() {
   const [prospectEmail, setProspectEmail] = useState("");
   const [generatedUrl, setGeneratedUrl] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+
+  function toggleSelect(id: number) {
+    setSelected((prev) => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
+  }
+  function toggleAll() {
+    selected.size === tokens.length ? setSelected(new Set()) : setSelected(new Set(tokens.map((t) => t.id)));
+  }
+  async function handleBulkDelete() {
+    if (selected.size === 0) return;
+    if (!confirm(`Permanently delete ${selected.size} demo link(s)?`)) return;
+    setBulkLoading(true);
+    try {
+      await fetch("/api/admin/manage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table: "demo_tokens", ids: Array.from(selected), action: "delete" }),
+      });
+      setTokens((prev) => prev.filter((t) => !selected.has(t.id)));
+      setSelected(new Set());
+    } catch { alert("Failed. Try again."); }
+    setBulkLoading(false);
+  }
 
   useEffect(() => {
     fetchTokens();
@@ -171,6 +197,19 @@ export default function AdminDemosPage() {
         )}
       </div>
 
+      {/* Bulk actions */}
+      {selected.size > 0 && (
+        <div className="rounded-xl bg-gray-900 text-white p-3 mb-4 flex items-center justify-between">
+          <span className="text-sm font-medium">{selected.size} selected</span>
+          <div className="flex items-center gap-2">
+            <button onClick={handleBulkDelete} disabled={bulkLoading} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50">
+              {bulkLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />} Delete
+            </button>
+            <button onClick={() => setSelected(new Set())} className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white">Cancel</button>
+          </div>
+        </div>
+      )}
+
       {/* Active Demos */}
       <div className="rounded-xl bg-white border border-gray-200 overflow-hidden">
         <div className="p-4 border-b border-gray-200">
@@ -180,6 +219,7 @@ export default function AdminDemosPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
+                <th className="p-3 w-10"><button onClick={toggleAll}>{selected.size === tokens.length && tokens.length > 0 ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4 text-gray-400" />}</button></th>
                 <th className="text-left p-3 text-xs font-medium text-gray-500">Prospect</th>
                 <th className="text-left p-3 text-xs font-medium text-gray-500">Industry</th>
                 <th className="text-left p-3 text-xs font-medium text-gray-500">Status</th>
@@ -195,7 +235,8 @@ export default function AdminDemosPage() {
                 const url = `${baseUrl}/admin/demo/${t.token}`;
 
                 return (
-                  <tr key={t.id} className="border-t border-gray-100 hover:bg-gray-50">
+                  <tr key={t.id} className={`border-t border-gray-100 hover:bg-gray-50 ${selected.has(t.id) ? "bg-primary/5" : ""}`}>
+                    <td className="p-3"><button onClick={() => toggleSelect(t.id)}>{selected.has(t.id) ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4 text-gray-300" />}</button></td>
                     <td className="p-3">
                       <div className="font-medium text-xs">{t.prospectName || "—"}</div>
                       <div className="text-[10px] text-gray-400">{t.prospectEmail || "No email"}</div>
@@ -261,7 +302,7 @@ export default function AdminDemosPage() {
               })}
               {tokens.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-12 text-center text-gray-400 text-sm">
+                  <td colSpan={7} className="p-12 text-center text-gray-400 text-sm">
                     No demo links created yet. Generate one above to share with a prospect.
                   </td>
                 </tr>

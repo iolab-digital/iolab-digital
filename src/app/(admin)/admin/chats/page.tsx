@@ -10,6 +10,10 @@ import {
   Loader2,
   X,
   Sparkles,
+  Trash2,
+  Archive,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 
 type Session = {
@@ -69,6 +73,39 @@ export default function AdminChatsPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [ratingLoading, setRatingLoading] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+
+  function toggleSelect(sessionId: string) {
+    setSelected((prev) => { const next = new Set(prev); next.has(sessionId) ? next.delete(sessionId) : next.add(sessionId); return next; });
+  }
+  function toggleAll() {
+    selected.size === sessions.length ? setSelected(new Set()) : setSelected(new Set(sessions.map((s) => s.sessionId)));
+  }
+
+  async function handleBulkAction(action: "delete" | "archive") {
+    if (selected.size === 0) return;
+    if (action === "delete" && !confirm(`Permanently delete ${selected.size} chat session(s) and all their messages?`)) return;
+    setBulkLoading(true);
+    try {
+      await fetch("/api/admin/manage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table: "chat_sessions", ids: Array.from(selected), action }),
+      });
+      if (action === "delete") {
+        setSessions((prev) => prev.filter((s) => !selected.has(s.sessionId)));
+      } else {
+        setSessions((prev) => prev.map((s) => selected.has(s.sessionId) ? { ...s, status: "archived" } : s));
+      }
+      setSelected(new Set());
+      if (selectedSession && selected.has(selectedSession)) {
+        setSelectedSession(null);
+        setMessages([]);
+      }
+    } catch { alert("Failed. Try again."); }
+    setBulkLoading(false);
+  }
 
   useEffect(() => {
     fetchSessions();
@@ -179,21 +216,43 @@ export default function AdminChatsPage() {
         </div>
       </div>
 
+      {/* Bulk actions */}
+      {selected.size > 0 && (
+        <div className="rounded-xl bg-gray-900 text-white p-3 mb-4 flex items-center justify-between">
+          <span className="text-sm font-medium">{selected.size} selected</span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => handleBulkAction("archive")} disabled={bulkLoading} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600 text-white text-xs font-medium hover:bg-amber-700 disabled:opacity-50">
+              {bulkLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Archive className="h-3 w-3" />} Archive
+            </button>
+            <button onClick={() => handleBulkAction("delete")} disabled={bulkLoading} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50">
+              {bulkLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />} Delete
+            </button>
+            <button onClick={() => setSelected(new Set())} className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white">Cancel</button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         {/* Sessions list */}
         <div className="flex-1 rounded-xl bg-white border border-gray-200 overflow-hidden">
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
             <h2 className="font-bold">All Conversations</h2>
+            <button onClick={toggleAll} className="text-gray-400 hover:text-gray-600">
+              {selected.size === sessions.length && sessions.length > 0 ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4" />}
+            </button>
           </div>
           <div className="overflow-y-auto max-h-[600px]">
             {sessions.map((session) => (
-              <button
+              <div
                 key={session.sessionId}
-                onClick={() => viewTranscript(session.sessionId)}
-                className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors flex items-start gap-2 ${
                   selectedSession === session.sessionId ? "bg-primary/5 border-l-2 border-l-primary" : ""
-                }`}
+                } ${selected.has(session.sessionId) ? "bg-primary/5" : ""}`}
               >
+                <button onClick={(e) => { e.stopPropagation(); toggleSelect(session.sessionId); }} className="mt-1 shrink-0">
+                  {selected.has(session.sessionId) ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4 text-gray-300" />}
+                </button>
+                <button onClick={() => viewTranscript(session.sessionId)} className="flex-1 text-left">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-medium text-gray-900">
                     {session.messageCount} messages
@@ -228,6 +287,7 @@ export default function AdminChatsPage() {
                   </div>
                 </div>
               </button>
+              </div>
             ))}
             {sessions.length === 0 && (
               <div className="p-12 text-center text-gray-400 text-sm">
